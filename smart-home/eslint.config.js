@@ -19,12 +19,12 @@ export default [
     ignores: [".angular", "dist", "node_modules", "eslint.config.js"],
   },
 
-  eslint.configs.recommended, // базовые правила ESLint
+  eslint.configs.recommended,
   ...typescriptEslint.configs.recommended,
-  importPlugin.flatConfigs.recommended, // правила для import/export
-  perfectionist.configs["recommended-natural"], // порядок/сортировка
-  //...angular.configs.tsRecommended, // angular-specific для TS
-  unicorn.configs.recommended, // правила unicorn
+  importPlugin.flatConfigs.recommended,
+  perfectionist.configs["recommended-natural"],
+  //...angular.configs.tsRecommended,
+  unicorn.configs.recommended,
 
   // TypeScript (Angular) файлы
   {
@@ -64,7 +64,7 @@ export default [
         { type: "element", prefix: "app", style: "kebab-case" },
       ],
       */
-      // Unicorn-правила (дополнительно к рекомендованным)
+      "unicorn/prefer-top-level-await": "off",
       "unicorn/filename-case": [
         "error",
         {
