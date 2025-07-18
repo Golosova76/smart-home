@@ -1,0 +1,11 @@
+@mixin margin-bottom20 {
+  &:not(:last-child) {
+    margin-bottom: 20px;
+  }
+}
+
+@mixin flex-column {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

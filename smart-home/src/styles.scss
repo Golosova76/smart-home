@@ -1,1 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
+@use 'material-design-icons/iconfont/material-icons';
+@use "styles/null";
+@use "styles/mixins";
+
+:root {
+  --dark-solid: #000000;
+  --light-solid: #FFFFFF;
+  --text-primary: #FFFFFF;
+  --back-primary: #121212;
+  --back-cards: #1E1E1E;
+  --dash-header: #0D1C24;
+  --light-border: #696969;
+  --active-primary: #0D3C4E;
+  --active-text: #40C4FF;
+}

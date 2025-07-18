@@ -112,6 +112,7 @@ export default [
           ],
         },
       ],
+      'perfectionist/sort-objects': 'off',
       "@typescript-eslint/no-explicit-any": "error",
     },
   },
@@ -128,12 +129,13 @@ export default [
       "@angular-eslint/template": angularEslintTemplate,
     },
     rules: {
-      "@angular-eslint/template/prefer-self-closing-tags": ["error"],
+      "@angular-eslint/template/prefer-self-closing-tags": "off",
       "@angular-eslint/template/elements-content": ["off"],
       "@typescript-eslint/ban-ts-comment": "off",
       "import/namespace": "off",
       "import/no-unresolved": "off",
       "import/no-extraneous-dependencies": "off",
+
     },
   },
 ];
