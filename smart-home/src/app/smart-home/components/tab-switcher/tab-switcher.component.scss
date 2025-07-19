@@ -1,16 +1,11 @@
 @use "styles/mixins" as m;
 
-.header-wrapper {
+.nav-tabs {
   height: 56px;
   border-bottom: 1px solid var(--light-border);
   border-right: 1px solid var(--light-border);
-  padding: 10px;
+  padding: 10px 10px 10px 20px;
   @include m.flex-column;
-}
-
-.menu-open-icon {
-  width: 24px;
-  height: 24px;
-  color: var(--light-border);
-  cursor: pointer;
+  gap: 20px;
+  background-color: var(--active-primary);
 }
