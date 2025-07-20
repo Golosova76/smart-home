@@ -77,16 +77,9 @@ export default [
       "unicorn/no-array-for-each": "warn",
       "import/no-unresolved": "error",
       "unused-imports/no-unused-imports": "warn",
-      "perfectionist/sort-imports": [
-        "error",
-        {
-          type: "natural",
-          groups: [
-            ["builtin", "external"],
-            ["internal", "parent", "sibling", "index"],
-          ],
-        },
-      ],
+      "perfectionist/sort-imports": 'off',
+      "perfectionist/sort-modules": "off",
+      "perfectionist/sort-interfaces": "off",
       "perfectionist/sort-classes": [
         "error",
         {
@@ -112,8 +105,16 @@ export default [
           ],
         },
       ],
-      'perfectionist/sort-objects': 'off',
+      "perfectionist/sort-objects": "off",
       "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          "vars": "all",
+          "args": "after-used",
+          "ignoreRestSiblings": true
+        }
+      ]
     },
   },
 
@@ -135,7 +136,6 @@ export default [
       "import/namespace": "off",
       "import/no-unresolved": "off",
       "import/no-extraneous-dependencies": "off",
-
     },
   },
 ];

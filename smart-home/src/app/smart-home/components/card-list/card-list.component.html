@@ -1,1 +1,3 @@
-<p>card-list works!</p>
+@for (card of cards(); track card.id) {
+  <app-card [card]="card"></app-card>
+}

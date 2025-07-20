@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
-import {SidebarFooterComponent} from '@/app/core/sidebar/sidebar-footer/sidebar-footer.component';
-import {SidebarHeaderComponent} from '@/app/core/sidebar/sidebar-header/sidebar-header.component';
-import {SidebarMainComponent} from '@/app/core/sidebar/sidebar-main/sidebar-main.component';
+import { SidebarFooterComponent } from '@/app/core/sidebar/sidebar-footer/sidebar-footer.component';
+import { SidebarHeaderComponent } from '@/app/core/sidebar/sidebar-header/sidebar-header.component';
+import { SidebarMainComponent } from '@/app/core/sidebar/sidebar-main/sidebar-main.component';
 
 @Component({
   imports: [

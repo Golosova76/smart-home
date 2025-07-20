@@ -1,20 +1,20 @@
-@use 'material-design-icons/iconfont/material-icons';
+@use "material-design-icons/iconfont/material-icons";
 @use "styles/fonts";
 @use "styles/null";
 @use "styles/mixins";
 
 :root {
   --dark-solid: #000000;
-  --light-solid: #FFFFFF;
-  --text-primary: #FFFFFF;
+  --light-solid: #ffffff;
+  --text-primary: #ffffff;
   --back-primary: #121212;
-  --back-cards: #1E1E1E;
-  --dash-header: #0D1C24;
+  --back-cards: #1e1e1e;
+  --dash-header: #0d1c24;
   --light-border: #696969;
-  --active-primary: #0D3C4E;
-  --active-text: #40C4FF;
+  --active-primary: #0d3c4e;
+  --active-text: #40c4ff;
 
-  --font-family: 'Roboto';
+  --font-family: "Roboto";
   --font-size-base: 14px;
   --font-weight-base: 400;
   --line-height: 1.4;

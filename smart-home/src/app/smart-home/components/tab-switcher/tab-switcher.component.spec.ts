@@ -8,9 +8,8 @@ describe('TabSwitcherComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TabSwitcherComponent]
-    })
-    .compileComponents();
+      imports: [TabSwitcherComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TabSwitcherComponent);
     component = fixture.componentInstance;

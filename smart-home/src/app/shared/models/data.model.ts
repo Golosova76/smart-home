@@ -1,34 +1,38 @@
-export interface Card {
-  id: string;
-  items: Item[];
-  layout: LayoutType;
-  title: string;
-}
+export type Device = Omit<DeviceItem, 'type'>
 
-export interface DataModel {
-  tabs: Tab[];
-}
+export type Sensor = Omit<SensorItem, 'type'>
 
 export interface DeviceItem {
+  type: string;
   icon: string;
   label: string;
   state: boolean;
+}
+
+export interface SensorItem {
   type: string;
+  icon: string;
+  label: string;
+  value: { amount: number; unit: string };
 }
 
 export type Item = DeviceItem | SensorItem;
 
 export type LayoutType = "horizontalLayout' | 'verticalLayout' | 'singleDevice";
 
-export interface SensorItem {
-  icon: string;
-  label: string;
-  type: string;
-  value: { amount: number; unit: string };
+export interface Card {
+  id: string;
+  title: string;
+  layout: LayoutType;
+  items: Item[];
 }
 
 export interface Tab {
-  cards: Card[];
   id: string;
   title: string;
+  cards: Card[];
+}
+
+export interface DataModel {
+  tabs: Tab[];
 }

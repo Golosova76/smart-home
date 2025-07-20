@@ -1,6 +1,6 @@
 @use "styles/mixins" as m;
 
-:host{
+:host {
   width: 200px;
   background-color: var(--back-cards);
   display: flex;

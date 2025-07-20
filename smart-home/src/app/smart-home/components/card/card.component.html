@@ -1,1 +1,13 @@
-<p>card works!</p>
+@if (card()) {
+  <div class="card-wrapper" [ngClass]="card()?.layout">
+    <h2 class="card-title">{{ card()?.title }}</h2>
+    <div class="card-content">
+      @for (sensor of sensors; track sensor.label) {
+        <app-sensor [sensor]="sensor"></app-sensor>
+      }
+      @for (device of devices; track device.label) {
+        <app-device [device]="device"></app-device>
+      }
+    </div>
+  </div>
+}

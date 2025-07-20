@@ -8,9 +8,8 @@ describe('SensorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SensorComponent]
-    })
-    .compileComponents();
+      imports: [SensorComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SensorComponent);
     component = fixture.componentInstance;
