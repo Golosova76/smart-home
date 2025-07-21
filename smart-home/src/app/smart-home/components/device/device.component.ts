@@ -1,6 +1,7 @@
 import { Component, input } from '@angular/core';
 
-import { Device } from '@/app/shared/models/data.model';
+import {Device, LayoutType} from '@/app/shared/models/data.model';
+
 
 @Component({
   selector: 'app-device',
@@ -11,4 +12,5 @@ import { Device } from '@/app/shared/models/data.model';
 })
 export class DeviceComponent {
   device = input<Device>();
+  layout = input<LayoutType>();
 }

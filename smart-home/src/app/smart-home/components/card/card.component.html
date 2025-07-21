@@ -3,10 +3,10 @@
     <h2 class="card-title">{{ card()?.title }}</h2>
     <div class="card-content">
       @for (sensor of sensors; track sensor.label) {
-        <app-sensor [sensor]="sensor"></app-sensor>
+        <app-sensor [sensor]="sensor" [layout]="card()?.layout"></app-sensor>
       }
       @for (device of devices; track device.label) {
-        <app-device [device]="device"></app-device>
+        <app-device [device]="device" [layout]="card()?.layout"></app-device>
       }
     </div>
   </div>

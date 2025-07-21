@@ -1,6 +1,35 @@
-.single-device {
+@use "styles/mixins" as m;
+
+.card-wrapper {
+  padding: 25px;
+  background-color: var(--active-text);
+  border-radius: 5px;
+  width: 100%;
+  min-width: 0;
 }
-.multi-horizontal {
+
+.card-title {
+  @include m.margin-bottom20;
 }
-.multi-vertical {
+
+
+.singleDevice {
+}
+.horizontalLayout {
+  .card-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    justify-items: start;
+    justify-content: start;
+  }
+}
+.verticalLayout {
+  .card-content {
+    display: grid;
+    grid-template-columns: 1fr;  // только 1 колонка
+    gap: 15px;
+    justify-items: start;
+
+  }
 }

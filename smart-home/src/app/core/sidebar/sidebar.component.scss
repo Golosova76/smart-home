@@ -1,7 +1,7 @@
 @use "styles/mixins" as m;
 
 :host {
-  width: 200px;
+  width: 250px;
   background-color: var(--back-cards);
   display: flex;
   flex-direction: column;

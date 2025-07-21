@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.device-wrapper.horizontal {
+  display: flex;
+  flex-direction: column;
+}
+
+.device-wrapper.vertical {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  width: 100%;
+  gap: 15px;
+  .device-icon {
+    color: red;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.device-wrapper.single {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  .device-block {
+    display: flex;
+    gap: 15px;
+  }
+}

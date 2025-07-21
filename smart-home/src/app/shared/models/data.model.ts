@@ -18,7 +18,7 @@ export interface SensorItem {
 
 export type Item = DeviceItem | SensorItem;
 
-export type LayoutType = "horizontalLayout' | 'verticalLayout' | 'singleDevice";
+export type LayoutType = 'horizontalLayout' | 'verticalLayout' | 'singleDevice';
 
 export interface Card {
   id: string;

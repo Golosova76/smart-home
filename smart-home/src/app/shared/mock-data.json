@@ -9,7 +9,7 @@
           "title": "Balcony",
           "layout": "horizontalLayout",
           "items": [
-            {             
+            {
             },
             {
               "type": "sensor",

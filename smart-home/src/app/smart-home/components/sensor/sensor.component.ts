@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 
-import { Sensor } from '@/app/shared/models/data.model';
+import {LayoutType, Sensor} from '@/app/shared/models/data.model';
 
 @Component({
   selector: 'app-sensor',
@@ -11,4 +11,5 @@ import { Sensor } from '@/app/shared/models/data.model';
 })
 export class SensorComponent {
   sensor = input<Sensor>();
+  layout = input<LayoutType>();
 }
