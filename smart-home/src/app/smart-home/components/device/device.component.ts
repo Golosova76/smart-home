@@ -1,11 +1,16 @@
 import { Component, input } from '@angular/core';
 
 import { Device, LayoutType } from '@/app/shared/models/data.model';
+import {DeviceStatePipe} from '@/app/shared/pipes/device-state.pipe';
+import {NgClass} from '@angular/common';
 
 @Component({
   selector: 'app-device',
   standalone: true,
-  imports: [],
+  imports: [
+    DeviceStatePipe,
+    NgClass
+  ],
   templateUrl: './device.component.html',
   styleUrl: './device.component.scss',
 })

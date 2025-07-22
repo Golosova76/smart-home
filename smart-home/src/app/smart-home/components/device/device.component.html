@@ -27,11 +27,14 @@
       <div class="device-wrapper single">
         <div class="device-block">
           <div class="device-label">{{ device()?.label }}</div>
-          <span class="material-symbols-outlined device-icon">{{
-            device()?.icon
-          }}</span>
+          <span
+            class="material-symbols-outlined device-icon"
+            [ngClass]="device()?.state ? 'icon-on' : 'icon-off'"
+          >
+            {{ device()?.icon }}
+          </span>
         </div>
-        <div class="device-state">{{ device()?.state }}</div>
+        <div class="device-state">{{ device()?.state | deviceState }}</div>
       </div>
     }
   }

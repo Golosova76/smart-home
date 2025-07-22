@@ -83,6 +83,17 @@
   gap: 15px;
   .device-block {
     display: flex;
-    gap: 15px;
+    align-items: center;
+    gap: 45px;
+    .device-icon.icon-on {
+      color: red;
+      width: 24px;
+      height: 24px;
+    }
+    .device-icon.icon-off {
+       color: var(--light-solid);
+       width: 24px;
+       height: 24px;
+     }
   }
 }

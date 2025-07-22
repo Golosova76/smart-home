@@ -26,9 +26,9 @@
       <div class="sensor-wrapper single">
         <div class="sensor-block">
           <div class="sensor-label">{{ sensor()?.label }}</div>
-          <span class="material-symbols-outlined sensor-icon">{{
-            sensor()?.icon
-          }}</span>
+          <span class="material-symbols-outlined sensor-icon">
+            {{ sensor()?.icon }}
+          </span>
         </div>
         <div class="sensor-value">
           {{ sensor()?.value?.amount }} {{ sensor()?.value?.unit }}
