@@ -1,6 +1,6 @@
-export type Device = Omit<DeviceItem, 'type'>
+export type Device = Omit<DeviceItem, 'type'>;
 
-export type Sensor = Omit<SensorItem, 'type'>
+export type Sensor = Omit<SensorItem, 'type'>;
 
 export interface DeviceItem {
   type: string;
@@ -18,7 +18,7 @@ export interface SensorItem {
 
 export type Item = DeviceItem | SensorItem;
 
-export type LayoutType = 'horizontalLayout' | 'verticalLayout' | 'singleDevice';
+export type LayoutType = 'horizontalLayout' | 'singleDevice' | 'verticalLayout';
 
 export interface Card {
   id: string;

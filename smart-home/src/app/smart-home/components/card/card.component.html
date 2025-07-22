@@ -1,6 +1,21 @@
 @if (card()) {
   <div class="card-wrapper" [ngClass]="card()?.layout">
-    <h2 class="card-title">{{ card()?.title }}</h2>
+    <div class="card-header">
+      <h2 class="card-title">{{ card()?.title }}</h2>
+      @if (hasGroupToggle) {
+        <div class="card-state switch">
+          <label class="switch">
+            <input
+              name="switch"
+              type="checkbox"
+              [checked]="groupToggleState"
+              (change)="groupToggleChange($event)"
+            />
+            <span class="slider"></span>
+          </label>
+        </div>
+      }
+    </div>
     <div class="card-content">
       @for (sensor of sensors; track sensor.label) {
         <app-sensor [sensor]="sensor" [layout]="card()?.layout"></app-sensor>

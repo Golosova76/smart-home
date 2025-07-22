@@ -24,6 +24,22 @@ export class CardComponent implements OnInit {
   devices: Device[] = [];
   sensors: Sensor[] = [];
 
+  groupToggleChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const newState = input.checked;
+    for (const device of this.devices) {
+      device.state = newState;
+    }
+  }
+
+  get groupToggleState(): boolean {
+    return this.devices.some((device) => device.state); // хотя бы одно устройство включено
+  }
+
+  get hasGroupToggle(): boolean {
+    return this.devices.length > 1;
+  }
+
   ngOnInit() {
     const items = this.card()?.items ?? [];
 

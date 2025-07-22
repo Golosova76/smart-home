@@ -77,7 +77,7 @@ export default [
       "unicorn/no-array-for-each": "warn",
       "import/no-unresolved": "error",
       "unused-imports/no-unused-imports": "warn",
-      "perfectionist/sort-imports": 'off',
+      "perfectionist/sort-imports": "off",
       "perfectionist/sort-modules": "off",
       "perfectionist/sort-interfaces": "off",
       "perfectionist/sort-classes": [
@@ -110,11 +110,11 @@ export default [
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
-          "vars": "all",
-          "args": "after-used",
-          "ignoreRestSiblings": true
-        }
-      ]
+          vars: "all",
+          args: "after-used",
+          ignoreRestSiblings: true,
+        },
+      ],
     },
   },
 
