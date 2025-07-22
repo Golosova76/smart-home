@@ -1,7 +1,7 @@
 @use "styles/mixins" as m;
 
 .card-wrapper {
-  padding: 25px;
+  padding: 20px;
   background-color: var(--active-text);
   border-radius: 5px;
   width: 100%;
@@ -15,11 +15,13 @@
 
 .singleDevice {
 }
+
+
 .horizontalLayout {
   .card-content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 20px;
     justify-items: start;
     justify-content: start;
   }
@@ -28,7 +30,7 @@
   .card-content {
     display: grid;
     grid-template-columns: 1fr;  // только 1 колонка
-    gap: 15px;
+    gap: 20px;
     justify-items: start;
 
   }
