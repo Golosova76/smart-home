@@ -7,7 +7,7 @@
           sensor()?.icon
         }}</span>
         <div class="sensor-value">
-          {{ sensor()?.value?.amount }} {{ sensor()?.value?.unit }}
+          {{ sensor()?.value | sensorValue }}
         </div>
       </div>
     }
@@ -18,7 +18,7 @@
         }}</span>
         <div class="sensor-label">{{ sensor()?.label }}</div>
         <div class="sensor-value">
-          {{ sensor()?.value?.amount }} {{ sensor()?.value?.unit }}
+          {{ sensor()?.value | sensorValue }}
         </div>
       </div>
     }
@@ -31,7 +31,7 @@
           </span>
         </div>
         <div class="sensor-value">
-          {{ sensor()?.value?.amount }} {{ sensor()?.value?.unit }}
+          {{ sensor()?.value | sensorValue }}
         </div>
       </div>
     }

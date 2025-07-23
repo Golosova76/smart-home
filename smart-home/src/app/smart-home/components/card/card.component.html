@@ -1,5 +1,9 @@
 @if (card()) {
-  <div class="card-wrapper" [ngClass]="card()?.layout">
+  <div
+    class="card-wrapper"
+    [ngClass]="card()?.layout"
+    [appLightActiveCard]="devices"
+  >
     <div class="card-header">
       <h2 class="card-title">{{ card()?.title }}</h2>
       @if (hasGroupToggle) {
