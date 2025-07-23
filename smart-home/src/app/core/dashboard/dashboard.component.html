@@ -1,3 +1,7 @@
-<app-tab-switcher [tabs]="tabs"></app-tab-switcher>
+<app-tab-switcher
+  [tabs]="tabs"
+  [activeTabId]="selectedTabId"
+  (selectTab)="onTabSelected($event)"
+></app-tab-switcher>
 
 <app-card-list [cards]="cards"></app-card-list>

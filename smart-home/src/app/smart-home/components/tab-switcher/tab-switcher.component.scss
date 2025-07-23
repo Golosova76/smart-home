@@ -8,4 +8,11 @@
   @include m.flex-column;
   gap: 20px;
   background-color: var(--active-primary);
+  .tab-button {
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+    &.active {
+      border-bottom: 2px solid red;
+    }
+  }
 }
