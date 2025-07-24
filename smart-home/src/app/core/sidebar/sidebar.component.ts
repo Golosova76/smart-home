@@ -1,9 +1,7 @@
 import {
   Component,
-  EventEmitter,
   HostBinding,
   input,
-  Output,
 } from '@angular/core';
 
 import { SidebarFooterComponent } from '@/app/core/sidebar/sidebar-footer/sidebar-footer.component';
@@ -22,15 +20,10 @@ import { SidebarMainComponent } from '@/app/core/sidebar/sidebar-main/sidebar-ma
   templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent {
-  @Output() toggleSidebar = new EventEmitter<void>();
   opened = input<boolean>(true);
 
   @HostBinding('class.closed')
   get isCosed() {
     return !this.opened();
-  }
-
-  onToggleSidebarClick(): void {
-    this.toggleSidebar.emit();
   }
 }

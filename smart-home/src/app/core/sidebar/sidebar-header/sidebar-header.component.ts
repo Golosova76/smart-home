@@ -10,9 +10,4 @@ import { SvgIconComponent } from '@/app/shared/svg-icon/svg-icon.component';
   styleUrl: './sidebar-header.component.scss',
 })
 export class SidebarHeaderComponent {
-  @Output() toggleSidebarHeader = new EventEmitter<void>();
-
-  onToggleClick() {
-    this.toggleSidebarHeader.emit();
-  }
 }
