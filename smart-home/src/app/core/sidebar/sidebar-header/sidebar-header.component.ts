@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { SvgIconComponent } from '@/app/shared/svg-icon/svg-icon.component';
 
@@ -9,5 +9,4 @@ import { SvgIconComponent } from '@/app/shared/svg-icon/svg-icon.component';
   templateUrl: './sidebar-header.component.html',
   styleUrl: './sidebar-header.component.scss',
 })
-export class SidebarHeaderComponent {
-}
+export class SidebarHeaderComponent {}

@@ -1,8 +1,4 @@
-import {
-  Component,
-  HostBinding,
-  input,
-} from '@angular/core';
+import { Component, HostBinding, input } from '@angular/core';
 
 import { SidebarFooterComponent } from '@/app/core/sidebar/sidebar-footer/sidebar-footer.component';
 import { SidebarHeaderComponent } from '@/app/core/sidebar/sidebar-header/sidebar-header.component';

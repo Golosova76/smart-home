@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { DashboardComponent } from '@/app/core/dashboard/dashboard.component';
 import { SidebarComponent } from '@/app/core/sidebar/sidebar.component';
-import {HeaderComponent} from '@/app/core/header/header.component';
+import { HeaderComponent } from '@/app/core/header/header.component';
 
 @Component({
   imports: [SidebarComponent, DashboardComponent, HeaderComponent],

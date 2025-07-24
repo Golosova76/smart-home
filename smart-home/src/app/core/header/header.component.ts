@@ -1,14 +1,12 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
-import {SvgIconComponent} from '@/app/shared/svg-icon/svg-icon.component';
+import { SvgIconComponent } from '@/app/shared/svg-icon/svg-icon.component';
 
 @Component({
   selector: 'app-header',
-  imports: [
-    SvgIconComponent
-  ],
+  imports: [SvgIconComponent],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+  styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
   @Output() toggleHeader = new EventEmitter<void>();
@@ -16,5 +14,4 @@ export class HeaderComponent {
   onToggleClick() {
     this.toggleHeader.emit();
   }
-
 }
