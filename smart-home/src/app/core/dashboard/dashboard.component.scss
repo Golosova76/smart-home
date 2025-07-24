@@ -1,3 +1,5 @@
 :host {
-  width: calc(100% - 250px);
+  flex-grow: 1;
+  width: 100%;
+  display: block;
 }

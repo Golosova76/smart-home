@@ -7,6 +7,13 @@
   flex-direction: column;
 }
 
+@media (max-width: 1024px) {
+  :host(.closed) {
+    width: 0;
+    overflow: hidden;
+  }
+}
+
 .main {
   border-right: 1px solid var(--light-border);
   height: 100%;
