@@ -11,7 +11,10 @@
     }
     @case ("verticalLayout") {
       <div class="device-wrapper vertical">
-        <span class="material-symbols-outlined device-icon" [appLightActiveDevice]="!!device()?.state">
+        <span
+          class="material-symbols-outlined device-icon"
+          [appLightActiveDevice]="!!device()?.state"
+        >
           {{ device()?.icon }}
         </span>
         <div class="device-label">{{ device()?.label }}</div>

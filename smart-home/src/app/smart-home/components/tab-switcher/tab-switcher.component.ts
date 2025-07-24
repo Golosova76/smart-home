@@ -1,4 +1,4 @@
-import {Component, EventEmitter, input, Output} from '@angular/core';
+import { Component, EventEmitter, input, Output } from '@angular/core';
 
 import { Tab } from '@/app/shared/models/data.model';
 
@@ -10,12 +10,12 @@ import { Tab } from '@/app/shared/models/data.model';
   styleUrl: './tab-switcher.component.scss',
 })
 export class TabSwitcherComponent {
-  tabs = input<Tab[]>([]);
+  @Output() selectTab = new EventEmitter<string>();
   activeTabId = input<string>('');
 
-  @Output() selectTab = new EventEmitter<string>();
+  tabs = input<Tab[]>([]);
 
-  onTabClick(tabId:string) {
+  onTabClick(tabId: string) {
     this.selectTab.emit(tabId);
   }
 }

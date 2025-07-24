@@ -11,12 +11,17 @@ import { NgClass } from '@angular/common';
 import { SensorComponent } from '@/app/smart-home/components/sensor/sensor.component';
 import { DeviceComponent } from '@/app/smart-home/components/device/device.component';
 
-import {LightActiveCardDirective} from '@/app/shared/directives/light-active-card.directive';
+import { LightActiveCardDirective } from '@/app/shared/directives/light-active-card.directive';
 
 @Component({
   selector: 'app-card',
   standalone: true,
-  imports: [NgClass, SensorComponent, DeviceComponent, LightActiveCardDirective],
+  imports: [
+    NgClass,
+    SensorComponent,
+    DeviceComponent,
+    LightActiveCardDirective,
+  ],
   templateUrl: './card.component.html',
   styleUrl: './card.component.scss',
 })

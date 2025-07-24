@@ -1,16 +1,32 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'sensorValue'
+  name: 'sensorValue',
 })
 export class SensorValuePipe implements PipeTransform {
-
   private readonly allUnits = new Set<string>([
-    '%', '°C', '°F', 'ppm', 'lux', 'W', 'kWh', 'V', 'A',
-    'dB', 'mg/m³', 'g/m³', 'hPa', 'mmHg', 'CO2', 'μg/m³', 'lx'
+    '%',
+    '°C',
+    '°F',
+    'A',
+    'CO2',
+    'dB',
+    'g/m³',
+    'hPa',
+    'kWh',
+    'lux',
+    'lx',
+    'mg/m³',
+    'mmHg',
+    'ppm',
+    'V',
+    'W',
+    'μg/m³',
   ]);
 
-  transform(value: { amount: number; unit: string } | null | undefined): string {
+  transform(
+    value: null | undefined | { amount: number; unit: string },
+  ): string {
     if (!value) return '';
     const { amount, unit } = value;
 
@@ -23,5 +39,4 @@ export class SensorValuePipe implements PipeTransform {
   private capitalizeText(text: string): string {
     return text.charAt(0).toUpperCase() + text.slice(1);
   }
-
 }

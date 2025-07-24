@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 import { SvgIconComponent } from '@/app/shared/svg-icon/svg-icon.component';
 
