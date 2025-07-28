@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
-import { DashboardComponent } from '@/app/core/dashboard/dashboard.component';
 import { SidebarComponent } from '@/app/core/sidebar/sidebar.component';
 import { HeaderComponent } from '@/app/core/header/header.component';
+import {RouterOutlet} from '@angular/router';
 
 @Component({
-  imports: [SidebarComponent, DashboardComponent, HeaderComponent],
+  imports: [SidebarComponent, HeaderComponent, RouterOutlet],
   selector: 'app-navigation',
   standalone: true,
   styleUrl: './navigation.component.scss',
