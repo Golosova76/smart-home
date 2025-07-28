@@ -1,1 +1,46 @@
-<p>login-page works!</p>
+
+<form
+  class="login-form"
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+>
+
+  <h1 class="h1">Welcome home</h1>
+
+  <div class="form-body">
+    <label class="control-label">
+      <span class="control-title">Username<span>*</span></span>
+      <input
+        formControlName="username"
+        class="login-input"
+        name="username"
+        type="text"
+        placeholder="username">
+    </label>
+
+    <label class="control-label">
+      <span class="control-title">Password<span>*</span></span>
+      <div class="control-pass-input">
+        <input
+          formControlName="password"
+          name="password"
+          class="login-input"
+          [type]="isPasswordVisible() ? 'text' : 'password'"
+          placeholder="password">
+        <button
+          class="password-eye-button"
+          [class.active]="isPasswordVisible()"
+          (click)="togglePasswordVisible()"
+        >
+          @if (!isPasswordVisible()) {
+            <span class="material-symbols-outlined pass-icon">visibility_off</span>
+          } @else {
+            <span class="material-symbols-outlined pass-icon">visibility</span>
+          }
+        </button>
+      </div>
+    </label>
+  </div>
+
+  <button class="btn btn-login" type="submit">LOG IN</button>
+</form>
