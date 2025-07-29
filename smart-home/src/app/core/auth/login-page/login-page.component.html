@@ -1,10 +1,4 @@
-
-<form
-  class="login-form"
-  [formGroup]="form"
-  (ngSubmit)="onSubmit()"
->
-
+<form class="login-form" [formGroup]="form" (ngSubmit)="onSubmit()">
   <h1 class="h1">Welcome home</h1>
 
   <div class="form-body">
@@ -15,7 +9,8 @@
         class="login-input"
         name="username"
         type="text"
-        placeholder="username">
+        placeholder="username"
+      />
     </label>
 
     <label class="control-label">
@@ -25,15 +20,18 @@
           formControlName="password"
           name="password"
           class="login-input"
+          placeholder="password"
           [type]="isPasswordVisible() ? 'text' : 'password'"
-          placeholder="password">
+        />
         <button
           class="password-eye-button"
           [class.active]="isPasswordVisible()"
           (click)="togglePasswordVisible()"
         >
           @if (!isPasswordVisible()) {
-            <span class="material-symbols-outlined pass-icon">visibility_off</span>
+            <span class="material-symbols-outlined pass-icon"
+              >visibility_off</span
+            >
           } @else {
             <span class="material-symbols-outlined pass-icon">visibility</span>
           }

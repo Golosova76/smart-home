@@ -3,14 +3,14 @@ export type Device = Omit<DeviceItem, 'type'>;
 export type Sensor = Omit<SensorItem, 'type'>;
 
 export interface DeviceItem {
-  type: "device";
+  type: 'device';
   icon: string;
   label: string;
   state: boolean;
 }
 
 export interface SensorItem {
-  type: "sensor";
+  type: 'sensor';
   icon: string;
   label: string;
   value: { amount: number; unit: string };

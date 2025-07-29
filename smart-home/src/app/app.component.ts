@@ -1,6 +1,5 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-
 
 @Component({
   imports: [RouterOutlet],
@@ -9,5 +8,4 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.component.scss',
   templateUrl: './app.component.html',
 })
-export class AppComponent {
-}
+export class AppComponent {}

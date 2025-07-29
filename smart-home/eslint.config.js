@@ -75,37 +75,16 @@ export default [
         },
       ],
       "unicorn/no-array-for-each": "warn",
+      "unicorn/no-null": "off",
       "import/no-unresolved": "error",
       "unused-imports/no-unused-imports": "warn",
       "perfectionist/sort-imports": "off",
       "perfectionist/sort-modules": "off",
       "perfectionist/sort-interfaces": "off",
-      "perfectionist/sort-classes": [
-        "error",
-        {
-          groups: [
-            "index-signature",
-            "static-property",
-            "private-static-property",
-            "protected-static-property",
-            "public-readonly-property",
-            "protected-readonly-property",
-            "private-readonly-property",
-            "decorated-property",
-            "public-property",
-            "protected-property",
-            "private-property",
-            "static-block",
-            "constructor",
-            "decorated-method",
-            "public-method",
-            "protected-method",
-            "private-method",
-            "unknown",
-          ],
-        },
-      ],
+      "perfectionist/sort-classes": "off",
       "perfectionist/sort-objects": "off",
+      "perfectionist/sort-object-types": "off",
+      "perfectionist/sort-union-types": "off",
       "@typescript-eslint/no-explicit-any": "error",
       "@typescript-eslint/no-unused-vars": [
         "error",
@@ -136,6 +115,19 @@ export default [
       "import/namespace": "off",
       "import/no-unresolved": "off",
       "import/no-extraneous-dependencies": "off",
+      "@angular-eslint/template/attributes-order": [
+        "warn",
+        {
+          order: [
+            "STRUCTURAL_DIRECTIVE", // *ngIf, *ngFor
+            "TEMPLATE_REFERENCE",   // #inputRef
+            "ATTRIBUTE_BINDING",    // обычные атрибуты: id, required и т.п.
+            "INPUT_BINDING",        // [prop], [attr.x], [style.x], [@anim]
+            "TWO_WAY_BINDING",      // [(ngModel)]
+            "OUTPUT_BINDING"        // (click), (change)
+          ],
+        },
+      ],
     },
   },
 ];
