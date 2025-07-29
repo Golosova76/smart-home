@@ -12,12 +12,13 @@ import { BASE_API_URL } from '@/app/shared/constants';
   providedIn: 'root',
 })
 export class AuthService {
-  http = inject(HttpClient);
-  tokenService = inject(TokenService);
+  private http = inject(HttpClient);
+  private tokenService = inject(TokenService);
 
   private isAuthSubject = new BehaviorSubject<boolean>(
     this.tokenService.hasToken(),
   );
+
   isAuth$ = this.isAuthSubject.asObservable();
 
   login(credentials: LoginCredentials): Observable<TokenResponse> {
@@ -35,4 +36,9 @@ export class AuthService {
     this.tokenService.clearToken();
     this.isAuthSubject.next(false);
   }
+
+  isAuthenticated():boolean {
+    return this.tokenService.hasToken();
+  }
+
 }
