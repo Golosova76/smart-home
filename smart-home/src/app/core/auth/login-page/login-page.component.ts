@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { AuthService } from '@/app/core/auth/services/auth/auth.service';
 import { Router } from '@angular/router';
+import {ProfileService} from '@/app/shared/services/profile.service';
 
 @Component({
   selector: 'app-login-page',
@@ -15,8 +16,9 @@ import { Router } from '@angular/router';
   styleUrl: './login-page.component.scss',
 })
 export class LoginPageComponent {
-  authService = inject(AuthService);
-  router = inject(Router);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private profileService = inject(ProfileService);
 
   isPasswordVisible = signal<boolean>(false);
 
@@ -39,6 +41,7 @@ export class LoginPageComponent {
         password: this.form.value.password ?? '',
       };
       this.authService.login(formData).subscribe(async () => {
+        this.profileService.getProfile().subscribe();
         await this.router.navigate(['']);
       });
     }

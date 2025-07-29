@@ -7,6 +7,8 @@ import {
   TokenResponse,
 } from '@/app/shared/models/login.model';
 import { BASE_API_URL } from '@/app/shared/constants';
+import {Router} from '@angular/router';
+import {ProfileService} from '@/app/shared/services/profile.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +16,8 @@ import { BASE_API_URL } from '@/app/shared/constants';
 export class AuthService {
   private http = inject(HttpClient);
   private tokenService = inject(TokenService);
+  private router = inject(Router);
+  private profileService = inject(ProfileService);
 
   private isAuthSubject = new BehaviorSubject<boolean>(
     this.tokenService.hasToken(),
@@ -35,6 +39,8 @@ export class AuthService {
   logout() {
     this.tokenService.clearToken();
     this.isAuthSubject.next(false);
+    this.profileService.clearProfile();
+    this.router.navigate(['/login']).catch(() => {});
   }
 
   isAuthenticated():boolean {

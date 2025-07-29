@@ -2,16 +2,27 @@
   max-height: 76px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
   padding: 10px;
   border: 1px solid var(--light-border);
 }
 
-.footer-avatar {
-  border-radius: 100%;
-  img {
-    width: 32px;
-    height: 32px;
-    border-radius: 100%;
-  }
+.footer-initials {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--active-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: var(--light-solid);
+  user-select: none;
+  box-shadow: 0 2px 8px 0 #0001;
+}
+
+.logout-icon {
+  cursor: pointer;
 }
