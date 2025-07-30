@@ -10,10 +10,8 @@ export class LightActiveCardDirective {
 
   lightActiveCard = input<Device[]>([], { alias: 'appLightActiveCard' });
 
-  constructor() {
-    effect(() => {
-      const devices = this.lightActiveCard() ?? [];
-      this.isActive = devices.some((device) => device.state);
-    });
-  }
+  private setActiveEffect = effect(() => {
+    const devices = this.lightActiveCard() ?? [];
+    this.isActive = devices.some((device) => device.state);
+  });
 }

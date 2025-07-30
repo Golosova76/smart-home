@@ -31,11 +31,17 @@ export class CardComponent implements OnInit {
   devices: Device[] = [];
   sensors: Sensor[] = [];
 
+  ngOnInit() {
+    this.updateItems();
+  }
+
   groupToggleChange(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const newState = input.checked;
-    for (const device of this.devices) {
-      device.state = newState;
+    const input = event.target;
+    if (input && input instanceof HTMLInputElement) {
+      const newState = input.checked;
+      for (const device of this.devices) {
+        device.state = newState;
+      }
     }
   }
 
@@ -47,7 +53,7 @@ export class CardComponent implements OnInit {
     return this.devices.length > 1;
   }
 
-  ngOnInit() {
+  private updateItems() {
     const items = this.card()?.items ?? [];
 
     this.sensors = items

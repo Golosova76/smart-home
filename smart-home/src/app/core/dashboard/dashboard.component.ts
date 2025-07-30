@@ -13,22 +13,23 @@ import { TabSwitcherComponent } from '@/app/smart-home/components/tab-switcher/t
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit {
-  selectedTabId = '';
+  selectedTabId: string | null = null;
   //cards: Card[] = [];
   tabs: Tab[] = [];
-
-  get cards(): Card[] {
-    return this.tabs.find((tab) => tab.id === this.selectedTabId)?.cards || [];
-  }
 
   ngOnInit() {
     const data = mockData as DataModel;
     this.tabs = data.tabs;
 
     //this.cards = this.tabs[0]?.cards || [];
-    if (this.tabs.length > 0) {
-      this.selectedTabId = this.tabs[0].id;
+    if (this.tabs.length <= 0) {
+      return;
     }
+    this.selectedTabId = this.tabs[0].id;
+  }
+
+  get cards(): Card[] {
+    return this.tabs.find((tab) => tab.id === this.selectedTabId)?.cards || [];
   }
 
   onTabSelected(tabId: string) {

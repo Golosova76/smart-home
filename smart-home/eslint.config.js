@@ -76,6 +76,7 @@ export default [
       ],
       "unicorn/no-array-for-each": "warn",
       "unicorn/no-null": "off",
+      "unicorn/consistent-function-scoping": "off",
       "import/no-unresolved": "error",
       "unused-imports/no-unused-imports": "warn",
       "perfectionist/sort-imports": "off",

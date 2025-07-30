@@ -5,7 +5,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class DeviceStatePipe implements PipeTransform {
   transform(value: boolean | null | undefined): string {
-    if (value) return 'ON';
-    return 'OFF';
+    return value ? 'ON' : 'OFF';
   }
 }
