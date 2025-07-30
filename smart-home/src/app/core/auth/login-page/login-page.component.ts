@@ -7,7 +7,8 @@ import {
 } from '@angular/forms';
 import { AuthService } from '@/app/core/auth/services/auth/auth.service';
 import { Router } from '@angular/router';
-import {ProfileService} from '@/app/shared/services/profile.service';
+import { ProfileService } from '@/app/shared/services/profile.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login-page',
@@ -21,6 +22,8 @@ export class LoginPageComponent {
   private profileService = inject(ProfileService);
 
   isPasswordVisible = signal<boolean>(false);
+
+  errorMessage = signal<string | null>(null);
 
   form: FormGroup<{
     username: FormControl<string | null>;
@@ -40,9 +43,20 @@ export class LoginPageComponent {
         userName: this.form.value.username ?? '',
         password: this.form.value.password ?? '',
       };
-      this.authService.login(formData).subscribe(async () => {
-        this.profileService.getProfile().subscribe();
-        await this.router.navigate(['']);
+      this.authService.login(formData).subscribe({
+        next: () => {
+          this.profileService.getProfile().subscribe();
+          this.router.navigate(['']).then(() => {});
+        },
+        error: (error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.errorMessage.set('Invalid login or password.');
+          } else {
+            this.errorMessage.set(
+              'Unknown error occurred. Please try again later.',
+            );
+          }
+        },
       });
     }
   }

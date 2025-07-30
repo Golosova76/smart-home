@@ -120,11 +120,11 @@ export default [
         {
           order: [
             "STRUCTURAL_DIRECTIVE", // *ngIf, *ngFor
-            "TEMPLATE_REFERENCE",   // #inputRef
-            "ATTRIBUTE_BINDING",    // обычные атрибуты: id, required и т.п.
-            "INPUT_BINDING",        // [prop], [attr.x], [style.x], [@anim]
-            "TWO_WAY_BINDING",      // [(ngModel)]
-            "OUTPUT_BINDING"        // (click), (change)
+            "TEMPLATE_REFERENCE", // #inputRef
+            "INPUT_BINDING", // [prop], [attr.x], [style.x], [@anim]
+            "TWO_WAY_BINDING", // [(ngModel)]
+            "OUTPUT_BINDING", // (click), (change)
+            "ATTRIBUTE_BINDING", // обычные атрибуты: id, required и т.п.
           ],
         },
       ],

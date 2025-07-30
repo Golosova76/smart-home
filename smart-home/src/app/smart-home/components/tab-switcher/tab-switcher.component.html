@@ -1,9 +1,9 @@
 <nav class="nav-tabs">
   @for (tab of tabs(); track tab.id) {
     <button
-      class="tab-button"
       [class.active]="tab.id === activeTabId()"
       (click)="onTabClick(tab.id)"
+      class="tab-button"
     >
       {{ tab.title }}
     </button>

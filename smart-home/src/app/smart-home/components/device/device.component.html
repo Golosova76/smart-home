@@ -12,15 +12,15 @@
     @case ("verticalLayout") {
       <div class="device-wrapper vertical">
         <span
-          class="material-symbols-outlined device-icon"
           [appLightActiveDevice]="!!device()?.state"
+          class="material-symbols-outlined device-icon"
         >
           {{ device()?.icon }}
         </span>
         <div class="device-label">{{ device()?.label }}</div>
         <div class="device-state">
           <label class="switch">
-            <input name="switch" type="checkbox" [checked]="device()?.state" />
+            <input [checked]="device()?.state" name="switch" type="checkbox" />
             <span class="slider"></span>
           </label>
         </div>
@@ -31,8 +31,8 @@
         <div class="device-block">
           <div class="device-label">{{ device()?.label }}</div>
           <span
-            class="material-symbols-outlined device-icon"
             [ngClass]="device()?.state ? 'icon-on' : 'icon-off'"
+            class="material-symbols-outlined device-icon"
           >
             {{ device()?.icon }}
           </span>

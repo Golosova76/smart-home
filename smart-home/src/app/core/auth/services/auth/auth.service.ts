@@ -7,8 +7,8 @@ import {
   TokenResponse,
 } from '@/app/shared/models/login.model';
 import { BASE_API_URL } from '@/app/shared/constants';
-import {Router} from '@angular/router';
-import {ProfileService} from '@/app/shared/services/profile.service';
+import { Router } from '@angular/router';
+import { ProfileService } from '@/app/shared/services/profile.service';
 
 @Injectable({
   providedIn: 'root',
@@ -43,8 +43,7 @@ export class AuthService {
     this.router.navigate(['/login']).catch(() => {});
   }
 
-  isAuthenticated():boolean {
+  isAuthenticated(): boolean {
     return this.tokenService.hasToken();
   }
-
 }

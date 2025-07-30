@@ -1,27 +1,26 @@
-import {inject, Injectable, signal} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {UserProfile} from '@/app/shared/models/profile.model';
-import {BASE_API_URL} from '@/app/shared/constants';
-import {Observable, tap} from 'rxjs';
+import { inject, Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { UserProfile } from '@/app/shared/models/profile.model';
+import { BASE_API_URL } from '@/app/shared/constants';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProfileService {
   private http = inject(HttpClient);
 
-  readonly profile = signal<UserProfile | null>(null)
+  readonly profile = signal<UserProfile | null>(null);
 
   getProfile(): Observable<UserProfile> {
-    return this.http.get<UserProfile>(`${BASE_API_URL}user/profile`)
-    .pipe(
+    return this.http.get<UserProfile>(`${BASE_API_URL}user/profile`).pipe(
       tap((profile: UserProfile) => {
         this.profile.set(profile);
-      })
-    )
+      }),
+    );
   }
 
-  clearProfile():void {
+  clearProfile(): void {
     this.profile.set(null);
   }
 }

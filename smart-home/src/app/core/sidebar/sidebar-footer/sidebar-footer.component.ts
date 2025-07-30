@@ -1,7 +1,6 @@
-import {Component, inject} from '@angular/core';
-import { NgOptimizedImage } from '@angular/common';
-import {ProfileService} from '@/app/shared/services/profile.service';
-import {AuthService} from '@/app/core/auth/services/auth/auth.service';
+import { Component, inject } from '@angular/core';
+import { ProfileService } from '@/app/shared/services/profile.service';
+import { AuthService } from '@/app/core/auth/services/auth/auth.service';
 
 @Component({
   selector: 'app-sidebar-footer',

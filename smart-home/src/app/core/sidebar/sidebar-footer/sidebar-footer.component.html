@@ -2,7 +2,9 @@
   @if (profile(); as user) {
     <div class="footer-initials">{{ user.initials }}</div>
     <div class="footer-text">{{ user.fullName }}</div>
-    <span class="material-symbols-outlined logout-icon" (click)="onLogout()">logout</span>
+    <span (click)="onLogout()" class="material-symbols-outlined logout-icon"
+      >logout</span
+    >
   } @else {
     <div class="no-profile">No profile data</div>
   }

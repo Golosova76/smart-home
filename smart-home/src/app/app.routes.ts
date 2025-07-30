@@ -4,7 +4,7 @@ import { NotFoundPageComponent } from '@/app/core/not-found-page/not-found-page.
 import { NavigationComponent } from '@/app/core/navigation/navigation.component';
 
 import { DashboardComponent } from '@/app/core/dashboard/dashboard.component';
-import {authGuard} from '@/app/core/auth/auth.guard';
+import { authGuard } from '@/app/core/auth/auth.guard';
 
 export const routes: Routes = [
   {
@@ -12,9 +12,10 @@ export const routes: Routes = [
     component: NavigationComponent,
     //canActivate: [AuthGuard],
     children: [
-      { path: 'dashboard/:dashboardId/:tabId',
+      {
+        path: 'dashboard/:dashboardId/:tabId',
         component: DashboardComponent,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
       },
     ],
   },
