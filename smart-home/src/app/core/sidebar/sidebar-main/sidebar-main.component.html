@@ -1,14 +1,12 @@
 <nav class="nav-wrapper">
   <ul class="menu-items">
-    <li class="menu-item active">
-      <a href="" class="menu-item-link">
-        <svg icon="dashboard" class="sidebar-icon"></svg>
-        <span class="item-title">Overview</span>
-      </a>
-    </li>
-    <li class="menu-item">
-      <svg icon="info" class="sidebar-icon"></svg>
-      <span class="item-title">About</span>
-    </li>
+    @for (dashboard of dashboards(); track dashboard.id) {
+      <li class="menu-item">
+        <a href="" class="menu-item-link" (click)="onDashboard(dashboard)">
+          <span class="material-symbols-outlined dash-icon">{{ dashboard.icon }}</span>
+          <div class="item-title">{{ dashboard.title }}</div>
+        </a>
+      </li>
+    }
   </ul>
 </nav>

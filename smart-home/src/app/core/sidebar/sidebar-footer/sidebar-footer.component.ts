@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import { ProfileService } from '@/app/shared/services/profile.service';
 import { AuthService } from '@/app/core/auth/services/auth/auth.service';
 
@@ -9,7 +9,7 @@ import { AuthService } from '@/app/core/auth/services/auth/auth.service';
   templateUrl: './sidebar-footer.component.html',
   styleUrl: './sidebar-footer.component.scss',
 })
-export class SidebarFooterComponent {
+export class SidebarFooterComponent implements OnInit {
   profileService = inject(ProfileService);
   authService = inject(AuthService);
 
