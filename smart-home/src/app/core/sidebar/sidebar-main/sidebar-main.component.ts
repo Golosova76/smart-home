@@ -13,7 +13,7 @@ import {Router} from '@angular/router';
 })
 export class SidebarMainComponent implements OnInit {
   dashboardService = inject(DashboardService);
-  private router = inject(Router);
+  router = inject(Router);
 
   readonly dashboards = this.dashboardService.dashboards;
 

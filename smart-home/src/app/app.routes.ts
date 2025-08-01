@@ -5,21 +5,33 @@ import { NavigationComponent } from '@/app/core/navigation/navigation.component'
 
 import { DashboardComponent } from '@/app/core/dashboard/dashboard.component';
 import { authGuard } from '@/app/core/auth/auth.guard';
+import {StubComponent} from '@/app/smart-home/components/stub/stub.component';
+import {DashboardTabComponent} from '@/app/smart-home/components/dashboard-tab/dashboard-tab.component';
 
 export const routes: Routes = [
   {
-    path:'', redirectTo: 'login', pathMatch: 'full',
-  },
-  {
     path: '',
     component: NavigationComponent,
-    //canActivate: [AuthGuard],
+    canActivate: [authGuard],
     children: [
       {
-        path: 'dashboard/:dashboardId/:tabId',
-        component: DashboardComponent,
-        canActivate: [authGuard],
+        path: '',
+        redirectTo: 'stub',
+        pathMatch: 'full'
       },
+      {
+        path: 'stub', component: StubComponent,
+      },
+      {
+        path: 'dashboard/:dashboardId',
+        component: DashboardComponent,
+        children: [
+          {
+            path: ':tabId',
+            component: DashboardTabComponent,
+          }
+        ]
+      }
     ],
   },
   { path: 'login', component: LoginPageComponent },

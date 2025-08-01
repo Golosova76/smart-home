@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Dashboard} from '@/app/shared/models/dashboard.model';
 import {Observable, tap} from 'rxjs';
 import {BASE_API_URL} from '@/app/shared/constants';
-import {DataModel} from '@/app/shared/models/data.model';
+import {DataModel, Tab} from '@/app/shared/models/data.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +13,7 @@ export class DashboardService {
 
   readonly dashboards = signal<Dashboard[]>([]);
   readonly dashboardById = signal<DataModel | null>(null);
+  readonly tabs = signal<Tab[]>([])
 
   getDashboards(): Observable<Dashboard[]> {
     return this.http.get<Dashboard[]>(`${BASE_API_URL}dashboards`).pipe(
@@ -26,6 +27,7 @@ export class DashboardService {
     return this.http.get<DataModel>(`${BASE_API_URL}dashboards/${id}`).pipe(
       tap((dataModel: DataModel) => {
         this.dashboardById.set(dataModel);
+        this.tabs.set(dataModel.tabs);
       })
     )
   }

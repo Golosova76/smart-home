@@ -2,7 +2,7 @@
   <ul class="menu-items">
     @for (dashboard of dashboards(); track dashboard.id) {
       <li class="menu-item">
-        <a href="" class="menu-item-link" (click)="onDashboard(dashboard)">
+        <a class="menu-item-link" (click)="onDashboard(dashboard)">
           <span class="material-symbols-outlined dash-icon">{{ dashboard.icon }}</span>
           <div class="item-title">{{ dashboard.title }}</div>
         </a>
