@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import {Component, computed, inject, OnInit} from '@angular/core';
 
 import { TabSwitcherComponent } from '@/app/smart-home/components/tab-switcher/tab-switcher.component';
 import { DashboardService } from '@/app/shared/services/dashboard.service';
@@ -12,7 +12,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
   styleUrl: './dashboard.component.scss',
   templateUrl: './dashboard.component.html',
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   dashboardService = inject(DashboardService);
@@ -34,6 +34,13 @@ export class DashboardComponent {
     const tabs = this.tabs();
     return tabs.find((tab) => tab.id === this.tabIdRoute())?.id ?? null;
   });
+
+  ngOnInit(): void {
+    const id = this.dashboardIdRoute();
+    if (id && !this.dashboardService.dashboardById()) {
+      this.dashboardService.getDashboardById(id).subscribe();
+    }
+  }
 
   onTabSelected(tabId: string) {
     this.router

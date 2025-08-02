@@ -29,6 +29,7 @@
 
 .menu-item-link {
   @include m.flex-column;
+  width: 100%;
 }
 
 .sidebar-icon {
