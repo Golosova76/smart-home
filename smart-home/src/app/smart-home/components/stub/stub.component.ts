@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-stub',
   imports: [],
   templateUrl: './stub.component.html',
-  styleUrl: './stub.component.scss'
+  styleUrl: './stub.component.scss',
 })
-export class StubComponent {
-
-}
+export class StubComponent {}

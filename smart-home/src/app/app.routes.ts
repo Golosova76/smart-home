@@ -5,8 +5,8 @@ import { NavigationComponent } from '@/app/core/navigation/navigation.component'
 
 import { DashboardComponent } from '@/app/core/dashboard/dashboard.component';
 import { authGuard } from '@/app/core/auth/auth.guard';
-import {StubComponent} from '@/app/smart-home/components/stub/stub.component';
-import {DashboardTabComponent} from '@/app/smart-home/components/dashboard-tab/dashboard-tab.component';
+import { StubComponent } from '@/app/smart-home/components/stub/stub.component';
+import { DashboardTabComponent } from '@/app/smart-home/components/dashboard-tab/dashboard-tab.component';
 
 export const routes: Routes = [
   {
@@ -17,10 +17,11 @@ export const routes: Routes = [
       {
         path: '',
         redirectTo: 'stub',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       {
-        path: 'stub', component: StubComponent,
+        path: 'stub',
+        component: StubComponent,
       },
       {
         path: 'dashboard/:dashboardId',
@@ -29,9 +30,9 @@ export const routes: Routes = [
           {
             path: ':tabId',
             component: DashboardTabComponent,
-          }
-        ]
-      }
+          },
+        ],
+      },
     ],
   },
   { path: 'login', component: LoginPageComponent },

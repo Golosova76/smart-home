@@ -1,10 +1,9 @@
-import {Component, computed, inject} from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 
 import { TabSwitcherComponent } from '@/app/smart-home/components/tab-switcher/tab-switcher.component';
-import {DashboardService} from '@/app/shared/services/dashboard.service';
-import {ActivatedRoute, Router, RouterOutlet} from '@angular/router';
-import {toSignal} from '@angular/core/rxjs-interop';
-
+import { DashboardService } from '@/app/shared/services/dashboard.service';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   imports: [TabSwitcherComponent, RouterOutlet],
@@ -37,8 +36,8 @@ export class DashboardComponent {
   });
 
   onTabSelected(tabId: string) {
-    this.router.navigate(['/dashboard', this.dashboardIdRoute(), tabId]).catch(() => {});
+    this.router
+      .navigate(['/dashboard', this.dashboardIdRoute(), tabId])
+      .catch(() => {});
   }
-
-
 }

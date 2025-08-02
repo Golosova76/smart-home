@@ -8,9 +8,8 @@ describe('StubComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [StubComponent]
-    })
-    .compileComponents();
+      imports: [StubComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(StubComponent);
     component = fixture.componentInstance;
