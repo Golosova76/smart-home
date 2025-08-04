@@ -1,5 +1,5 @@
 <app-tab-switcher
-  [tabs]="tabs()"
+  [tabs]="tabsSignal()"
   [activeTabId]="selectedTabId()"
   (selectTab)="onTabSelected($event)"
 ></app-tab-switcher>

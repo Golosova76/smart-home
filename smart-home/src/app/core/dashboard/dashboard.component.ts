@@ -22,61 +22,41 @@ export class DashboardComponent implements OnInit {
   destroyRef = inject(DestroyRef);
 
   // Добавляем новые поля для хранения последних параметров роута:
-  private lastDashboardId: string | null = null;
-  private lastTabId: string | null = null;
+  private lastDashboardIdRoute: string | null = null;
+  private lastTabIdRoute: string | null = null;
 
   //получение параметров URL - сигналы
-  readonly paramMap = toSignal(this.route.paramMap);
-  readonly dashboardIdRoute = computed(
-    () => this.paramMap()?.get('dashboardId') ?? null,
+  readonly dashboardIdRouteSignal = toSignal(
+    this.route.paramMap.pipe(
+      map((parameters) => parameters.get('dashboardId') ?? null),
+    ),
+    { initialValue: null },
   );
-  readonly tabIdRoute = toSignal(
+  readonly tabIdRouteSignal = toSignal(
     this.route.firstChild?.params.pipe(
       map((parameters) => parameters['tabId'] ?? null),
     ) ?? of(null),
     { initialValue: null },
   );
 
-  // сигналы
   //массив dashboards где dashboardId
-  readonly dashboards = this.dashboardService.dashboards;
+  readonly dashboardsSignal = this.dashboardService.dashboardsSignal;
   // один dashboard с tabs
-  readonly dashboardById = this.dashboardService.dashboardById;
+  readonly dashboardByIdSignal = this.dashboardService.dashboardByIdSignal;
   // массив tab где tabId
-  readonly tabs = this.dashboardService.tabs;
+  readonly tabsSignal = this.dashboardService.tabsSignal;
 
   // получаем TabId кот соот роуту
   readonly selectedTabId = computed(() => {
-    const tabs = this.tabs();
-    return tabs.find((tab) => tab.id === this.tabIdRoute())?.id ?? null;
+    const tabsSignal = this.tabsSignal();
+    return (
+      tabsSignal.find((tab) => tab.id === this.tabIdRouteSignal())?.id ?? null
+    );
   });
 
   ngOnInit(): void {
     this.initDashboards();
     this.initRouteParams();
-  }
-
-  //подгрузка dashboards при необходимости
-  private initDashboards() {
-    console.log('[initDashboards] SIGNAL dashboards до:', this.dashboards());
-    if (this.dashboards.length === 0 || !this.dashboards()) {
-      this.dashboardService.getDashboards().subscribe({
-        next: (data) => {
-          // Это данные из бэка
-          console.log(
-            '[initDashboards] BACKEND dashboards после запроса:',
-            data,
-          );
-
-          if (this.lastDashboardId !== null) {
-            console.log(
-              '[initDashboards] >>> Повторный вызов handleRouteParams после загрузки данных',
-            );
-            this.handleRouteParams(this.lastDashboardId, this.lastTabId);
-          }
-        },
-      });
-    }
   }
 
   initRouteParams() {
@@ -86,107 +66,140 @@ export class DashboardComponent implements OnInit {
     ])
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(([parentParameters, childParameters]) => {
-        const dashboardId = parentParameters.get('dashboardId');
-        const tabId = childParameters?.get('tabId') ?? null;
+        const dashboardIdRoute = parentParameters.get('dashboardId');
+        const tabIdRoute = childParameters?.get('tabId') ?? null;
         console.log(
           '[initRouteParams] ROUTE dashboardId:',
-          dashboardId,
+          dashboardIdRoute,
           'tabId:',
-          tabId,
+          tabIdRoute,
         );
 
         // Запоминаем актуальные параметры роута:
-        this.lastDashboardId = dashboardId;
-        this.lastTabId = tabId;
+        this.lastDashboardIdRoute = dashboardIdRoute;
+        this.lastTabIdRoute = tabIdRoute;
 
-        this.handleRouteParams(dashboardId, tabId);
+        this.handleRouteParams(dashboardIdRoute, tabIdRoute);
       });
   }
 
   onTabSelected(tabId: string) {
     this.router
-      .navigate(['/dashboard', this.dashboardIdRoute(), tabId])
+      .navigate(['/dashboard', this.dashboardIdRouteSignal(), tabId])
       .catch(() => {});
   }
 
-  handleRouteParams(dashboardId: string | null, tabId: string | null) {
-    const dashboards = this.dashboards();
-    console.log('SIGNAL dashboards:', dashboards);
+  handleRouteParams(
+    dashboardIdRoute: string | null,
+    tabIdRoute: string | null,
+  ) {
+    const dashboardsSignal = this.dashboardsSignal();
+    console.log('SIGNAL dashboards:', dashboardsSignal);
 
     // Это то, что пришло из роутера — параметры роута
     console.log(
       '[handleRouteParams] ROUTE dashboardId:',
-      dashboardId,
+      dashboardIdRoute,
       'tabId:',
-      tabId,
+      tabIdRoute,
     );
 
-    const dashboardIdRouteSub = this.getValidDashboardId(
-      dashboards,
-      dashboardId,
+    const dashboardIdValid = this.getValidDashboardId(
+      dashboardsSignal,
+      dashboardIdRoute,
     );
     console.log(
       '[handleRouteParams] SIGNAL dashboardIdRouteSub:',
-      dashboardIdRouteSub,
+      dashboardIdValid,
     );
-    if (!dashboardIdRouteSub) return;
+    if (!dashboardIdValid) return;
 
     console.log(
       '[handleRouteParams] SIGNAL dashboards:',
-      dashboards,
+      dashboardsSignal,
       'dashboardIdRouteSub:',
-      dashboardIdRouteSub,
+      dashboardIdValid,
       'tabId:',
-      tabId,
+      tabIdRoute,
     );
 
-    let tabIdRouteSub;
+    let tabIdValid;
 
     this.dashboardService
-      .getDashboardById(dashboardIdRouteSub)
+      .getDashboardById(dashboardIdValid)
       .subscribe((dataModel) => {
-        // === ЭТО ДАННЫЕ ИЗ БЭКА (НЕ СИГНАЛ, А HTTP ОТВЕТ) ===
         console.log(
           '[getDashboardById.subscribe] BACKEND dataModel:',
           dataModel,
         );
-        this.dashboardById.set(dataModel);
-        this.tabs.set(dataModel.tabs);
-        tabIdRouteSub = this.getValidTabId(dataModel.tabs, tabId);
+        this.dashboardByIdSignal.set(dataModel);
+        this.tabsSignal.set(dataModel.tabs);
+        tabIdValid = this.getValidTabId(dataModel.tabs, tabIdRoute);
         console.log(
           '[getDashboardById.subscribe] SIGNAL tabIdRouteSub:',
-          tabIdRouteSub,
+          tabIdValid,
         );
 
-        if (!tabIdRouteSub) return;
+        if (!tabIdValid) return;
 
-        if (dashboardIdRouteSub !== dashboardId || tabIdRouteSub !== tabId) {
+        if (
+          dashboardIdValid !== dashboardIdRoute ||
+          tabIdValid !== tabIdRoute
+        ) {
           this.router
-            .navigate(['/dashboard', dashboardIdRouteSub, tabIdRouteSub])
+            .navigate(['/dashboard', dashboardIdValid, tabIdValid])
             .catch(() => {});
           return;
         }
       });
   }
 
-  private getValidDashboardId(
-    dashboards: Dashboard[],
-    dashboardId: string | null,
-  ) {
-    const httpDashboardId = dashboards.some(
-      (dashboard) => dashboard.id === dashboardId,
+  private initDashboards() {
+    console.log(
+      '[initDashboards] SIGNAL dashboards до:',
+      this.dashboardsSignal(),
     );
-    if (!dashboardId || !httpDashboardId) {
-      return dashboards.length > 0 ? dashboards[0].id : null;
+    if (this.dashboardsSignal.length === 0 || !this.dashboardsSignal()) {
+      this.dashboardService.getDashboards().subscribe({
+        next: (data) => {
+          // Это данные из бэка
+          console.log(
+            '[initDashboards] BACKEND dashboards после запроса:',
+            data,
+          );
+
+          if (this.lastDashboardIdRoute !== null) {
+            console.log(
+              '[initDashboards] >>> Повторный вызов handleRouteParams после загрузки данных',
+            );
+            this.handleRouteParams(
+              this.lastDashboardIdRoute,
+              this.lastTabIdRoute,
+            );
+          }
+        },
+      });
     }
-    return dashboardId;
   }
 
-  private getValidTabId(tabs: Tab[], tabId: string | null) {
-    const httpTabId = tabs.some((tab) => tab.id === tabId);
-    if (!tabId || !httpTabId) {
+  private getValidDashboardId(
+    dashboards: Dashboard[],
+    dashboardIdRoute: string | null,
+  ) {
+    const httpDashboardId = dashboards.some(
+      (dashboard) => dashboard.id === dashboardIdRoute,
+    );
+    if (!dashboardIdRoute || !httpDashboardId) {
+      return dashboards.length > 0 ? dashboards[0].id : null;
+    }
+    return dashboardIdRoute;
+  }
+
+  private getValidTabId(tabs: Tab[], tabIdRoute: string | null) {
+    const httpTabId = tabs.some((tab) => tab.id === tabIdRoute);
+    if (!tabIdRoute || !httpTabId) {
       return tabs.length > 0 ? tabs[0].id : null;
     }
-    return tabId;
+    return tabIdRoute;
   }
 }

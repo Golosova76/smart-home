@@ -11,14 +11,14 @@ import { DataModel, Tab } from '@/app/shared/models/data.model';
 export class DashboardService {
   private http = inject(HttpClient);
 
-  readonly dashboards = signal<Dashboard[]>([]);
-  readonly dashboardById = signal<DataModel | null>(null);
-  readonly tabs = signal<Tab[]>([]);
+  readonly dashboardsSignal = signal<Dashboard[]>([]);
+  readonly dashboardByIdSignal = signal<DataModel | null>(null);
+  readonly tabsSignal = signal<Tab[]>([]);
 
   getDashboards(): Observable<Dashboard[]> {
     return this.http.get<Dashboard[]>(`${BASE_API_URL}dashboards`).pipe(
       tap((dashboard: Dashboard[]) => {
-        this.dashboards.set(dashboard);
+        this.dashboardsSignal.set(dashboard);
       }),
     );
   }
@@ -26,8 +26,8 @@ export class DashboardService {
   getDashboardById(id: string): Observable<DataModel> {
     return this.http.get<DataModel>(`${BASE_API_URL}dashboards/${id}`).pipe(
       tap((dataModel: DataModel) => {
-        this.dashboardById.set(dataModel);
-        this.tabs.set(dataModel.tabs);
+        this.dashboardByIdSignal.set(dataModel);
+        this.tabsSignal.set(dataModel.tabs);
       }),
     );
   }

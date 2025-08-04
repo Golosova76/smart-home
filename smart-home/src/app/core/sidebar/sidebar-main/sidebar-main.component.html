@@ -1,6 +1,6 @@
 <nav class="nav-wrapper">
   <ul class="menu-items">
-    @for (dashboard of dashboards(); track dashboard.id) {
+    @for (dashboard of dashboardsSignal(); track dashboard.id) {
       <li [class.active]="isActive(dashboard)" class="menu-item">
         <a (click)="onDashboard(dashboard)" class="menu-item-link">
           <span class="material-symbols-outlined dash-icon">{{

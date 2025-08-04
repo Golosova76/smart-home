@@ -18,7 +18,7 @@ export class SidebarMainComponent implements OnInit {
   router = inject(Router);
   route = inject(ActivatedRoute);
 
-  readonly dashboards = this.dashboardService.dashboards;
+  readonly dashboardsSignal = this.dashboardService.dashboardsSignal;
 
   readonly dashboardIdRoute: Signal<string | null> = toSignal(
     this.router.events.pipe(

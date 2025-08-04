@@ -14,16 +14,16 @@ export class DashboardTabComponent {
   dashboardService = inject(DashboardService);
   private route = inject(ActivatedRoute);
 
-  readonly dashboardById = this.dashboardService.dashboardById;
-  readonly tabs = this.dashboardService.tabs;
+  readonly dashboardByIdSignal = this.dashboardService.dashboardByIdSignal;
+  readonly tabsSignal = this.dashboardService.tabsSignal;
 
   readonly paramMap = toSignal(this.route.paramMap);
   readonly tabIdRoute = computed(() => this.paramMap()?.get('tabId') ?? null);
 
   readonly cards = computed(() => {
-    const dataModel = this.dashboardById();
+    const dataModel = this.dashboardByIdSignal();
     const tabIdRoute = this.tabIdRoute();
     if (!dataModel || !tabIdRoute) return [];
-    return this.tabs().find((tab) => tab.id === tabIdRoute)?.cards ?? [];
+    return this.tabsSignal().find((tab) => tab.id === tabIdRoute)?.cards ?? [];
   });
 }
