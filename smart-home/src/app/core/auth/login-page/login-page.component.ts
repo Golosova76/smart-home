@@ -9,6 +9,7 @@ import { AuthService } from '@/app/core/auth/services/auth/auth.service';
 import { Router } from '@angular/router';
 import { ProfileService } from '@/app/shared/services/profile.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import {DashboardService} from '@/app/shared/services/dashboard.service';
 
 @Component({
   selector: 'app-login-page',
@@ -20,6 +21,8 @@ export class LoginPageComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
   private profileService = inject(ProfileService);
+  dashboardService = inject(DashboardService);
+
 
   isPasswordVisible = signal<boolean>(false);
 
@@ -46,7 +49,20 @@ export class LoginPageComponent {
       this.authService.login(formData).subscribe({
         next: () => {
           this.profileService.getProfile().subscribe();
-          this.router.navigate(['']).then(() => {});
+          this.dashboardService.getDashboards().subscribe({
+            next: (dashboards) => {
+              if (dashboards.length === 0) return;
+              const firstDashboard = dashboards[0];
+              this.dashboardService.getDashboardById(firstDashboard.id).subscribe({
+                next: (data) => {
+                  if (data.tabs && data.tabs.length > 0) {
+                    const firstTabId = data.tabs[0].id;
+                    this.router.navigate(['/dashboard', firstDashboard.id, firstTabId]).catch(() => {});
+                  }
+                }
+              })
+            }
+          });
         },
         error: (error: HttpErrorResponse) => {
           if (error.status === 401) {
