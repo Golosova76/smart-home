@@ -5,18 +5,21 @@
   background-color: var(--back-cards);
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100vh;
+  transition: width 0.5s ease 0s;
+
+  &.collapsed {
+    width: 50px;
+  }
 }
 
-@media (max-width: 1024px) {
-  :host(.closed) {
-    width: 0;
-    overflow: hidden;
-  }
+.header {
+  border-left: 1px solid var(--light-border);
 }
 
 .main {
   border-right: 1px solid var(--light-border);
+  border-left: 1px solid var(--light-border);
   height: 100%;
 }
 

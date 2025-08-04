@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {Component, inject, input, OnInit} from '@angular/core';
 import { ProfileService } from '@/app/shared/services/profile.service';
 import { AuthService } from '@/app/core/auth/services/auth/auth.service';
 
@@ -12,6 +12,8 @@ import { AuthService } from '@/app/core/auth/services/auth/auth.service';
 export class SidebarFooterComponent implements OnInit {
   profileService = inject(ProfileService);
   authService = inject(AuthService);
+
+  sidebarCollapsed = input<boolean>(false);
 
   readonly profile = this.profileService.profile;
 

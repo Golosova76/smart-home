@@ -9,15 +9,15 @@
 }
 
 .footer-initials {
-  width: 32px;
-  height: 32px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   background-color: var(--active-text);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: var(--light-solid);
   user-select: none;
   box-shadow: 0 2px 8px 0 #0001;
@@ -26,3 +26,8 @@
 .logout-icon {
   cursor: pointer;
 }
+
+.footer-text {
+  white-space: nowrap;
+}
+

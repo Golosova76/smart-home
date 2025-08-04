@@ -6,7 +6,9 @@
           <span class="material-symbols-outlined dash-icon">{{
             dashboard.icon
           }}</span>
-          <div class="item-title">{{ dashboard.title }}</div>
+          @if (!sidebarCollapsed()) {
+            <div class="item-title">{{ dashboard.title }}</div>
+          }
         </a>
       </li>
     }
