@@ -3,7 +3,9 @@
     <div class="footer-initials">{{ user.initials }}</div>
     @if (!sidebarCollapsed()) {
       <div class="footer-text">{{ user.fullName }}</div>
-      <span (click)="onLogout()" class="material-symbols-outlined logout-icon">logout</span>
+      <span (click)="onLogout()" class="material-symbols-outlined logout-icon"
+        >logout</span
+      >
     }
   } @else {
     <div class="no-profile">No profile data</div>

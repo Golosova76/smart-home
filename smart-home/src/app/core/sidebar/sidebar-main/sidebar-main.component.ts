@@ -1,4 +1,4 @@
-import {Component, inject, input, OnInit, Signal} from '@angular/core';
+import { Component, inject, input, OnInit, Signal } from '@angular/core';
 import { DashboardService } from '@/app/shared/services/dashboard.service';
 import { Dashboard } from '@/app/shared/models/dashboard.model';
 import { DataModel } from '@/app/shared/models/data.model';
