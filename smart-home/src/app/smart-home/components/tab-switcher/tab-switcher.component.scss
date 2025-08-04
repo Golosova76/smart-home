@@ -1,0 +1,18 @@
+@use "styles/mixins" as m;
+
+.nav-tabs {
+  height: 56px;
+  border-bottom: 1px solid var(--light-border);
+  border-right: 1px solid var(--light-border);
+  padding: 10px 10px 10px 20px;
+  @include m.flex-column;
+  gap: 20px;
+  background-color: var(--active-primary);
+  .tab-button {
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+    &.active {
+      border-bottom: 2px solid red;
+    }
+  }
+}

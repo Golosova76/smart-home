@@ -1,0 +1,61 @@
+@use "styles/mixins" as m;
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.device-wrapper.horizontal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  width: 100%;
+  .device-icon {
+    color: var(--active-icon);
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.device-wrapper.vertical {
+  display: grid;
+  grid-template-columns: 24px 1fr 1fr;
+  align-items: center;
+  width: 100%;
+  gap: 15px;
+  .device-icon {
+    color: var(--active-icon);
+    width: 24px;
+    height: 24px;
+    &.active-device {
+      color: var(--active-swich-back);
+    }
+  }
+  .device-state {
+    justify-self: center;
+    @include m.switch;
+  }
+}
+
+.device-wrapper.single {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  .device-block {
+    display: flex;
+    align-items: center;
+    gap: 45px;
+    .device-icon.icon-on {
+      color: var(--active-swich-back);
+      width: 24px;
+      height: 24px;
+    }
+    .device-icon.icon-off {
+      color: var(--active-icon);
+      width: 24px;
+      height: 24px;
+    }
+  }
+}

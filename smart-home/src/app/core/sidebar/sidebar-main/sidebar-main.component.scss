@@ -1,0 +1,34 @@
+@use "styles/mixins" as m;
+
+.nav-wrapper {
+  padding: 5px;
+}
+
+.menu-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  .menu-item.active {
+    background-color: var(--active-primary);
+    color: var(--active-text);
+    .sidebar-icon {
+      color: var(--active-text);
+    }
+  }
+}
+
+.menu-item {
+  @include m.flex-column;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.menu-item-link {
+  @include m.flex-column;
+}
+
+.sidebar-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--light-border);
+}

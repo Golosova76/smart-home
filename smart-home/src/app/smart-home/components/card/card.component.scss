@@ -1,0 +1,45 @@
+@use "styles/mixins" as m;
+
+.card-wrapper {
+  padding: 20px;
+  background-color: var(--active-text);
+  border-radius: 5px;
+  width: 100%;
+  min-width: 0;
+  &.active-card {
+    box-shadow: 0 0 15px var(--box-shadow-active);
+    border: 2px solid var(--box-border-active);
+    transition: all 0.3s ease;
+  }
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  @include m.margin-bottom20;
+}
+
+.card-state.switch {
+  @include m.switch;
+}
+
+.singleDevice {
+}
+
+.horizontalLayout {
+  .card-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 20px;
+    justify-items: start;
+    justify-content: start;
+  }
+}
+.verticalLayout {
+  .card-content {
+    display: grid;
+    grid-template-columns: 1fr; // только 1 колонка
+    gap: 20px;
+    justify-items: start;
+  }
+}

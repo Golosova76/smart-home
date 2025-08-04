@@ -1,0 +1,39 @@
+@if (sensor()) {
+  @switch (layout()) {
+    @case ("horizontalLayout") {
+      <div class="sensor-wrapper horizontal">
+        <div class="sensor-label">{{ sensor()?.label }}</div>
+        <span class="material-symbols-outlined sensor-icon">{{
+          sensor()?.icon
+        }}</span>
+        <div class="sensor-value">
+          {{ sensor()?.value | sensorValue }}
+        </div>
+      </div>
+    }
+    @case ("verticalLayout") {
+      <div class="sensor-wrapper vertical">
+        <span class="material-symbols-outlined sensor-icon">{{
+          sensor()?.icon
+        }}</span>
+        <div class="sensor-label">{{ sensor()?.label }}</div>
+        <div class="sensor-value">
+          {{ sensor()?.value | sensorValue }}
+        </div>
+      </div>
+    }
+    @case ("singleDevice") {
+      <div class="sensor-wrapper single">
+        <div class="sensor-block">
+          <div class="sensor-label">{{ sensor()?.label }}</div>
+          <span class="material-symbols-outlined sensor-icon">
+            {{ sensor()?.icon }}
+          </span>
+        </div>
+        <div class="sensor-value">
+          {{ sensor()?.value | sensorValue }}
+        </div>
+      </div>
+    }
+  }
+}
