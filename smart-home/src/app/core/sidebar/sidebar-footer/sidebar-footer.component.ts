@@ -1,6 +1,7 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, input } from '@angular/core';
 import { ProfileService } from '@/app/shared/services/profile.service';
 import { AuthService } from '@/app/core/auth/services/auth/auth.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-sidebar-footer',
@@ -9,16 +10,20 @@ import { AuthService } from '@/app/core/auth/services/auth/auth.service';
   templateUrl: './sidebar-footer.component.html',
   styleUrl: './sidebar-footer.component.scss',
 })
-export class SidebarFooterComponent implements OnInit {
+export class SidebarFooterComponent {
   profileService = inject(ProfileService);
   authService = inject(AuthService);
+  destroyRef = inject(DestroyRef);
 
   sidebarCollapsed = input<boolean>(false);
 
   readonly profile = this.profileService.profile;
 
-  ngOnInit() {
-    this.profileService.getProfile().subscribe();
+  constructor() {
+    this.profileService
+      .getProfile()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe();
   }
 
   onLogout() {

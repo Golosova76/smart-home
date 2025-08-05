@@ -19,7 +19,7 @@ export class SidebarComponent {
   sidebarCollapsed = signal<boolean>(false);
 
   @HostBinding('class.collapsed')
-  get isCollapsed() {
+  get isCollapsed(): boolean {
     return this.sidebarCollapsed();
   }
 

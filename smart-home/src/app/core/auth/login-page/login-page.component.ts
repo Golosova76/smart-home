@@ -1,4 +1,4 @@
-import {Component, inject, OnDestroy, signal} from '@angular/core';
+import { Component, inject, OnDestroy, signal } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -10,8 +10,7 @@ import { Router } from '@angular/router';
 import { ProfileService } from '@/app/shared/services/profile.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { DashboardService } from '@/app/shared/services/dashboard.service';
-import {EMPTY, map, Subject, switchMap, takeUntil} from 'rxjs';
-
+import { EMPTY, map, Subject, switchMap, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-login-page',
@@ -54,35 +53,39 @@ export class LoginPageComponent implements OnDestroy {
       userName: this.form.value.username ?? '',
       password: this.form.value.password ?? '',
     };
-    this.authService.login(formData).pipe(
-      switchMap(() => this.profileService.getProfile()),
-      switchMap(() => this.dashboardService.getDashboards()),
-      switchMap((dashboards) => {
-        if (!dashboards.length) return EMPTY;
-        const firstDashboard = dashboards[0];
-        return this.dashboardService.getDashboardById(firstDashboard.id).pipe(
-          map((data) => ({data, firstDashboard}))
-        );
-      }),
-      takeUntil(this.destroy$),
-    )
-    .subscribe({
-      next: (result) => {
-        if (!result) return;
-        const {data, firstDashboard} = result;
-        if (!data.tabs?.length) return;
-        const firstTabId = data.tabs[0].id;
-        this.router
-          .navigate(['/dashboard', firstDashboard.id, firstTabId])
-          .catch(() => {});
-      },
-      error: (error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          this.errorMessage.set('Invalid login or password.');
-          return;
-        }
-        this.errorMessage.set('Unknown error occurred. Please try again later.');
-      }
-    });
+    this.authService
+      .login(formData)
+      .pipe(
+        switchMap(() => this.profileService.getProfile()),
+        switchMap(() => this.dashboardService.getDashboards()),
+        switchMap((dashboards) => {
+          if (dashboards.length === 0) return EMPTY;
+          const firstDashboard = dashboards[0];
+          return this.dashboardService
+            .getDashboardById(firstDashboard.id)
+            .pipe(map((data) => ({ data, firstDashboard })));
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe({
+        next: (result) => {
+          if (!result) return;
+          const { data, firstDashboard } = result;
+          if (!data.tabs?.length) return;
+          const firstTabId = data.tabs[0].id;
+          this.router
+            .navigate(['/dashboard', firstDashboard.id, firstTabId])
+            .catch(() => {});
+        },
+        error: (error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.errorMessage.set('Invalid login or password.');
+            return;
+          }
+          this.errorMessage.set(
+            'Unknown error occurred. Please try again later.',
+          );
+        },
+      });
   }
 }

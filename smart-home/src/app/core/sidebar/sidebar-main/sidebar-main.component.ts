@@ -1,9 +1,15 @@
-import { Component, inject, input, OnInit, Signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  input,
+  Signal,
+} from '@angular/core';
 import { DashboardService } from '@/app/shared/services/dashboard.service';
 import { Dashboard } from '@/app/shared/models/dashboard.model';
 import { DataModel } from '@/app/shared/models/data.model';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { filter, map, startWith } from 'rxjs';
 
 @Component({
@@ -13,10 +19,11 @@ import { filter, map, startWith } from 'rxjs';
   templateUrl: './sidebar-main.component.html',
   styleUrl: './sidebar-main.component.scss',
 })
-export class SidebarMainComponent implements OnInit {
+export class SidebarMainComponent {
   dashboardService = inject(DashboardService);
   router = inject(Router);
   route = inject(ActivatedRoute);
+  destroyRef = inject(DestroyRef);
 
   sidebarCollapsed = input<boolean>(false);
 
@@ -34,19 +41,21 @@ export class SidebarMainComponent implements OnInit {
     { initialValue: null },
   );
 
-  ngOnInit() {
-    this.dashboardService.getDashboards().subscribe();
+  constructor() {
+    this.dashboardService
+      .getDashboards()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe();
   }
 
   onDashboard(dashboard: Dashboard) {
     this.dashboardService.getDashboardById(dashboard.id).subscribe({
       next: (data: DataModel) => {
-        if (data.tabs && data.tabs.length > 0) {
-          const firstTabId = data.tabs[0].id;
-          this.router
-            .navigate(['/dashboard', dashboard.id, firstTabId])
-            .catch(() => {});
-        }
+        if (!data.tabs?.length) return;
+        const firstTabId = data.tabs[0].id;
+        this.router
+          .navigate(['/dashboard', dashboard.id, firstTabId])
+          .catch(() => {});
       },
     });
   }
