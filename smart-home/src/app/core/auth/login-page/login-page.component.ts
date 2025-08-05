@@ -59,7 +59,10 @@ export class LoginPageComponent implements OnDestroy {
         switchMap(() => this.profileService.getProfile()),
         switchMap(() => this.dashboardService.getDashboards()),
         switchMap((dashboards) => {
-          if (dashboards.length === 0) return EMPTY;
+          if (dashboards.length === 0) {
+            this.router.navigate(['/stub']).catch(() => {});
+            return EMPTY;
+          }
           const firstDashboard = dashboards[0];
           return this.dashboardService
             .getDashboardById(firstDashboard.id)
