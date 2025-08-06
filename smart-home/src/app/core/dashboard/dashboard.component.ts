@@ -49,26 +49,11 @@ export class DashboardComponent implements OnInit {
   // получаем TabId кот соот роуту
   readonly selectedTabId = computed(() => {
     const tabsSignal = this.tabsSignal();
-    const routeTabIdSignal = this.tabIdRouteSignal();
-
-    console.log('[(1) - selectedTabId] до tabsSignal:', tabsSignal);
-    console.log('[(2) - selectedTabId] до routeTabIdSignal:', routeTabIdSignal);
-
-    const foundRouteTabIdSignal = tabsSignal.find((tab) => tab.id === routeTabIdSignal)?.id ?? null
-
-    console.log('[(3) - selectedTabId] после foundRouteTabIdSignal:', foundRouteTabIdSignal);
-    return foundRouteTabIdSignal;
-  });
-
-  /*
-  // получаем TabId кот соот роуту
-  readonly selectedTabId = computed(() => {
-    const tabsSignal = this.tabsSignal();
     return (
       tabsSignal.find((tab) => tab.id === this.tabIdRouteSignal())?.id ?? null
     );
   });
-  */
+
 
   ngOnInit(): void {
     this.initDashboards();
@@ -84,12 +69,6 @@ export class DashboardComponent implements OnInit {
       .subscribe(([parentParameters, childParameters]) => {
         const dashboardIdRoute = parentParameters.get('dashboardId');
         const tabIdRoute = childParameters?.get('tabId') ?? null;
-        console.log(
-          '[(4) - initRouteParams] ROUTE dashboardId:',
-          dashboardIdRoute,
-          'tabId:',
-          tabIdRoute,
-        );
 
         // Запоминаем актуальные параметры роута:
         this.lastDashboardIdRoute = dashboardIdRoute;
@@ -110,51 +89,22 @@ export class DashboardComponent implements OnInit {
     tabIdRoute: string | null,
   ) {
     const dashboardsSignal = this.dashboardsSignal();
-    console.log('[(5) - handleRouteParams] SIGNAL dashboards до:', dashboardsSignal);
-
-    // Это то, что пришло из роутера — параметры роута
-    console.log(
-      '[(6) - handleRouteParams] ROUTE dashboardId:',
-      dashboardIdRoute,
-      'tabId:',
-      tabIdRoute,
-    );
 
     const dashboardIdValid = this.getValidDashboardId(
       dashboardsSignal,
       dashboardIdRoute,
     );
-    console.log(
-      '[(7) - handleRouteParams] ROUTE dashboardIdValid:',
-      dashboardIdValid,
-    );
-    if (!dashboardIdValid) return;
 
-    console.log(
-      '[(8) - handleRouteParams] SIGNAL dashboards:',
-      dashboardsSignal,
-      'dashboardIdValid:',
-      dashboardIdValid,
-      'tabId:',
-      tabIdRoute,
-    );
+    if (!dashboardIdValid) return;
 
     let tabIdValid;
 
     this.dashboardService
       .getDashboardById(dashboardIdValid)
       .subscribe((dataModel) => {
-        console.log(
-          '[(9) - handleRouteParams]getDashboardById.subscribe] BACKEND dataModel:',
-          dataModel,
-        );
         this.dashboardByIdSignal.set(dataModel);
         this.tabsSignal.set(dataModel.tabs);
         tabIdValid = this.getValidTabId(dataModel.tabs, tabIdRoute);
-        console.log(
-          '[(10) - handleRouteParams]getDashboardById.subscribe] ROUTE tabIdValid:',
-          tabIdValid,
-        );
 
         if (!tabIdValid) return;
 
@@ -171,28 +121,10 @@ export class DashboardComponent implements OnInit {
   }
 
   private initDashboards() {
-    console.log('[(11) - initDashboards] SIGNAL dashboards до:',this.dashboardsSignal(),
-    );
-    this.handleRouteParams(
-      this.lastDashboardIdRoute,
-      this.lastTabIdRoute,
-    );
     if (this.dashboardsSignal.length === 0 || !this.dashboardsSignal()) {
       this.dashboardService.getDashboards().subscribe({
-        next: (data) => {
-          console.log(
-            '[(12) - initDashboards] BACKEND dashboards после запроса:',
-            data,
-          );
-          console.log(
-            '[(13) - initDashboards] SIGNAL dashboards после запроса:',
-            this.dashboardsSignal(),
-          );
-
+        next: () => {
           if (this.lastDashboardIdRoute !== null) {
-            console.log(
-              '[(14) - initDashboards] >>> Повторный вызов handleRouteParams после загрузки данных',
-            );
             this.handleRouteParams(
               this.lastDashboardIdRoute,
               this.lastTabIdRoute,
