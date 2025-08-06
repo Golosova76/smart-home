@@ -1,6 +1,5 @@
-import {Component, DestroyRef, inject} from '@angular/core';
-import {DashboardService} from '@/app/shared/services/dashboard.service';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { Component, DestroyRef, inject } from '@angular/core';
+import { DashboardService } from '@/app/shared/services/dashboard.service';
 
 @Component({
   selector: 'app-stub',
@@ -16,8 +15,8 @@ export class StubComponent {
 
   constructor() {
     //this.dashboardService
-      //.getDashboards()
-      //.pipe(takeUntilDestroyed(this.destroyRef))
-      //.subscribe();
+    //.getDashboards()
+    //.pipe(takeUntilDestroyed(this.destroyRef))
+    //.subscribe();
   }
 }

@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 import { ProfileService } from '@/app/shared/services/profile.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { DashboardService } from '@/app/shared/services/dashboard.service';
-import { EMPTY, map, Subject, switchMap, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-login-page',
@@ -56,16 +56,16 @@ export class LoginPageComponent implements OnDestroy {
     this.authService.login(formData).subscribe({
       next: () => {
         this.router.navigate(['']).then(() => {});
-        },
-        error: (error: HttpErrorResponse) => {
-          if (error.status === 401) {
-            this.errorMessage.set('Invalid login or password.');
-            return;
-          }
-          this.errorMessage.set(
-            'Unknown error occurred. Please try again later.',
-          );
-        },
-      });
+      },
+      error: (error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          this.errorMessage.set('Invalid login or password.');
+          return;
+        }
+        this.errorMessage.set(
+          'Unknown error occurred. Please try again later.',
+        );
+      },
+    });
   }
 }

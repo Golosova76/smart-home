@@ -1,13 +1,6 @@
-import {
-  Component,
-  DestroyRef,
-  inject,
-  input,
-  Signal,
-} from '@angular/core';
+import { Component, DestroyRef, inject, input, Signal } from '@angular/core';
 import { DashboardService } from '@/app/shared/services/dashboard.service';
 import { Dashboard } from '@/app/shared/models/dashboard.model';
-import { DataModel } from '@/app/shared/models/data.model';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { filter, map, startWith } from 'rxjs';
@@ -51,9 +44,7 @@ export class SidebarMainComponent {
   }
 
   onDashboard(dashboard: Dashboard) {
-    this.router
-      .navigate(['/dashboard', dashboard.id])
-      .catch(() => {});
+    this.router.navigate(['/dashboard', dashboard.id]).catch(() => {});
   }
 
   isActive(dashboard: Dashboard) {

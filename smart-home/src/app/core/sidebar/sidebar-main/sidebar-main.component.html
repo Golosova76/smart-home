@@ -1,20 +1,19 @@
 @if (dashboardsSignal().length === 0) {
-    @if (!sidebarCollapsed()) {
-      <div class="empty-state-dashboards">
-        You don’t have any dashboards yet. They’ll appear here as soon as you create them.
-      </div>
-    } @else {
-      <div class="empty-state-dashboards">
-        No dash
-      </div>
-    }
+  @if (!sidebarCollapsed()) {
+    <div class="empty-state-dashboards">
+      You don’t have any dashboards yet. They’ll appear here as soon as you
+      create them.
+    </div>
   } @else {
-    <nav class="nav-wrapper">
-      <ul class="menu-items">
+    <div class="empty-state-dashboards">No dash</div>
+  }
+} @else {
+  <nav class="nav-wrapper">
+    <ul class="menu-items">
       @for (dashboard of dashboardsSignal(); track dashboard.id) {
         <li [class.active]="isActive(dashboard)" class="menu-item">
           <a (click)="onDashboard(dashboard)" class="menu-item-link">
-          <span class="material-symbols-outlined dash-icon">{{
+            <span class="material-symbols-outlined dash-icon">{{
               dashboard.icon
             }}</span>
             @if (!sidebarCollapsed()) {
@@ -24,6 +23,5 @@
         </li>
       }
     </ul>
-    </nav>
+  </nav>
 }
-

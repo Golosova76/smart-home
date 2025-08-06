@@ -54,9 +54,13 @@ export class DashboardComponent implements OnInit {
     console.log('[(1) - selectedTabId] до tabsSignal:', tabsSignal);
     console.log('[(2) - selectedTabId] до routeTabIdSignal:', routeTabIdSignal);
 
-    const foundRouteTabIdSignal = tabsSignal.find((tab) => tab.id === routeTabIdSignal)?.id ?? null
+    const foundRouteTabIdSignal =
+      tabsSignal.find((tab) => tab.id === routeTabIdSignal)?.id ?? null;
 
-    console.log('[(3) - selectedTabId] после foundRouteTabIdSignal:', foundRouteTabIdSignal);
+    console.log(
+      '[(3) - selectedTabId] после foundRouteTabIdSignal:',
+      foundRouteTabIdSignal,
+    );
     return foundRouteTabIdSignal;
   });
 
@@ -110,7 +114,10 @@ export class DashboardComponent implements OnInit {
     tabIdRoute: string | null,
   ) {
     const dashboardsSignal = this.dashboardsSignal();
-    console.log('[(5) - handleRouteParams] SIGNAL dashboards до:', dashboardsSignal);
+    console.log(
+      '[(5) - handleRouteParams] SIGNAL dashboards до:',
+      dashboardsSignal,
+    );
 
     // Это то, что пришло из роутера — параметры роута
     console.log(
@@ -171,12 +178,11 @@ export class DashboardComponent implements OnInit {
   }
 
   private initDashboards() {
-    console.log('[(11) - initDashboards] SIGNAL dashboards до:',this.dashboardsSignal(),
+    console.log(
+      '[(11) - initDashboards] SIGNAL dashboards до:',
+      this.dashboardsSignal(),
     );
-    this.handleRouteParams(
-      this.lastDashboardIdRoute,
-      this.lastTabIdRoute,
-    );
+    this.handleRouteParams(this.lastDashboardIdRoute, this.lastTabIdRoute);
     if (this.dashboardsSignal.length === 0 || !this.dashboardsSignal()) {
       this.dashboardService.getDashboards().subscribe({
         next: (data) => {
