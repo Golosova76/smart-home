@@ -13,11 +13,7 @@ export class ProfileService {
   readonly profile = signal<UserProfile | null>(null);
 
   getProfile(): Observable<UserProfile> {
-    return this.http.get<UserProfile>(`${BASE_API_URL}user/profile`).pipe(
-      tap((profile: UserProfile) => {
-        this.profile.set(profile);
-      }),
-    );
+    return this.http.get<UserProfile>(`${BASE_API_URL}user/profile`);
   }
 
   clearProfile(): void {

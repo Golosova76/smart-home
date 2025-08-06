@@ -53,32 +53,9 @@ export class LoginPageComponent implements OnDestroy {
       userName: this.form.value.username ?? '',
       password: this.form.value.password ?? '',
     };
-    this.authService
-      .login(formData)
-      .pipe(
-        switchMap(() => this.profileService.getProfile()),
-        switchMap(() => this.dashboardService.getDashboards()),
-        switchMap((dashboards) => {
-          if (dashboards.length === 0) {
-            this.router.navigate(['/stub']).catch(() => {});
-            return EMPTY;
-          }
-          const firstDashboard = dashboards[0];
-          return this.dashboardService
-            .getDashboardById(firstDashboard.id)
-            .pipe(map((data) => ({ data, firstDashboard })));
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: (result) => {
-          if (!result) return;
-          const { data, firstDashboard } = result;
-          if (!data.tabs?.length) return;
-          const firstTabId = data.tabs[0].id;
-          this.router
-            .navigate(['/dashboard', firstDashboard.id, firstTabId])
-            .catch(() => {});
+    this.authService.login(formData).subscribe({
+      next: () => {
+        this.router.navigate(['']).then(() => {});
         },
         error: (error: HttpErrorResponse) => {
           if (error.status === 401) {

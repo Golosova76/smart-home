@@ -23,7 +23,9 @@ export class SidebarFooterComponent {
     this.profileService
       .getProfile()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe();
+      .subscribe({
+        next: (profile) => this.profile.set(profile),
+      });
   }
 
   onLogout() {
