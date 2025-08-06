@@ -51,15 +51,9 @@ export class SidebarMainComponent {
   }
 
   onDashboard(dashboard: Dashboard) {
-    this.dashboardService.getDashboardById(dashboard.id).subscribe({
-      next: (data: DataModel) => {
-        if (!data.tabs?.length) return;
-        const firstTabId = data.tabs[0].id;
-        this.router
-          .navigate(['/dashboard', dashboard.id, firstTabId])
-          .catch(() => {});
-      },
-    });
+    this.router
+      .navigate(['/dashboard', dashboard.id])
+      .catch(() => {});
   }
 
   isActive(dashboard: Dashboard) {

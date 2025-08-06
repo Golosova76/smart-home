@@ -171,9 +171,11 @@ export class DashboardComponent implements OnInit {
   }
 
   private initDashboards() {
-    console.log(
-      '[(11) - initDashboards] SIGNAL dashboards до:',
-      this.dashboardsSignal(),
+    console.log('[(11) - initDashboards] SIGNAL dashboards до:',this.dashboardsSignal(),
+    );
+    this.handleRouteParams(
+      this.lastDashboardIdRoute,
+      this.lastTabIdRoute,
     );
     if (this.dashboardsSignal.length === 0 || !this.dashboardsSignal()) {
       this.dashboardService.getDashboards().subscribe({
