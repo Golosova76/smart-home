@@ -45,7 +45,9 @@ export class SidebarMainComponent {
     this.dashboardService
       .getDashboards()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe();
+      .subscribe({
+        next: (dashboardsSignal) => this.dashboardsSignal.set(dashboardsSignal),
+      });
   }
 
   onDashboard(dashboard: Dashboard) {

@@ -15,9 +15,9 @@ export class StubComponent {
   readonly dashboards = this.dashboardService.dashboardsSignal;
 
   constructor() {
-    this.dashboardService
-      .getDashboards()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe();
+    //this.dashboardService
+      //.getDashboards()
+      //.pipe(takeUntilDestroyed(this.destroyRef))
+      //.subscribe();
   }
 }

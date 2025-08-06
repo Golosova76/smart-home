@@ -16,11 +16,7 @@ export class DashboardService {
   readonly tabsSignal = signal<Tab[]>([]);
 
   getDashboards(): Observable<Dashboard[]> {
-    return this.http.get<Dashboard[]>(`${BASE_API_URL}dashboards`).pipe(
-      tap((dashboard: Dashboard[]) => {
-        this.dashboardsSignal.set(dashboard);
-      }),
-    );
+    return this.http.get<Dashboard[]>(`${BASE_API_URL}dashboards`);
   }
 
   getDashboardById(id: string): Observable<DataModel> {
