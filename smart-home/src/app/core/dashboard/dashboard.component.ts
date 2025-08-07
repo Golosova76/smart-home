@@ -96,9 +96,7 @@ export class DashboardComponent {
 
     if (!dashboardIdValid) return;
 
-    const tabIdValid;
-
-    tabIdValid = this.getValidTabId(this.tabsSignal(), tabIdRoute);
+    const tabIdValid = this.getValidTabId(this.tabsSignal(), tabIdRoute);
 
     if (!tabIdValid) return;
 
