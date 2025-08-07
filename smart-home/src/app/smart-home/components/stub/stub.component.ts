@@ -1,5 +1,6 @@
-import { Component, DestroyRef, inject } from '@angular/core';
-import { DashboardService } from '@/app/shared/services/dashboard.service';
+import {Component, inject} from '@angular/core';
+import {DashboardService} from '@/app/shared/services/dashboard.service';
+
 
 @Component({
   selector: 'app-stub',
@@ -9,14 +10,6 @@ import { DashboardService } from '@/app/shared/services/dashboard.service';
 })
 export class StubComponent {
   dashboardService = inject(DashboardService);
-  destroyRef = inject(DestroyRef);
 
-  readonly dashboards = this.dashboardService.dashboardsSignal;
-
-  constructor() {
-    //this.dashboardService
-    //.getDashboards()
-    //.pipe(takeUntilDestroyed(this.destroyRef))
-    //.subscribe();
-  }
+  readonly dashboardsSignal = this.dashboardService.dashboardsSignal;
 }
