@@ -54,7 +54,6 @@ export class DashboardComponent implements OnInit {
     );
   });
 
-
   ngOnInit(): void {
     this.initDashboards();
     this.initRouteParams();
