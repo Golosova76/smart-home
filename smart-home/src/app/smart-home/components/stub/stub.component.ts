@@ -1,6 +1,5 @@
-import {Component, inject} from '@angular/core';
-import {DashboardService} from '@/app/shared/services/dashboard.service';
-
+import { Component, inject } from '@angular/core';
+import { DashboardService } from '@/app/shared/services/dashboard.service';
 
 @Component({
   selector: 'app-stub',

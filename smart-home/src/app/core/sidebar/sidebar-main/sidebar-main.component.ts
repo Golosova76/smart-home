@@ -2,7 +2,8 @@ import {
   Component,
   DestroyRef,
   inject,
-  input, OnInit,
+  input,
+  OnInit,
   Signal,
 } from '@angular/core';
 import { DashboardService } from '@/app/shared/services/dashboard.service';
@@ -48,21 +49,23 @@ export class SidebarMainComponent implements OnInit {
         next: (dashboards) => {
           this.dashboardsSignal.set(dashboards);
 
-          const dashboardId = this.route.firstChild?.snapshot.params['dashboardId'] ?? null;
-          const hasValidDashboard = dashboards.some(dash => dash.id === dashboardId);
+          const dashboardId =
+            this.route.firstChild?.snapshot.params['dashboardId'] ?? null;
+          const hasValidDashboard = dashboards.some(
+            (dash) => dash.id === dashboardId,
+          );
 
           if (dashboards.length > 0 && !hasValidDashboard) {
-            this.router.navigate(['/dashboard', dashboards[0].id]).catch(() => {});
+            this.router
+              .navigate(['/dashboard', dashboards[0].id])
+              .catch(() => {});
           }
         },
       });
   }
 
-
   onDashboard(dashboard: Dashboard) {
-    this.router
-      .navigate(['/dashboard', dashboard.id])
-      .catch(() => {});
+    this.router.navigate(['/dashboard', dashboard.id]).catch(() => {});
   }
 
   isActive(dashboard: Dashboard) {
@@ -70,6 +73,8 @@ export class SidebarMainComponent implements OnInit {
   }
 
   get emptyDashboardText(): string {
-    return this.sidebarCollapsed() ? 'No dash' : "You don’t have any dashboards yet. They’ll appear here as soon as you create them.";
+    return this.sidebarCollapsed()
+      ? 'No dash'
+      : 'You don’t have any dashboards yet. They’ll appear here as soon as you create them.';
   }
 }

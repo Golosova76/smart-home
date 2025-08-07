@@ -1,12 +1,12 @@
-import {Component, computed, DestroyRef, effect, inject} from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject } from '@angular/core';
 
 import { TabSwitcherComponent } from '@/app/smart-home/components/tab-switcher/tab-switcher.component';
 import { DashboardService } from '@/app/shared/services/dashboard.service';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
-import {takeUntilDestroyed, toSignal} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Dashboard } from '@/app/shared/models/dashboard.model';
 import { Tab } from '@/app/shared/models/data.model';
-import {map, of} from 'rxjs';
+import { map, of } from 'rxjs';
 
 @Component({
   imports: [TabSwitcherComponent, RouterOutlet],
@@ -79,27 +79,33 @@ export class DashboardComponent {
         },
         error: (error) => {
           console.error('Ошибка загрузки Dashboard:', error);
-        }
+        },
       });
   }
 
-
-
-  handleRouteParams( dashboardIdRoute: string | null,  tabIdRoute: string | null, ) {
+  handleRouteParams(
+    dashboardIdRoute: string | null,
+    tabIdRoute: string | null,
+  ) {
     const dashboardsSignal = this.dashboardsSignal();
 
-    const dashboardIdValid = this.getValidDashboardId( dashboardsSignal,  dashboardIdRoute,);
+    const dashboardIdValid = this.getValidDashboardId(
+      dashboardsSignal,
+      dashboardIdRoute,
+    );
 
     if (!dashboardIdValid) return;
 
-    let tabIdValid;
+    const tabIdValid;
 
     tabIdValid = this.getValidTabId(this.tabsSignal(), tabIdRoute);
 
     if (!tabIdValid) return;
 
-    if ( dashboardIdValid !== dashboardIdRoute ||  tabIdValid !== tabIdRoute   ) {
-      this.router.navigate(['/dashboard', dashboardIdValid, tabIdValid]).catch(() => {});
+    if (dashboardIdValid !== dashboardIdRoute || tabIdValid !== tabIdRoute) {
+      this.router
+        .navigate(['/dashboard', dashboardIdValid, tabIdValid])
+        .catch(() => {});
       return;
     }
   }
@@ -124,7 +130,6 @@ export class DashboardComponent {
     }
     return tabIdRoute;
   }
-
 
   //конец класса
 }

@@ -10,9 +10,9 @@
       @for (dashboard of dashboards; track dashboard.id) {
         <li [class.active]="isActive(dashboard)" class="menu-item">
           <a (click)="onDashboard(dashboard)" class="menu-item-link">
-        <span class="material-symbols-outlined dash-icon">{{
-            dashboard.icon
-          }}</span>
+            <span class="material-symbols-outlined dash-icon">{{
+              dashboard.icon
+            }}</span>
             @if (!sidebarCollapsed()) {
               <div class="item-title">{{ dashboard.title }}</div>
             }
@@ -22,4 +22,3 @@
     </ul>
   </nav>
 }
-
