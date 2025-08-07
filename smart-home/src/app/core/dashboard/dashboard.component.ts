@@ -1,12 +1,12 @@
-import { Component, computed, DestroyRef, inject, OnInit } from '@angular/core';
+import {Component, computed, DestroyRef, effect, inject} from '@angular/core';
 
 import { TabSwitcherComponent } from '@/app/smart-home/components/tab-switcher/tab-switcher.component';
 import { DashboardService } from '@/app/shared/services/dashboard.service';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import {takeUntilDestroyed, toSignal} from '@angular/core/rxjs-interop';
 import { Dashboard } from '@/app/shared/models/dashboard.model';
 import { Tab } from '@/app/shared/models/data.model';
-import { combineLatest, map, of } from 'rxjs';
+import {map, of} from 'rxjs';
 
 @Component({
   imports: [TabSwitcherComponent, RouterOutlet],
@@ -15,15 +15,11 @@ import { combineLatest, map, of } from 'rxjs';
   styleUrl: './dashboard.component.scss',
   templateUrl: './dashboard.component.html',
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
   route = inject(ActivatedRoute);
   router = inject(Router);
   dashboardService = inject(DashboardService);
   destroyRef = inject(DestroyRef);
-
-  // Добавляем новые поля для хранения последних параметров роута:
-  private lastDashboardIdRoute: string | null = null;
-  private lastTabIdRoute: string | null = null;
 
   //получение параметров URL - сигналы
   readonly dashboardIdRouteSignal = toSignal(
@@ -33,8 +29,8 @@ export class DashboardComponent implements OnInit {
     { initialValue: null },
   );
   readonly tabIdRouteSignal = toSignal(
-    this.route.firstChild?.params.pipe(
-      map((parameters) => parameters['tabId'] ?? null),
+    this.route.firstChild?.paramMap.pipe(
+      map((parameters) => parameters.get('tabId')),
     ) ?? of(null),
     { initialValue: null },
   );
@@ -48,35 +44,8 @@ export class DashboardComponent implements OnInit {
 
   // получаем TabId кот соот роуту
   readonly selectedTabId = computed(() => {
-    const tabsSignal = this.tabsSignal();
-    return (
-      tabsSignal.find((tab) => tab.id === this.tabIdRouteSignal())?.id ?? null
-    );
+    return this.getValidTabId(this.tabsSignal(), this.tabIdRouteSignal());
   });
-
-
-  ngOnInit(): void {
-    this.initDashboards();
-    this.initRouteParams();
-  }
-
-  initRouteParams() {
-    combineLatest([
-      this.route.paramMap, // dashboardId
-      this.route.firstChild?.paramMap ?? of(null), // tabId
-    ])
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(([parentParameters, childParameters]) => {
-        const dashboardIdRoute = parentParameters.get('dashboardId');
-        const tabIdRoute = childParameters?.get('tabId') ?? null;
-
-        // Запоминаем актуальные параметры роута:
-        this.lastDashboardIdRoute = dashboardIdRoute;
-        this.lastTabIdRoute = tabIdRoute;
-
-        this.handleRouteParams(dashboardIdRoute, tabIdRoute);
-      });
-  }
 
   onTabSelected(tabId: string) {
     this.router
@@ -84,54 +53,54 @@ export class DashboardComponent implements OnInit {
       .catch(() => {});
   }
 
-  handleRouteParams(
-    dashboardIdRoute: string | null,
-    tabIdRoute: string | null,
-  ) {
+  constructor() {
+    effect(() => {
+      const dashboardId = this.dashboardIdRouteSignal();
+      if (dashboardId) {
+        this.initTabs(dashboardId);
+      }
+    });
+  }
+
+  private initTabs(dashboardId: string) {
+    if (!dashboardId) return;
+
+    this.dashboardService
+      .getDashboardById(dashboardId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (dataModel) => {
+          this.dashboardByIdSignal.set(dataModel);
+          this.tabsSignal.set(dataModel.tabs);
+          this.handleRouteParams(
+            this.dashboardIdRouteSignal(),
+            this.tabIdRouteSignal(),
+          );
+        },
+        error: (error) => {
+          console.error('Ошибка загрузки Dashboard:', error);
+        }
+      });
+  }
+
+
+
+  handleRouteParams( dashboardIdRoute: string | null,  tabIdRoute: string | null, ) {
     const dashboardsSignal = this.dashboardsSignal();
 
-    const dashboardIdValid = this.getValidDashboardId(
-      dashboardsSignal,
-      dashboardIdRoute,
-    );
+    const dashboardIdValid = this.getValidDashboardId( dashboardsSignal,  dashboardIdRoute,);
 
     if (!dashboardIdValid) return;
 
     let tabIdValid;
 
-    this.dashboardService
-      .getDashboardById(dashboardIdValid)
-      .subscribe((dataModel) => {
-        this.dashboardByIdSignal.set(dataModel);
-        this.tabsSignal.set(dataModel.tabs);
-        tabIdValid = this.getValidTabId(dataModel.tabs, tabIdRoute);
+    tabIdValid = this.getValidTabId(this.tabsSignal(), tabIdRoute);
 
-        if (!tabIdValid) return;
+    if (!tabIdValid) return;
 
-        if (
-          dashboardIdValid !== dashboardIdRoute ||
-          tabIdValid !== tabIdRoute
-        ) {
-          this.router
-            .navigate(['/dashboard', dashboardIdValid, tabIdValid])
-            .catch(() => {});
-          return;
-        }
-      });
-  }
-
-  private initDashboards() {
-    if (this.dashboardsSignal.length === 0 || !this.dashboardsSignal()) {
-      this.dashboardService.getDashboards().subscribe({
-        next: () => {
-          if (this.lastDashboardIdRoute !== null) {
-            this.handleRouteParams(
-              this.lastDashboardIdRoute,
-              this.lastTabIdRoute,
-            );
-          }
-        },
-      });
+    if ( dashboardIdValid !== dashboardIdRoute ||  tabIdValid !== tabIdRoute   ) {
+      this.router.navigate(['/dashboard', dashboardIdValid, tabIdValid]).catch(() => {});
+      return;
     }
   }
 
@@ -155,4 +124,7 @@ export class DashboardComponent implements OnInit {
     }
     return tabIdRoute;
   }
+
+
+  //конец класса
 }
