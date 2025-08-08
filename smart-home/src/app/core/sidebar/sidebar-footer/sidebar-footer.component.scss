@@ -20,11 +20,14 @@
   font-size: 1rem;
   color: var(--light-solid);
   user-select: none;
-  box-shadow: 0 2px 8px 0 #0001;
+  flex-shrink: 0;
 }
 
 .logout-icon {
   cursor: pointer;
+  &:hover {
+    color: var(--active-icon);
+  }
 }
 
 .footer-text {
