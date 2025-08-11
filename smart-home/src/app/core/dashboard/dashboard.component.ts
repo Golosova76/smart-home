@@ -1,12 +1,24 @@
-import { Component, computed, DestroyRef, effect, inject } from '@angular/core';
+import {
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  inject,
+  Signal,
+} from '@angular/core';
 
 import { TabSwitcherComponent } from '@/app/smart-home/components/tab-switcher/tab-switcher.component';
 import { DashboardService } from '@/app/shared/services/dashboard.service';
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterOutlet,
+} from '@angular/router';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Dashboard } from '@/app/shared/models/dashboard.model';
 import { Tab } from '@/app/shared/models/data.model';
-import { map, of } from 'rxjs';
+import { filter, map, startWith } from 'rxjs';
 
 @Component({
   imports: [TabSwitcherComponent, RouterOutlet],
@@ -22,16 +34,19 @@ export class DashboardComponent {
   destroyRef = inject(DestroyRef);
 
   //получение параметров URL - сигналы
-  readonly dashboardIdRouteSignal = toSignal(
+  readonly dashboardIdRouteSignal: Signal<string | null> = toSignal(
     this.route.paramMap.pipe(
       map((parameters) => parameters.get('dashboardId') ?? null),
     ),
     { initialValue: null },
   );
-  readonly tabIdRouteSignal = toSignal(
-    this.route.firstChild?.paramMap.pipe(
-      map((parameters) => parameters.get('tabId')),
-    ) ?? of(null),
+
+  readonly tabIdRouteSignal: Signal<string | null> = toSignal(
+    this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      startWith(null),
+      map(() => this.route.firstChild?.snapshot.paramMap.get('tabId') ?? null),
+    ),
     { initialValue: null },
   );
 

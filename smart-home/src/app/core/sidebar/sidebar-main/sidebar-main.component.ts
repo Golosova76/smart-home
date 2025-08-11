@@ -34,7 +34,8 @@ export class SidebarMainComponent implements OnInit {
       filter((event) => event instanceof NavigationEnd),
       startWith(null),
       map(() => {
-        const id = this.route.firstChild?.snapshot.params['dashboardId'];
+        const id: string | null =
+          this.route.firstChild?.snapshot.params['dashboardId'];
         return typeof id === 'string' ? id : null;
       }),
     ),
