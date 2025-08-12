@@ -28,6 +28,26 @@
   gap: 10px;
 }
 
+@mixin flex-center-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-center-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-center-center-column {
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+
 @mixin switch {
   .switch {
     position: relative;

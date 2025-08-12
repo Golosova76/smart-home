@@ -1,12 +1,17 @@
-import { Component, DestroyRef, inject, input } from '@angular/core';
+import {Component, DestroyRef, inject, input, signal} from '@angular/core';
 import { ProfileService } from '@/app/shared/services/profile.service';
 import { AuthService } from '@/app/core/auth/services/auth/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {
+  ModalCreateDashboardsComponent
+} from '@/app/smart-home/components/modal/modal-create-dashboards/modal-create-dashboards.component';
 
 @Component({
   selector: 'app-sidebar-footer',
   standalone: true,
-  imports: [],
+  imports: [
+    ModalCreateDashboardsComponent
+  ],
   templateUrl: './sidebar-footer.component.html',
   styleUrl: './sidebar-footer.component.scss',
 })
@@ -15,7 +20,8 @@ export class SidebarFooterComponent {
   authService = inject(AuthService);
   destroyRef = inject(DestroyRef);
 
-  sidebarCollapsed = input<boolean>(false);
+  readonly sidebarCollapsed = input<boolean>(false);
+  readonly isCreateOpenModal = signal<boolean>(false)
 
   readonly profile = this.profileService.profile;
 
@@ -26,6 +32,14 @@ export class SidebarFooterComponent {
       .subscribe({
         next: (profile) => this.profile.set(profile),
       });
+  }
+
+  openCreate () {
+    this.isCreateOpenModal.set(true);
+  }
+
+  closeCreate () {
+    this.isCreateOpenModal.set(false);
   }
 
   onLogout() {

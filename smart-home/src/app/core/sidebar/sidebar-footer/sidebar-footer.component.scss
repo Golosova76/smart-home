@@ -1,11 +1,26 @@
+@use "styles/mixins" as m;
+
 .footer {
-  max-height: 76px;
+  min-height: 76px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 10px;
   padding: 10px;
   border: 1px solid var(--light-border);
+}
+
+.footer-add {
+  @include m.margin-bottom10;
+  @include m.flex-center-center;
+  gap: 10px;
+  &:hover {
+    color: var(--active-text);
+  }
+}
+
+.footer-profile {
+  @include m.flex-center-between;
+  gap: 10px;
 }
 
 .footer-initials {
@@ -13,9 +28,7 @@
   height: 26px;
   border-radius: 50%;
   background-color: var(--active-text);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include m.flex-center-center;
   font-weight: 600;
   font-size: 1rem;
   color: var(--light-solid);
