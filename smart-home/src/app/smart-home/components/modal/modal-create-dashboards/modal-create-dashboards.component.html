@@ -1,51 +1,81 @@
 <div class="modal-wrapper">
-  <div class="modal">
+  <div
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cdm-title"
+    class="modal"
+  >
     <div class="modal-content">
       <div class="modal-header">
         <h3 class="modal-title">Add Dashboard</h3>
-        <button type="button" class="modal-close">
-          <span class="material-symbols-outlined">close</span>
+        <button
+          (click)="closeModal()"
+          type="button"
+          class="modal-close"
+          aria-label="Close"
+        >
+          <span class="material-symbols-outlined close-icon">close</span>
         </button>
       </div>
-      <form class="form">
+      <form [formGroup]="form" class="form">
         <div class="modal-body">
           <div class="form-field">
             <label class="form-label">
-              <span class="form-control-title">Id<span>*</span></span>
+              <span class="form-control-title">ID<span>*</span></span>
               <input
+                formControlName="id"
                 class="control-input"
                 name="id"
                 type="text"
-                placeholder="Id"
+                placeholder="ID"
               />
             </label>
+            <app-form-error [control]="idControl"></app-form-error>
           </div>
           <div class="form-field">
             <label class="form-label">
               <span class="form-control-title">Name<span>*</span></span>
               <input
+                formControlName="title"
                 class="control-input"
-                name="name"
+                name="title"
                 type="text"
                 placeholder="Name"
               />
             </label>
+            <app-form-error [control]="titleControl"></app-form-error>
           </div>
           <div class="form-field">
             <label class="form-label">
               <span class="form-control-title">Icon<span>*</span></span>
               <input
+                formControlName="icon"
                 class="control-input"
                 name="icon"
                 type="text"
                 placeholder="Icon"
               />
             </label>
+            <app-form-error [control]="iconControl"></app-form-error>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="modal-footer-close">Cancel</button>
-          <button type="submit" class="modal-footer-submit">Add</button>
+          <button
+            (click)="closeModal()"
+            type="button"
+            class="modal-footer-close"
+          >
+            Cancel
+          </button>
+          <button
+            [disabled]="form.invalid"
+            [class.disable]="!canSubmit"
+            (click)="onSubmit()"
+            type="submit"
+            class="modal-footer-submit"
+          >
+            Add
+          </button>
         </div>
       </form>
     </div>

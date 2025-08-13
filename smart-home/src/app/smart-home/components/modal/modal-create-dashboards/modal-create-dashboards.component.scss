@@ -58,6 +58,7 @@
   grid-template-columns: 70px 1fr;
   align-items: center;
   gap: 10px;
+  @include m.margin-bottom10;
 }
 
 .form-control-title {
@@ -104,6 +105,20 @@
       color: var(--color404);
     }
   }
+}
+
+.modal-close {
+  &:hover {
+    .close-icon {
+      color: var(--active-icon);
+    }
+  }
+}
+
+.modal-footer-submit.disable {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 @keyframes fadeIn {

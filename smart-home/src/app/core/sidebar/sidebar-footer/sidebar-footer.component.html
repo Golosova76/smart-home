@@ -1,5 +1,5 @@
 <footer class="footer">
-  <button type="button" (click)="openCreate()" class="footer-add">
+  <button (click)="openCreate()" type="button" class="footer-add">
     <span class="material-symbols-outlined add-icon">add</span>
     @if (!sidebarCollapsed()) {
       <span class="footer-text">Add Dashboard</span>
@@ -10,7 +10,9 @@
       <div class="footer-initials">{{ user.initials }}</div>
       @if (!sidebarCollapsed()) {
         <div class="footer-text">{{ user.fullName }}</div>
-        <span (click)="onLogout()" class="material-symbols-outlined logout-icon">logout</span>
+        <span (click)="onLogout()" class="material-symbols-outlined logout-icon"
+          >logout</span
+        >
       }
     </div>
   } @else {
@@ -19,5 +21,8 @@
 </footer>
 
 @if (isCreateOpenModal()) {
-  <app-modal-create-dashboards></app-modal-create-dashboards>
+  <app-modal-create-dashboards
+    [checkId]="checkId()"
+    (closed)="closeCreate()"
+  ></app-modal-create-dashboards>
 }
