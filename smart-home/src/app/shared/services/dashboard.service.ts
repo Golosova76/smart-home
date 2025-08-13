@@ -22,4 +22,8 @@ export class DashboardService {
   getDashboardById(id: string): Observable<DataModel> {
     return this.http.get<DataModel>(`${BASE_API_URL}dashboards/${id}`);
   }
+
+  createDashboard(payload: Dashboard): Observable<Dashboard> {
+    return this.http.post<Dashboard>(`${BASE_API_URL}dashboards`, payload);
+  }
 }
