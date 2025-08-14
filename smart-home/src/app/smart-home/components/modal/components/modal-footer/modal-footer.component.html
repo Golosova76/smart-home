@@ -1,0 +1,18 @@
+<div class="modal-footer">
+  <button
+    (click)="closeModal()"
+    type="button"
+    class="modal-footer-close"
+  >
+    Cancel
+  </button>
+  <button
+    [attr.form]="formId()"
+    [disabled]="disabled()"
+    [class.disable]="disabled()"
+    type="submit"
+    class="modal-footer-submit"
+  >
+    {{ buttonAction }}
+  </button>
+</div>

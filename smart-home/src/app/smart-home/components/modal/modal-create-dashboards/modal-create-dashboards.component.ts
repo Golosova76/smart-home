@@ -25,10 +25,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { capitalize, normalizeId } from '@/app/shared/capitalize';
 import {ModalShellComponent} from '@/app/smart-home/components/modal/modal-shell/modal-shell.component';
 import {ModalHeaderComponent} from '@/app/smart-home/components/modal/components/modal-header/modal-header.component';
+import {ModalFooterComponent} from '@/app/smart-home/components/modal/components/modal-footer/modal-footer.component';
 
 @Component({
   selector: 'app-modal-create-dashboards',
-  imports: [FormsModule, ReactiveFormsModule, FormErrorComponent, ModalShellComponent, ModalHeaderComponent],
+  imports: [FormsModule, ReactiveFormsModule, FormErrorComponent, ModalShellComponent, ModalHeaderComponent, ModalFooterComponent],
   templateUrl: './modal-create-dashboards.component.html',
   styleUrl: './modal-create-dashboards.component.scss',
 })

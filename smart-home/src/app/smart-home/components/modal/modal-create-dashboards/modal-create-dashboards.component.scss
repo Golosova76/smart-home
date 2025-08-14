@@ -44,50 +44,6 @@
   -webkit-text-fill-color: var(--active-text);
 }
 
-.modal-footer {
-  @include m.flex-column;
-  justify-content: flex-end;
-  padding: 10px;
-  background-color: var(--active-swich-back);
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-  button {
-    max-width: 100px;
-    border: none;
-    background-color: var(--active-text);
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: var(--font-size-title);
-    font-weight: var(--font-weight-title);
-    color: var(--light-solid);
-    &:hover {
-      color: var(--color404);
-    }
-  }
-}
 
-.modal-close {
-  &:hover {
-    .close-icon {
-      color: var(--active-icon);
-    }
-  }
-}
 
-.modal-footer-submit.disable {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
-}
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
