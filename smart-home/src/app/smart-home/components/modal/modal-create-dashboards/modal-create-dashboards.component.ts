@@ -1,6 +1,8 @@
 import {
-  Component, DestroyRef,
-  effect, inject,
+  Component,
+  DestroyRef,
+  effect,
+  inject,
   input,
   OnInit,
   output,
@@ -15,13 +17,12 @@ import {
 } from '@angular/forms';
 import { uniqueIdValidator } from '@/app/shared/unique-id.validator';
 import { FormErrorComponent } from '@/app/shared/components/form-error/form-error.component';
-import {Dashboard} from '@/app/shared/models/dashboard.model';
-import {DashboardService} from '@/app/shared/services/dashboard.service';
-import {switchMap, tap} from 'rxjs';
-import {Router} from '@angular/router';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {capitalize, normalizeId, uncapitalize} from '@/app/shared/capitalize';
-
+import { Dashboard } from '@/app/shared/models/dashboard.model';
+import { DashboardService } from '@/app/shared/services/dashboard.service';
+import { switchMap, tap } from 'rxjs';
+import { Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { capitalize, normalizeId } from '@/app/shared/capitalize';
 
 @Component({
   selector: 'app-modal-create-dashboards',
@@ -39,8 +40,10 @@ export class ModalCreateDashboardsComponent implements OnInit {
   closed = output<void>();
   checkId = input<string[]>([]);
 
+  private lastIds: string[] = [];
+
   form = new FormGroup({
-    id: new FormControl<string | null>(null, this.getIdValidators(this.checkId())),
+    id: new FormControl<string | null>(null),
     title: new FormControl<string | null>(null, [
       Validators.required,
       Validators.maxLength(50),
@@ -49,10 +52,17 @@ export class ModalCreateDashboardsComponent implements OnInit {
   });
 
   constructor() {
-    effect(() => this.updateIdValidators(this.checkId()));
+    effect(() => {
+      const ids = this.checkId();
+      if (!this.arraysEqual(ids, this.lastIds)) {
+        this.lastIds = [...ids];
+        this.updateIdValidators(ids);
+      }
+    });
   }
 
   ngOnInit(): void {
+    this.idControl?.updateValueAndValidity({ emitEvent: false });
     this.titleControl?.updateValueAndValidity({ emitEvent: false });
     this.iconControl?.updateValueAndValidity({ emitEvent: false });
   }
@@ -66,23 +76,27 @@ export class ModalCreateDashboardsComponent implements OnInit {
     const { id, title, icon } = this.form.value;
     if (!id || !title || !icon) return;
 
-    const normId:string = normalizeId(id);
+    const normId: string = normalizeId(id);
 
     const payload: Dashboard = {
       id: normId,
       title: capitalize(title),
-      icon};
+      icon,
+    };
     console.log(payload);
 
-    this.dashboardService.createDashboard(payload).pipe(
-      takeUntilDestroyed(this.destroyRef),
-      switchMap(() => this.dashboardService.getDashboards()),
-      tap((dashboards) => this.dashboardsSignal.set(dashboards)),
-      tap(() => {
-        this.closed.emit();
-        this.router.navigate(['/dashboard', normId]).catch(() => {})
-      }),
-    ).subscribe();
+    this.dashboardService
+      .createDashboard(payload)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        switchMap(() => this.dashboardService.getDashboards()),
+        tap((dashboards) => this.dashboardsSignal.set(dashboards)),
+        tap(() => {
+          this.closed.emit();
+          this.router.navigate(['/dashboard', normId]).catch(() => {});
+        }),
+      )
+      .subscribe();
   }
 
   closeModal() {
@@ -108,7 +122,7 @@ export class ModalCreateDashboardsComponent implements OnInit {
     return this.form.valid;
   }
 
-  private getIdValidators(ids:string[]) {
+  private getIdValidators(ids: string[]) {
     return [
       Validators.required,
       Validators.maxLength(30),
@@ -116,13 +130,16 @@ export class ModalCreateDashboardsComponent implements OnInit {
     ];
   }
 
-  private updateIdValidators(checkId: string[]) {
-    const ids = this.checkId();
+  private updateIdValidators(ids: string[]) {
     const control: AbstractControl | null = this.form.get('id');
 
     if (control instanceof FormControl) {
-      control.setValidators(this.getIdValidators(this.checkId()));
+      control.setValidators(this.getIdValidators(ids));
       control.updateValueAndValidity({ emitEvent: false });
     }
+  }
+
+  private arraysEqual(a: string[], b: string[]): boolean {
+    return a.length === b.length && a.every((v, index) => v === b[index]);
   }
 }

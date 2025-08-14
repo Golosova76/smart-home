@@ -1,12 +1,12 @@
-export function capitalize(str: string): string {
-  if (!str) return str;
-  return str.charAt(0).toUpperCase() + str.slice(1);
+export function capitalize(string_: string): string {
+  if (!string_) return string_;
+  return string_.charAt(0).toUpperCase() + string_.slice(1);
 }
 
-export function uncapitalize(str: string): string {
-  return str.charAt(0).toLowerCase() + str.slice(1);
+export function uncapitalize(string_: string): string {
+  return string_.charAt(0).toLowerCase() + string_.slice(1);
 }
 
-export function normalizeId(str: string): string {
-  return str.trim().toLowerCase();
+export function normalizeId(string_: string): string {
+  return string_.trim().toLowerCase();
 }
