@@ -1,11 +1,21 @@
 <nav class="nav-tabs">
-  @for (tab of tabs(); track tab.id) {
-    <button
-      [class.active]="tab.id === activeTabId()"
-      (click)="onTabClick(tab.id)"
-      class="tab-button"
-    >
-      {{ tab.title }}
+  <div class="tabs-actions">
+    @for (tab of tabs(); track tab.id) {
+      <button
+        [class.active]="tab.id === activeTabId()"
+        (click)="onTabClick(tab.id)"
+        class="tab-button"
+      >
+        {{ tab.title }}
+      </button>
+    }
+  </div>
+  <div class="dash-actions">
+    <button class="dash-action-button">
+      <span class="material-symbols-outlined dash-action-icon">edit</span>
     </button>
-  }
+    <button class="dash-action-button">
+      <span class="material-symbols-outlined dash-action-icon">delete</span>
+    </button>
+  </div>
 </nav>

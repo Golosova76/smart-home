@@ -5,9 +5,23 @@
   border-bottom: 1px solid var(--light-border);
   border-right: 1px solid var(--light-border);
   padding: 10px 10px 10px 20px;
-  @include m.flex-column;
+  @include m.flex-center-between;
   gap: 20px;
   background-color: var(--active-primary);
+}
+
+.tabs-actions {
+  @include m.flex-column20;
+}
+
+.dash-actions {
+  @include m.flex-column20;
+}
+
+.dash-action-button {
+  &:hover {
+    color: var(--active-text);
+  }
 }
 
 .tab-button {

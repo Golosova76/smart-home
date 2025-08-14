@@ -83,7 +83,6 @@ export class ModalCreateDashboardsComponent implements OnInit {
       title: capitalize(title),
       icon,
     };
-    console.log(payload);
 
     this.dashboardService
       .createDashboard(payload)

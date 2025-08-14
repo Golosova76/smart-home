@@ -28,6 +28,13 @@
   gap: 10px;
 }
 
+@mixin flex-column20 {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+
 @mixin flex-center-center {
   display: flex;
   align-items: center;
