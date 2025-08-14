@@ -17,16 +17,18 @@ import {
 } from '@angular/forms';
 import { uniqueIdValidator } from '@/app/shared/unique-id.validator';
 import { FormErrorComponent } from '@/app/shared/components/form-error/form-error.component';
-import { Dashboard } from '@/app/shared/models/dashboard.model';
+import {Dashboard, EntityActions} from '@/app/shared/models/dashboard.model';
 import { DashboardService } from '@/app/shared/services/dashboard.service';
 import { switchMap, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { capitalize, normalizeId } from '@/app/shared/capitalize';
+import {ModalShellComponent} from '@/app/smart-home/components/modal/modal-shell/modal-shell.component';
+import {ModalHeaderComponent} from '@/app/smart-home/components/modal/components/modal-header/modal-header.component';
 
 @Component({
   selector: 'app-modal-create-dashboards',
-  imports: [FormsModule, ReactiveFormsModule, FormErrorComponent],
+  imports: [FormsModule, ReactiveFormsModule, FormErrorComponent, ModalShellComponent, ModalHeaderComponent],
   templateUrl: './modal-create-dashboards.component.html',
   styleUrl: './modal-create-dashboards.component.scss',
 })
@@ -39,6 +41,7 @@ export class ModalCreateDashboardsComponent implements OnInit {
 
   closed = output<void>();
   checkId = input<string[]>([]);
+  entityActions = input.required<EntityActions>();
 
   private lastIds: string[] = [];
 

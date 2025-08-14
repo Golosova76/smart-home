@@ -26,4 +26,8 @@ export class DashboardService {
   createDashboard(payload: Dashboard): Observable<Dashboard> {
     return this.http.post<Dashboard>(`${BASE_API_URL}dashboards`, payload);
   }
+
+  deleteDashboard(id: string): Observable<void> {
+    return this.http.delete<void>(`${BASE_API_URL}dashboards/${id}`);
+  }
 }

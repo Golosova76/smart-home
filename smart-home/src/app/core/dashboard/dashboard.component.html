@@ -5,7 +5,16 @@
     [tabs]="tabs"
     [activeTabId]="selectedTabId()"
     (selectTab)="onTabSelected($event)"
+    (deleteClick)="openDeleteModal()"
   ></app-tab-switcher>
+}
+
+@if (isDeleteOpenModal()) {
+  <app-modal-confirm-delete
+    [entityDelete]="'dashboard'"
+    [labelDelete]="dashboardIdRouteSignal() ?? ''"
+    (closed)="closeDelete()"
+  ></app-modal-confirm-delete>
 }
 
 <router-outlet></router-outlet>

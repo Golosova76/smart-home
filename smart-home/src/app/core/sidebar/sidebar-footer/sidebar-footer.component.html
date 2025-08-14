@@ -22,6 +22,7 @@
 
 @if (isCreateOpenModal()) {
   <app-modal-create-dashboards
+    [entityActions]="'Add'"
     [checkId]="checkId()"
     (closed)="closeCreate()"
   ></app-modal-create-dashboards>

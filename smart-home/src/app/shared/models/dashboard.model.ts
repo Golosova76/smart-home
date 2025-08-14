@@ -3,3 +3,7 @@ export interface Dashboard {
   title: string;
   icon: string;
 }
+
+export type EntityDelete = 'dashboard' | 'tab' | 'card';
+
+export type EntityActions = 'Add' | 'Delete';

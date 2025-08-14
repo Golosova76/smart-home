@@ -3,7 +3,7 @@ import {
   computed,
   DestroyRef,
   effect,
-  inject,
+  inject, signal,
   Signal,
 } from '@angular/core';
 
@@ -19,9 +19,12 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Dashboard } from '@/app/shared/models/dashboard.model';
 import { Tab } from '@/app/shared/models/data.model';
 import { filter, map, startWith } from 'rxjs';
+import {
+  ModalConfirmDeleteComponent
+} from '@/app/smart-home/components/modal/modal-confirm-delete/modal-confirm-delete.component';
 
 @Component({
-  imports: [TabSwitcherComponent, RouterOutlet],
+  imports: [TabSwitcherComponent, RouterOutlet, ModalConfirmDeleteComponent],
   selector: 'app-dashboard',
   standalone: true,
   styleUrl: './dashboard.component.scss',
@@ -56,6 +59,8 @@ export class DashboardComponent {
   readonly dashboardByIdSignal = this.dashboardService.dashboardByIdSignal;
   // массив tab где tabId
   readonly tabsSignal = this.dashboardService.tabsSignal;
+
+  readonly isDeleteOpenModal = signal<boolean>(false);
 
   // получаем TabId кот соот роуту
   readonly selectedTabId = computed(() => {
@@ -142,6 +147,14 @@ export class DashboardComponent {
       return tabs.length > 0 ? tabs[0].id : null;
     }
     return tabIdRoute;
+  }
+
+  openDeleteModal() {
+    this.isDeleteOpenModal.set(true);
+  }
+
+  closeDelete() {
+    this.isDeleteOpenModal.set(false);
   }
 
   //конец класса

@@ -10,7 +10,8 @@ import { Tab } from '@/app/shared/models/data.model';
   styleUrl: './tab-switcher.component.scss',
 })
 export class TabSwitcherComponent {
-  @Output() selectTab = new EventEmitter<string>();
+  @Output() readonly  selectTab = new EventEmitter<string>();
+  @Output() readonly  deleteClick = new EventEmitter<string>();
 
   activeTabId = input<string | null>(null);
 
@@ -18,5 +19,9 @@ export class TabSwitcherComponent {
 
   onTabClick(tabId: string) {
     this.selectTab.emit(tabId);
+  }
+
+  onDelete() {
+    this.deleteClick.emit();
   }
 }

@@ -1,0 +1,32 @@
+<app-modal-shell>
+  <div class="modal-header">
+    <h3 class="modal-title">{{ heading }}</h3>
+    <button
+      (click)="closeModal()"
+      type="button"
+      class="modal-close"
+      aria-label="Close"
+    >
+      <span class="material-symbols-outlined close-icon">close</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="modal-text">{{ message }}</div>
+  </div>
+  <div class="modal-footer">
+    <button
+      (click)="closeModal()"
+      type="button"
+      class="modal-footer-close"
+    >
+      Cancel
+    </button>
+    <button
+      (click)="onDelete()"
+      type="submit"
+      class="modal-footer-submit"
+    >
+      Delete
+    </button>
+  </div>
+</app-modal-shell>
