@@ -42,8 +42,8 @@
 
 .control-input:-webkit-autofill {
   -webkit-text-fill-color: var(--active-text);
+  -webkit-box-shadow: 0 0 0 1000px #fff inset;
 }
-
 
 
 

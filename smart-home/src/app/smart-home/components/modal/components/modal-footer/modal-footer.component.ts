@@ -1,5 +1,5 @@
 import {Component, input, output} from '@angular/core';
-import {EntityActions} from '@/app/shared/models/dashboard.model';
+import {EntityActions, FooterVariant} from '@/app/shared/models/dashboard.model';
 
 @Component({
   selector: 'app-modal-footer',
@@ -8,11 +8,14 @@ import {EntityActions} from '@/app/shared/models/dashboard.model';
   styleUrl: './modal-footer.component.scss'
 })
 export class ModalFooterComponent {
-  entityActions = input.required<EntityActions>();
-  formId = input.required<string>();
+  entityActions = input<EntityActions>();
+  formId = input<string>();
 
   closed = output<void>();
   disabled = input<boolean>(false);
+  delete = output<void>();
+
+  variant = input<FooterVariant>('form');
 
   get buttonAction(): string {
     return `${this.entityActions()}`;
@@ -21,5 +24,7 @@ export class ModalFooterComponent {
   closeModal() {
     this.closed.emit();
   }
-
+  onDelete() {
+    this.delete.emit();
+  }
 }

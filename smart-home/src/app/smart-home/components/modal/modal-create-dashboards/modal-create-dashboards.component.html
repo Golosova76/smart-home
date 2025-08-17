@@ -1,5 +1,5 @@
 <app-modal-shell>
-  <app-modal-header [entityActions]="'Add'" [entityDelete]="'dashboard'" (closed)="closed.emit()"></app-modal-header>
+  <app-modal-header [entityActions]="'Add'" [entityDelete]="'dashboard'" (closed)="closeModal()"></app-modal-header>
   <div class="modal-body">
     <form [formGroup]="form" (ngSubmit)="onSubmit()" id="createDashboardForm" class="form">
       <div class="form-field">
@@ -21,7 +21,7 @@
           <input
             formControlName="title"
             class="control-input"
-            name="title"
+            name="name"
             type="text"
             placeholder="Name"
           />
@@ -46,7 +46,7 @@
   <app-modal-footer
     [formId]="'createDashboardForm'"
     [entityActions]="'Add'"
-    (closed)="closed.emit()"
+    (closed)="closeModal()"
     [disabled]="form.invalid"
     [class.disable]="!canSubmit"
   ></app-modal-footer>
