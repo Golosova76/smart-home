@@ -1,5 +1,9 @@
 <app-modal-shell>
-  <app-modal-header [entityActions]="'Add'" [entityDelete]="'dashboard'" (closed)="closeModal()"></app-modal-header>
+  <app-modal-header
+    [entityActions]="'Add'"
+    [entityDelete]="'dashboard'"
+    (closed)="closeModal()"
+  ></app-modal-header>
   <div class="modal-body">
     <form [formGroup]="form" id="createDashboardForm" class="form">
       <div class="form-field">
@@ -45,9 +49,9 @@
   </div>
   <app-modal-footer
     [entityActions]="'Add'"
-    (closed)="closeModal()"
     [disabled]="form.invalid"
     [class.disable]="!canSubmit"
+    (closed)="closeModal()"
     (submit)="onSubmit()"
   ></app-modal-footer>
 </app-modal-shell>

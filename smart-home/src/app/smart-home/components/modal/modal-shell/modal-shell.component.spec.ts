@@ -8,9 +8,8 @@ describe('ModalShellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ModalShellComponent]
-    })
-    .compileComponents();
+      imports: [ModalShellComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ModalShellComponent);
     component = fixture.componentInstance;

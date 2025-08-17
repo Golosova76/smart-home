@@ -1,6 +1,5 @@
 import {
   Component,
-  DestroyRef,
   effect,
   inject,
   input,
@@ -17,32 +16,34 @@ import {
 } from '@angular/forms';
 import { uniqueIdValidator } from '@/app/shared/unique-id.validator';
 import { FormErrorComponent } from '@/app/shared/components/form-error/form-error.component';
-import {Dashboard, EntityActions} from '@/app/shared/models/dashboard.model';
-import { DashboardService } from '@/app/shared/services/dashboard.service';
-import { switchMap, tap } from 'rxjs';
+import { Dashboard, EntityActions } from '@/app/shared/models/dashboard.model';
 import { Router } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { capitalize, normalizeId } from '@/app/shared/capitalize';
-import {ModalShellComponent} from '@/app/smart-home/components/modal/modal-shell/modal-shell.component';
-import {ModalHeaderComponent} from '@/app/smart-home/components/modal/components/modal-header/modal-header.component';
-import {ModalFooterComponent} from '@/app/smart-home/components/modal/components/modal-footer/modal-footer.component';
+import { ModalShellComponent } from '@/app/smart-home/components/modal/modal-shell/modal-shell.component';
+import { ModalHeaderComponent } from '@/app/smart-home/components/modal/components/modal-header/modal-header.component';
+import { ModalFooterComponent } from '@/app/smart-home/components/modal/components/modal-footer/modal-footer.component';
 
 @Component({
   selector: 'app-modal-create-dashboards',
-  imports: [FormsModule, ReactiveFormsModule, FormErrorComponent, ModalShellComponent, ModalHeaderComponent, ModalFooterComponent],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    FormErrorComponent,
+    ModalShellComponent,
+    ModalHeaderComponent,
+    ModalFooterComponent,
+  ],
   templateUrl: './modal-create-dashboards.component.html',
   styleUrl: './modal-create-dashboards.component.scss',
 })
 export class ModalCreateDashboardsComponent implements OnInit {
-  dashboardService = inject(DashboardService);
   router = inject(Router);
-  destroyRef = inject(DestroyRef);
-
-  readonly dashboardsSignal = this.dashboardService.dashboardsSignal;
 
   closed = output<void>();
   checkId = input<string[]>([]);
   entityActions = input.required<EntityActions>();
+
+  submitted = output<{ id: string; title: string; icon: string }>();
 
   private lastIds: string[] = [];
 
@@ -87,19 +88,7 @@ export class ModalCreateDashboardsComponent implements OnInit {
       title: capitalize(title),
       icon,
     };
-
-    this.dashboardService
-      .createDashboard(payload)
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        switchMap(() => this.dashboardService.getDashboards()),
-        tap((dashboards) => this.dashboardsSignal.set(dashboards)),
-        tap(() => {
-          this.closed.emit();
-          this.router.navigate(['/dashboard', normId]).catch(() => {});
-        }),
-      )
-      .subscribe();
+    this.submitted.emit(payload);
   }
 
   closeModal() {

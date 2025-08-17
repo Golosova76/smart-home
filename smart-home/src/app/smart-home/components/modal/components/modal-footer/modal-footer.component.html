@@ -1,28 +1,20 @@
 <div class="modal-footer">
-  <button
-    (click)="closeModal()"
-    type="button"
-    class="modal-footer-close"
-  >
+  <button (click)="closeModal()" type="button" class="modal-footer-close">
     Cancel
   </button>
 
-  @if (variant() === 'form') {
+  @if (variant() === "form") {
     <button
-      (click)="onSubmit()"
       [disabled]="disabled()"
       [class.disable]="disabled()"
+      (click)="onSubmit()"
       type="button"
       class="modal-footer-submit"
     >
       {{ buttonAction }}
     </button>
-  } @else if (variant() === 'delete') {
-    <button
-      (click)="onDelete()"
-      type="button"
-      class="modal-footer-delete"
-    >
+  } @else if (variant() === "delete") {
+    <button (click)="onDelete()" type="button" class="modal-footer-delete">
       {{ buttonAction }}
     </button>
   }

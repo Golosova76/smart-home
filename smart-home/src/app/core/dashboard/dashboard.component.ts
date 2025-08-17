@@ -3,7 +3,8 @@ import {
   computed,
   DestroyRef,
   effect,
-  inject, signal,
+  inject,
+  signal,
   Signal,
 } from '@angular/core';
 
@@ -19,9 +20,7 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Dashboard } from '@/app/shared/models/dashboard.model';
 import { Tab } from '@/app/shared/models/data.model';
 import { filter, map, startWith } from 'rxjs';
-import {
-  ModalConfirmDeleteComponent
-} from '@/app/smart-home/components/modal/modal-confirm-delete/modal-confirm-delete.component';
+import { ModalConfirmDeleteComponent } from '@/app/smart-home/components/modal/modal-confirm-delete/modal-confirm-delete.component';
 
 @Component({
   imports: [TabSwitcherComponent, RouterOutlet, ModalConfirmDeleteComponent],

@@ -11,6 +11,9 @@ import { AuthService } from '@/app/core/auth/services/auth/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ModalCreateDashboardsComponent } from '@/app/smart-home/components/modal/modal-create-dashboards/modal-create-dashboards.component';
 import { DashboardService } from '@/app/shared/services/dashboard.service';
+import { Dashboard } from '@/app/shared/models/dashboard.model';
+import { switchMap, tap } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar-footer',
@@ -24,6 +27,7 @@ export class SidebarFooterComponent {
   authService = inject(AuthService);
   destroyRef = inject(DestroyRef);
   dashboardService = inject(DashboardService);
+  router = inject(Router);
 
   readonly sidebarCollapsed = input<boolean>(false);
   readonly isCreateOpenModal = signal<boolean>(false);
@@ -54,5 +58,20 @@ export class SidebarFooterComponent {
 
   onLogout() {
     this.authService.logout();
+  }
+
+  handleCreate(dto: Dashboard) {
+    this.dashboardService
+      .createDashboard(dto)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        switchMap(() => this.dashboardService.getDashboards()),
+        tap((dashboards) => {
+          this.dashboardService.dashboardsSignal.set(dashboards);
+          this.router.navigate(['/dashboard', dto.id]).catch(() => {});
+          this.isCreateOpenModal.set(false);
+        }),
+      )
+      .subscribe();
   }
 }

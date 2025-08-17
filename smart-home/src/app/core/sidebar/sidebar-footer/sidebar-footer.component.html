@@ -25,5 +25,6 @@
     [entityActions]="'Add'"
     [checkId]="checkId()"
     (closed)="closeCreate()"
+    (submitted)="handleCreate($event)"
   ></app-modal-create-dashboards>
 }

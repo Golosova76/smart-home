@@ -10,8 +10,8 @@ import { Tab } from '@/app/shared/models/data.model';
   styleUrl: './tab-switcher.component.scss',
 })
 export class TabSwitcherComponent {
-  @Output() readonly  selectTab = new EventEmitter<string>();
-  @Output() readonly  deleteClick = new EventEmitter<string>();
+  @Output() readonly selectTab = new EventEmitter<string>();
+  @Output() readonly deleteClick = new EventEmitter<string>();
 
   activeTabId = input<string | null>(null);
 

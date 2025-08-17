@@ -49,9 +49,8 @@ export class SidebarMainComponent implements OnInit {
       .subscribe({
         next: (dashboards) => {
           this.dashboardsSignal.set(dashboards);
-          console.log(this.dashboardsSignal());
 
-          const dashboardId =
+          const dashboardId: string =
             this.route.firstChild?.snapshot.params['dashboardId'] ?? null;
           const hasValidDashboard = dashboards.some(
             (dash) => dash.id === dashboardId,

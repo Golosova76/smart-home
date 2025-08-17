@@ -8,9 +8,8 @@ describe('ModalConfirmDeleteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ModalConfirmDeleteComponent]
-    })
-    .compileComponents();
+      imports: [ModalConfirmDeleteComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ModalConfirmDeleteComponent);
     component = fixture.componentInstance;

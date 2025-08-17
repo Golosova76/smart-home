@@ -5,7 +5,10 @@
     (closed)="closed.emit()"
   ></app-modal-header>
   <div class="modal-body">
-    <div class="modal-text">This will delete the <strong>{{ entityDelete() }} {{ labelDelete() | upperFirst }}</strong></div>
+    <div class="modal-text">
+      This will delete the
+      <strong>{{ entityDelete() }} {{ labelDelete() | upperFirst }}</strong>
+    </div>
   </div>
   <app-modal-footer
     [entityActions]="'Delete'"

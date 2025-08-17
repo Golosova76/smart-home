@@ -1,12 +1,18 @@
 @let tabs = tabsSignal();
 
-@if (tabs.length > 0) {
-  <app-tab-switcher
-    [tabs]="tabs"
-    [activeTabId]="selectedTabId()"
-    (selectTab)="onTabSelected($event)"
-    (deleteClick)="openDeleteModal()"
-  ></app-tab-switcher>
+<app-tab-switcher
+  [tabs]="tabs"
+  [activeTabId]="selectedTabId()"
+  (selectTab)="onTabSelected($event)"
+  (deleteClick)="openDeleteModal()"
+></app-tab-switcher>
+
+<router-outlet></router-outlet>
+
+@if (tabs.length === 0) {
+  <div class="empty-dashboard" role="status">
+    <p>This dashboard doesn’t have any tabs yet.</p>
+  </div>
 }
 
 @if (isDeleteOpenModal()) {
@@ -17,5 +23,3 @@
     (deleted)="onDelete()"
   ></app-modal-confirm-delete>
 }
-
-<router-outlet></router-outlet>
