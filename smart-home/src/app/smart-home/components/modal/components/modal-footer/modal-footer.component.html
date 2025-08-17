@@ -9,10 +9,10 @@
 
   @if (variant() === 'form') {
     <button
-      [attr.form]="formId()"
+      (click)="onSubmit()"
       [disabled]="disabled()"
       [class.disable]="disabled()"
-      type="submit"
+      type="button"
       class="modal-footer-submit"
     >
       {{ buttonAction }}

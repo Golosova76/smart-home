@@ -157,5 +157,7 @@ export class DashboardComponent {
     this.isDeleteOpenModal.set(false);
   }
 
+  onDelete() {}
+
   //конец класса
 }

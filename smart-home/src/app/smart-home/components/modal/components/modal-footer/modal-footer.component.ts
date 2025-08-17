@@ -9,11 +9,11 @@ import {EntityActions, FooterVariant} from '@/app/shared/models/dashboard.model'
 })
 export class ModalFooterComponent {
   entityActions = input<EntityActions>();
-  formId = input<string>();
+  disabled = input<boolean>(false);
 
   closed = output<void>();
-  disabled = input<boolean>(false);
   delete = output<void>();
+  submit = output<void>();
 
   variant = input<FooterVariant>('form');
 
@@ -26,5 +26,9 @@ export class ModalFooterComponent {
   }
   onDelete() {
     this.delete.emit();
+  }
+
+  onSubmit() {
+    this.submit.emit(); // Эмитим событие submit
   }
 }
