@@ -39,3 +39,10 @@
     outline-offset: 2px;
   }
 }
+
+.dash-action-button.delete.disable {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+

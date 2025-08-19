@@ -5,6 +5,8 @@
   [activeTabId]="selectedTabId()"
   (selectTab)="onTabSelected($event)"
   (deleteClick)="openDeleteModal()"
+  (editClick)="onEditClick()"
+  [editMode]="isEditMode()"
 ></app-tab-switcher>
 
 <router-outlet></router-outlet>

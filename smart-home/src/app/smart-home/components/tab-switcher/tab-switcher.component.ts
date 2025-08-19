@@ -11,9 +11,11 @@ import { Tab } from '@/app/shared/models/data.model';
 })
 export class TabSwitcherComponent {
   @Output() readonly selectTab = new EventEmitter<string>();
-  @Output() readonly deleteClick = new EventEmitter<string>();
+  @Output() readonly deleteClick = new EventEmitter<void>();
+  @Output() readonly editClick = new EventEmitter<void>();
 
-  activeTabId = input<string | null>(null);
+  readonly activeTabId = input<string | null>(null);
+  readonly editMode = input<boolean>(false);
 
   tabs = input<Tab[]>([]);
 
@@ -22,6 +24,11 @@ export class TabSwitcherComponent {
   }
 
   onDelete() {
+    if (this.editMode()) return;
     this.deleteClick.emit();
+  }
+
+  onEditClick() {
+    this.editClick.emit();
   }
 }

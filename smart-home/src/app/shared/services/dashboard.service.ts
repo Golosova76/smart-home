@@ -1,7 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Dashboard } from '@/app/shared/models/dashboard.model';
-import { Observable } from 'rxjs';
+import {Observable, tap} from 'rxjs';
 import { BASE_API_URL } from '@/app/shared/constants';
 import { DataModel, Tab } from '@/app/shared/models/data.model';
 
@@ -30,4 +30,11 @@ export class DashboardService {
   deleteDashboard(id: string): Observable<void> {
     return this.http.delete<void>(`${BASE_API_URL}dashboards/${id}`);
   }
+
+  loadDashboards(): Observable<Dashboard[]> {
+    return this.getDashboards().pipe(
+      tap(list => this.dashboardsSignal.set(list))
+    );
+  }
+
 }

@@ -19,7 +19,7 @@ import {
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Dashboard } from '@/app/shared/models/dashboard.model';
 import { Tab } from '@/app/shared/models/data.model';
-import { filter, map, startWith } from 'rxjs';
+import {filter, map, startWith, switchMap} from 'rxjs';
 import { ModalConfirmDeleteComponent } from '@/app/smart-home/components/modal/modal-confirm-delete/modal-confirm-delete.component';
 
 @Component({
@@ -60,6 +60,7 @@ export class DashboardComponent {
   readonly tabsSignal = this.dashboardService.tabsSignal;
 
   readonly isDeleteOpenModal = signal<boolean>(false);
+  readonly isEditMode = signal<boolean>(false);
 
   // получаем TabId кот соот роуту
   readonly selectedTabId = computed(() => {
@@ -149,6 +150,9 @@ export class DashboardComponent {
   }
 
   openDeleteModal() {
+    if (this.isEditMode()) {
+      return;
+    }
     this.isDeleteOpenModal.set(true);
   }
 
@@ -156,7 +160,29 @@ export class DashboardComponent {
     this.isDeleteOpenModal.set(false);
   }
 
-  onDelete() {}
+  onDelete() {
+    const dashboardId = this.dashboardIdRouteSignal();
+    if (!dashboardId) {
+      this.closeDelete();
+      return;
+    }
+
+    this.dashboardService.deleteDashboard(dashboardId).pipe(
+      switchMap(() => this.dashboardService.loadDashboards()),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe({
+      next: (dashboards) => {
+        this.closeDelete();
+        this.router
+          .navigate(['/dashboard', dashboards[0].id])
+          .catch(() => {});
+      }
+    })
+  }
+
+  onEditClick() {
+    this.isEditMode.update(v => !v);
+  }
 
   //конец класса
 }
