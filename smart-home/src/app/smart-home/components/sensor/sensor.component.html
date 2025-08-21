@@ -1,6 +1,6 @@
 @if (sensor()) {
   @switch (layout()) {
-    @case ("horizontalLayout") {
+    @case (LAYOUT.HORIZONTAL) {
       <div class="sensor-wrapper horizontal">
         <div class="sensor-label">{{ sensor()?.label }}</div>
         <span class="material-symbols-outlined sensor-icon">{{
@@ -11,7 +11,7 @@
         </div>
       </div>
     }
-    @case ("verticalLayout") {
+    @case (LAYOUT.VERTICAL) {
       <div class="sensor-wrapper vertical">
         <span class="material-symbols-outlined sensor-icon">{{
           sensor()?.icon
@@ -22,7 +22,7 @@
         </div>
       </div>
     }
-    @case ("singleDevice") {
+    @case (LAYOUT.SINGLE_DEVICE) {
       <div class="sensor-wrapper single">
         <div class="sensor-block">
           <div class="sensor-label">{{ sensor()?.label }}</div>

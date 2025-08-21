@@ -1,5 +1,5 @@
 import {
-  Component,
+  Component, computed,
   DestroyRef,
   inject,
   input,
@@ -8,14 +8,17 @@ import {
 } from '@angular/core';
 import { DashboardService } from '@/app/shared/services/dashboard.service';
 import { Dashboard } from '@/app/shared/models/dashboard.model';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Router, RouterLink, RouterLinkActive} from '@angular/router';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { filter, map, startWith } from 'rxjs';
 
 @Component({
   selector: 'app-sidebar-main',
   standalone: true,
-  imports: [],
+  imports: [
+    RouterLink,
+    RouterLinkActive
+  ],
   templateUrl: './sidebar-main.component.html',
   styleUrl: './sidebar-main.component.scss',
 })
@@ -28,6 +31,13 @@ export class SidebarMainComponent implements OnInit {
   sidebarCollapsed = input<boolean>(false);
 
   readonly dashboardsSignal = this.dashboardService.dashboardsSignal;
+
+  readonly emptyDashboardText = computed(() => {
+    return this.sidebarCollapsed()
+      ? 'No dash'
+      : 'You don’t have any dashboards yet. They’ll appear here as soon as you create them.'
+    }
+  );
 
   readonly dashboardIdRoute: Signal<string | null> = toSignal(
     this.router.events.pipe(
@@ -63,19 +73,5 @@ export class SidebarMainComponent implements OnInit {
           }
         },
       });
-  }
-
-  onDashboard(dashboard: Dashboard) {
-    this.router.navigate(['/dashboard', dashboard.id]).catch(() => {});
-  }
-
-  isActive(dashboard: Dashboard) {
-    return dashboard.id === this.dashboardIdRoute();
-  }
-
-  get emptyDashboardText(): string {
-    return this.sidebarCollapsed()
-      ? 'No dash'
-      : 'You don’t have any dashboards yet. They’ll appear here as soon as you create them.';
   }
 }

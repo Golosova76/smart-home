@@ -1,6 +1,6 @@
 @if (device()) {
   @switch (layout()) {
-    @case ("horizontalLayout") {
+    @case (LAYOUT.HORIZONTAL) {
       <div class="device-wrapper horizontal">
         <div class="device-label">{{ device()?.label }}</div>
         <span class="material-symbols-outlined device-icon">{{
@@ -9,7 +9,7 @@
         <div class="device-state">{{ device()?.state }}</div>
       </div>
     }
-    @case ("verticalLayout") {
+    @case (LAYOUT.VERTICAL) {
       <div class="device-wrapper vertical">
         <span
           [appLightActiveDevice]="!!device()?.state"
@@ -26,7 +26,7 @@
         </div>
       </div>
     }
-    @case ("singleDevice") {
+    @case (LAYOUT.SINGLE_DEVICE) {
       <div class="device-wrapper single">
         <div class="device-block">
           <div class="device-label">{{ device()?.label }}</div>
