@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 
-import { LayoutType, Sensor } from '@/app/shared/models/data.model';
+import {LAYOUT_TYPES, LayoutType, Sensor} from '@/app/shared/models/data.model';
 import { SensorValuePipe } from '@/app/shared/pipes/sensor-value.pipe';
 
 @Component({
@@ -11,6 +11,8 @@ import { SensorValuePipe } from '@/app/shared/pipes/sensor-value.pipe';
   styleUrl: './sensor.component.scss',
 })
 export class SensorComponent {
+  readonly LAYOUT = LAYOUT_TYPES;
+
   layout = input<LayoutType>();
   sensor = input<Sensor>();
 }

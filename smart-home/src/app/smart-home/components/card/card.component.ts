@@ -3,7 +3,7 @@ import { Component, input, OnInit } from '@angular/core';
 import {
   Card,
   Device,
-  DeviceItem,
+  DeviceItem, ITEM_TYPES,
   Sensor,
   SensorItem,
 } from '@/app/shared/models/data.model';
@@ -27,6 +27,8 @@ import { LightActiveCardDirective } from '@/app/shared/directives/light-active-c
 })
 export class CardComponent implements OnInit {
   card = input<Card>();
+
+  readonly TYPES = ITEM_TYPES;
 
   devices: Device[] = [];
   sensors: Sensor[] = [];
@@ -57,11 +59,11 @@ export class CardComponent implements OnInit {
     const items = this.card()?.items ?? [];
 
     this.sensors = items
-      .filter((item): item is SensorItem => item.type === 'sensor')
+      .filter((item): item is SensorItem => item.type === this.TYPES.SENSOR)
       .map(({ type, ...sensor }) => sensor);
 
     this.devices = items
-      .filter((item): item is DeviceItem => item.type === 'device')
+      .filter((item): item is DeviceItem => item.type === this.TYPES.DEVICE)
       .map(({ type, ...device }) => device);
   }
 }
