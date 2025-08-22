@@ -21,6 +21,7 @@ import { Dashboard } from '@/app/shared/models/dashboard.model';
 import { Tab } from '@/app/shared/models/data.model';
 import {filter, map, startWith, switchMap} from 'rxjs';
 import { ModalConfirmDeleteComponent } from '@/app/smart-home/components/modal/modal-confirm-delete/modal-confirm-delete.component';
+import {DashboardHandlerService} from '@/app/shared/services/dashboard-handler.service';
 
 @Component({
   imports: [TabSwitcherComponent, RouterOutlet, ModalConfirmDeleteComponent],
@@ -34,6 +35,7 @@ export class DashboardComponent {
   router = inject(Router);
   dashboardService = inject(DashboardService);
   destroyRef = inject(DestroyRef);
+  dashboardHandler = inject(DashboardHandlerService);
 
   //получение параметров URL - сигналы
   readonly dashboardIdRouteSignal: Signal<string | null> = toSignal(
