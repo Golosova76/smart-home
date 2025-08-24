@@ -3,10 +3,10 @@
 <app-tab-switcher
   [tabs]="tabs"
   [activeTabId]="selectedTabId()"
+  [editMode]="isEditMode()"
   (selectTab)="onTabSelected($event)"
   (deleteClick)="openDeleteModal()"
   (editClick)="onEditClick()"
-  [editMode]="isEditMode()"
 ></app-tab-switcher>
 
 <router-outlet></router-outlet>

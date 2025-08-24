@@ -1,7 +1,8 @@
 import {
   ApplicationConfig,
+  isDevMode,
   provideBrowserGlobalErrorListeners,
-  provideZoneChangeDetection, isDevMode,
+  provideZoneChangeDetection,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
@@ -24,6 +25,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
     provideStore(),
     provideEffects(),
-    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })
-],
+    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+  ],
 };

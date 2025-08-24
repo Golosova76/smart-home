@@ -10,10 +10,11 @@ import { ProfileService } from '@/app/shared/services/profile.service';
 import { AuthService } from '@/app/core/auth/services/auth/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ModalCreateDashboardsComponent } from '@/app/smart-home/components/modal/modal-create-dashboards/modal-create-dashboards.component';
-import { DashboardService } from '@/app/shared/services/dashboard.service';
+
 import { Dashboard } from '@/app/shared/models/dashboard.model';
-import { switchMap, tap } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { DashboardHandlerService } from '@/app/shared/services/dashboard-handler.service';
 
 @Component({
   selector: 'app-sidebar-footer',
@@ -26,12 +27,12 @@ export class SidebarFooterComponent {
   profileService = inject(ProfileService);
   authService = inject(AuthService);
   destroyRef = inject(DestroyRef);
-  dashboardService = inject(DashboardService);
+  handlerService = inject(DashboardHandlerService);
   router = inject(Router);
 
   readonly sidebarCollapsed = input<boolean>(false);
   readonly isCreateOpenModal = signal<boolean>(false);
-  readonly dashboardsSignal = this.dashboardService.dashboardsSignal;
+  readonly dashboardsSignal = this.handlerService.dashboardsSignal;
 
   readonly checkId = computed(() =>
     this.dashboardsSignal().map((dash) => dash.id),
@@ -61,14 +62,15 @@ export class SidebarFooterComponent {
   }
 
   handleCreate(dto: Dashboard) {
-    this.dashboardService
-      .createDashboard(dto)
+    this.handlerService
+      .addDashboard(dto)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        switchMap(() => this.dashboardService.getDashboards()),
-        tap((dashboards) => {
-          this.dashboardService.dashboardsSignal.set(dashboards);
-          this.router.navigate(['/dashboard', dto.id]).catch(() => {});
+        switchMap((created) =>
+          this.handlerService.loadDashboards().pipe(map(() => created)),
+        ),
+        tap((created) => {
+          this.router.navigate(['/dashboard', created.id]).catch(() => {});
           this.isCreateOpenModal.set(false);
         }),
       )

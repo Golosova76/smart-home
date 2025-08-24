@@ -19,9 +19,9 @@ import {
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Dashboard } from '@/app/shared/models/dashboard.model';
 import { Tab } from '@/app/shared/models/data.model';
-import {filter, map, startWith, switchMap} from 'rxjs';
+import { filter, map, startWith, switchMap } from 'rxjs';
 import { ModalConfirmDeleteComponent } from '@/app/smart-home/components/modal/modal-confirm-delete/modal-confirm-delete.component';
-import {DashboardHandlerService} from '@/app/shared/services/dashboard-handler.service';
+import { DashboardHandlerService } from '@/app/shared/services/dashboard-handler.service';
 
 @Component({
   imports: [TabSwitcherComponent, RouterOutlet, ModalConfirmDeleteComponent],
@@ -35,7 +35,7 @@ export class DashboardComponent {
   router = inject(Router);
   dashboardService = inject(DashboardService);
   destroyRef = inject(DestroyRef);
-  dashboardHandler = inject(DashboardHandlerService);
+  handlerService = inject(DashboardHandlerService);
 
   //получение параметров URL - сигналы
   readonly dashboardIdRouteSignal: Signal<string | null> = toSignal(
@@ -55,11 +55,11 @@ export class DashboardComponent {
   );
 
   //массив dashboards где dashboardId
-  readonly dashboardsSignal = this.dashboardService.dashboardsSignal;
+  readonly dashboardsSignal = this.handlerService.dashboardsSignal;
   // один dashboard с tabs
-  readonly dashboardByIdSignal = this.dashboardService.dashboardByIdSignal;
+  readonly dashboardByIdSignal = this.handlerService.dashboardByIdSignal;
   // массив tab где tabId
-  readonly tabsSignal = this.dashboardService.tabsSignal;
+  readonly tabsSignal = this.handlerService.tabsSignal;
 
   readonly isDeleteOpenModal = signal<boolean>(false);
   readonly isEditMode = signal<boolean>(false);
@@ -169,21 +169,24 @@ export class DashboardComponent {
       return;
     }
 
-    this.dashboardService.deleteDashboard(dashboardId).pipe(
-      switchMap(() => this.dashboardService.loadDashboards()),
-      takeUntilDestroyed(this.destroyRef),
-    ).subscribe({
-      next: (dashboards) => {
-        this.closeDelete();
-        this.router
-          .navigate(['/dashboard', dashboards[0].id])
-          .catch(() => {});
-      }
-    })
+    this.handlerService
+      .removeDashboard(dashboardId)
+      .pipe(
+        switchMap(() => this.handlerService.loadDashboards()),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe({
+        next: (nextId) => {
+          this.closeDelete();
+          this.router
+            .navigate(nextId ? ['/dashboard', nextId] : ['/dashboard'])
+            .catch(() => {});
+        },
+      });
   }
 
   onEditClick() {
-    this.isEditMode.update(v => !v);
+    this.isEditMode.update((v) => !v);
   }
 
   //конец класса

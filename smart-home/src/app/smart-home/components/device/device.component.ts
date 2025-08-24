@@ -1,6 +1,10 @@
 import { Component, input } from '@angular/core';
 
-import {Device, LAYOUT_TYPES, LayoutType} from '@/app/shared/models/data.model';
+import {
+  Device,
+  LAYOUT_TYPES,
+  LayoutType,
+} from '@/app/shared/models/data.model';
 import { DeviceStatePipe } from '@/app/shared/pipes/device-state.pipe';
 import { NgClass } from '@angular/common';
 import { LightActiveDeviceDirective } from '@/app/shared/directives/light-active-device.directive';
