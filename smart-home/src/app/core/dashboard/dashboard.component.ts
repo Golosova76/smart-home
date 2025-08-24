@@ -22,6 +22,7 @@ import { Tab } from '@/app/shared/models/data.model';
 import { filter, map, startWith, switchMap } from 'rxjs';
 import { ModalConfirmDeleteComponent } from '@/app/smart-home/components/modal/modal-confirm-delete/modal-confirm-delete.component';
 import { DashboardHandlerService } from '@/app/shared/services/dashboard-handler.service';
+import { RouteIdValidService } from '@/app/shared/services/route-id-valid.service';
 
 @Component({
   imports: [TabSwitcherComponent, RouterOutlet, ModalConfirmDeleteComponent],
@@ -36,23 +37,7 @@ export class DashboardComponent {
   dashboardService = inject(DashboardService);
   destroyRef = inject(DestroyRef);
   handlerService = inject(DashboardHandlerService);
-
-  //получение параметров URL - сигналы
-  readonly dashboardIdRouteSignal: Signal<string | null> = toSignal(
-    this.route.paramMap.pipe(
-      map((parameters) => parameters.get('dashboardId') ?? null),
-    ),
-    { initialValue: null },
-  );
-
-  readonly tabIdRouteSignal: Signal<string | null> = toSignal(
-    this.router.events.pipe(
-      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-      startWith(null),
-      map(() => this.route.firstChild?.snapshot.paramMap.get('tabId') ?? null),
-    ),
-    { initialValue: null },
-  );
+  routeIds = inject(RouteIdValidService);
 
   //массив dashboards где dashboardId
   readonly dashboardsSignal = this.handlerService.dashboardsSignal;
@@ -65,19 +50,15 @@ export class DashboardComponent {
   readonly isEditMode = signal<boolean>(false);
 
   // получаем TabId кот соот роуту
-  readonly selectedTabId = computed(() => {
-    return this.getValidTabId(this.tabsSignal(), this.tabIdRouteSignal());
-  });
+  readonly selectedTabId = this.routeIds.selectedTabId;
 
   onTabSelected(tabId: string) {
-    this.router
-      .navigate(['/dashboard', this.dashboardIdRouteSignal(), tabId])
-      .catch(() => {});
+    this.routeIds.selectTab(tabId);
   }
 
   constructor() {
     effect(() => {
-      const dashboardId = this.dashboardIdRouteSignal();
+      const dashboardId = this.routeIds.dashboardIdRouteSignal();
       if (dashboardId) {
         this.initTabs(dashboardId);
       }
@@ -128,27 +109,6 @@ export class DashboardComponent {
         .catch(() => {});
       return;
     }
-  }
-
-  private getValidDashboardId(
-    dashboards: Dashboard[],
-    dashboardIdRoute: string | null,
-  ) {
-    const httpDashboardId = dashboards.some(
-      (dashboard) => dashboard.id === dashboardIdRoute,
-    );
-    if (!dashboardIdRoute || !httpDashboardId) {
-      return dashboards.length > 0 ? dashboards[0].id : null;
-    }
-    return dashboardIdRoute;
-  }
-
-  private getValidTabId(tabs: Tab[], tabIdRoute: string | null) {
-    const httpTabId = tabs.some((tab) => tab.id === tabIdRoute);
-    if (!tabIdRoute || !httpTabId) {
-      return tabs.length > 0 ? tabs[0].id : null;
-    }
-    return tabIdRoute;
   }
 
   openDeleteModal() {

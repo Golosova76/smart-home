@@ -1,8 +1,8 @@
 import { Component, computed, inject } from '@angular/core';
 import { CardListComponent } from '@/app/smart-home/components/card-list/card-list.component';
-import { DashboardService } from '@/app/shared/services/dashboard.service';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
+import { DashboardHandlerService } from '@/app/shared/services/dashboard-handler.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-dashboard-tab',
@@ -11,11 +11,11 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './dashboard-tab.component.scss',
 })
 export class DashboardTabComponent {
-  dashboardService = inject(DashboardService);
   private route = inject(ActivatedRoute);
+  handlerService = inject(DashboardHandlerService);
 
-  readonly dashboardByIdSignal = this.dashboardService.dashboardByIdSignal;
-  readonly tabsSignal = this.dashboardService.tabsSignal;
+  readonly dashboardByIdSignal = this.handlerService.dashboardByIdSignal;
+  readonly tabsSignal = this.handlerService.tabsSignal;
 
   readonly paramMap = toSignal(this.route.paramMap);
   readonly tabIdRoute = computed(() => this.paramMap()?.get('tabId') ?? null);
