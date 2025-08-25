@@ -15,7 +15,6 @@ export class RouteIdValidService {
   handlerService = inject(DashboardHandlerService);
 
   readonly dashboardsSignal = this.handlerService.dashboardsSignal;
-  readonly dashboardByIdSignal = this.handlerService.dashboardByIdSignal;
   readonly tabsSignal = this.handlerService.tabsSignal;
 
   private readParamFromTree(parameters: string): string | null {

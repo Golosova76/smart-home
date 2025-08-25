@@ -6,12 +6,7 @@ import {
   input,
   OnInit,
 } from '@angular/core';
-import {
-  ActivatedRoute,
-  Router,
-  RouterLink,
-  RouterLinkActive,
-} from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DashboardHandlerService } from '@/app/shared/services/dashboard-handler.service';
 import { RouteIdValidService } from '@/app/shared/services/route-id-valid.service';
@@ -27,7 +22,6 @@ export class SidebarMainComponent implements OnInit {
   handlerService = inject(DashboardHandlerService);
   routeIds = inject(RouteIdValidService);
   router = inject(Router);
-  route = inject(ActivatedRoute);
   destroyRef = inject(DestroyRef);
 
   sidebarCollapsed = input<boolean>(false);

@@ -1,8 +1,7 @@
 import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
 
 import { TabSwitcherComponent } from '@/app/smart-home/components/tab-switcher/tab-switcher.component';
-import { DashboardService } from '@/app/shared/services/dashboard.service';
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { map, switchMap } from 'rxjs';
 import { ModalConfirmDeleteComponent } from '@/app/smart-home/components/modal/modal-confirm-delete/modal-confirm-delete.component';
@@ -17,17 +16,11 @@ import { RouteIdValidService } from '@/app/shared/services/route-id-valid.servic
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent {
-  route = inject(ActivatedRoute);
   router = inject(Router);
-  dashboardService = inject(DashboardService);
   destroyRef = inject(DestroyRef);
   handlerService = inject(DashboardHandlerService);
   routeIds = inject(RouteIdValidService);
 
-  //массив dashboards где dashboardId
-  readonly dashboardsSignal = this.handlerService.dashboardsSignal;
-  // один dashboard с tabs
-  readonly dashboardByIdSignal = this.handlerService.dashboardByIdSignal;
   // массив tab где tabId
   readonly tabsSignal = this.handlerService.tabsSignal;
 
@@ -36,7 +29,6 @@ export class DashboardComponent {
   readonly isDeleteOpenModal = signal<boolean>(false);
   readonly isEditMode = signal<boolean>(false);
 
-  // получаем TabId кот соот роуту
   readonly selectedTabId = this.routeIds.selectedTabId;
 
   onTabSelected(tabId: string) {
@@ -125,6 +117,4 @@ export class DashboardComponent {
   onEditClick() {
     this.isEditMode.update((v) => !v);
   }
-
-  //конец класса
 }
