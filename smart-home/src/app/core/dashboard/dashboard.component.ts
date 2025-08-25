@@ -1,25 +1,10 @@
-import {
-  Component,
-  computed,
-  DestroyRef,
-  effect,
-  inject,
-  signal,
-  Signal,
-} from '@angular/core';
+import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
 
 import { TabSwitcherComponent } from '@/app/smart-home/components/tab-switcher/tab-switcher.component';
 import { DashboardService } from '@/app/shared/services/dashboard.service';
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-  RouterOutlet,
-} from '@angular/router';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { Dashboard } from '@/app/shared/models/dashboard.model';
-import { Tab } from '@/app/shared/models/data.model';
-import { filter, map, startWith, switchMap } from 'rxjs';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { map, switchMap } from 'rxjs';
 import { ModalConfirmDeleteComponent } from '@/app/smart-home/components/modal/modal-confirm-delete/modal-confirm-delete.component';
 import { DashboardHandlerService } from '@/app/shared/services/dashboard-handler.service';
 import { RouteIdValidService } from '@/app/shared/services/route-id-valid.service';
@@ -46,6 +31,8 @@ export class DashboardComponent {
   // массив tab где tabId
   readonly tabsSignal = this.handlerService.tabsSignal;
 
+  readonly dashboardIdRouteSignal = this.routeIds.dashboardIdValid;
+
   readonly isDeleteOpenModal = signal<boolean>(false);
   readonly isEditMode = signal<boolean>(false);
 
@@ -58,7 +45,7 @@ export class DashboardComponent {
 
   constructor() {
     effect(() => {
-      const dashboardId = this.routeIds.dashboardIdRouteSignal();
+      const dashboardId = this.routeIds.dashboardIdValid();
       if (dashboardId) {
         this.initTabs(dashboardId);
       }
@@ -68,47 +55,29 @@ export class DashboardComponent {
   private initTabs(dashboardId: string) {
     if (!dashboardId) return;
 
-    this.dashboardService
-      .getDashboardById(dashboardId)
+    this.handlerService
+      .loadDashboardById(dashboardId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (dataModel) => {
-          this.dashboardByIdSignal.set(dataModel);
-          this.tabsSignal.set(dataModel.tabs);
-          this.handleRouteParams(
-            this.dashboardIdRouteSignal(),
-            this.tabIdRouteSignal(),
-          );
+        next: () => {
+          const dashboardIdValid = this.routeIds.dashboardIdValid();
+          const tabIdValid = this.routeIds.tabIdValid();
+          const dashboardIdRouteSignal = this.routeIds.dashboardIdRouteSignal();
+          const tabIdRouteSignal = this.routeIds.tabIdRouteSignal();
+
+          if (
+            dashboardIdValid &&
+            tabIdValid &&
+            (dashboardIdValid !== dashboardIdRouteSignal ||
+              tabIdValid !== tabIdRouteSignal)
+          ) {
+            this.routeIds.selectTab(tabIdValid);
+          }
         },
         error: (error) => {
           console.error('Ошибка загрузки Dashboard:', error);
         },
       });
-  }
-
-  handleRouteParams(
-    dashboardIdRoute: string | null,
-    tabIdRoute: string | null,
-  ) {
-    const dashboardsSignal = this.dashboardsSignal();
-
-    const dashboardIdValid = this.getValidDashboardId(
-      dashboardsSignal,
-      dashboardIdRoute,
-    );
-
-    if (!dashboardIdValid) return;
-
-    const tabIdValid = this.getValidTabId(this.tabsSignal(), tabIdRoute);
-
-    if (!tabIdValid) return;
-
-    if (dashboardIdValid !== dashboardIdRoute || tabIdValid !== tabIdRoute) {
-      this.router
-        .navigate(['/dashboard', dashboardIdValid, tabIdValid])
-        .catch(() => {});
-      return;
-    }
   }
 
   openDeleteModal() {
@@ -123,7 +92,7 @@ export class DashboardComponent {
   }
 
   onDelete() {
-    const dashboardId = this.dashboardIdRouteSignal();
+    const dashboardId = this.routeIds.dashboardIdRouteSignal();
     if (!dashboardId) {
       this.closeDelete();
       return;
@@ -132,15 +101,23 @@ export class DashboardComponent {
     this.handlerService
       .removeDashboard(dashboardId)
       .pipe(
-        switchMap(() => this.handlerService.loadDashboards()),
+        switchMap((nextIdAfterRemove) =>
+          this.handlerService.loadDashboards().pipe(
+            map(() => {
+              const firstId =
+                this.handlerService.dashboardsSignal()[0]?.id ?? null;
+              return nextIdAfterRemove ?? firstId ?? null;
+            }),
+          ),
+        ),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
         next: (nextId) => {
           this.closeDelete();
-          this.router
-            .navigate(nextId ? ['/dashboard', nextId] : ['/dashboard'])
-            .catch(() => {});
+          if (nextId) {
+            this.routeIds.selectDashboard(nextId);
+          }
         },
       });
   }
