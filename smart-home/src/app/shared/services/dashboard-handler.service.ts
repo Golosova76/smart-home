@@ -8,7 +8,7 @@ import { DashboardService } from '@/app/shared/services/dashboard.service';
   providedIn: 'root',
 })
 export class DashboardHandlerService {
-  api = inject(DashboardService);
+  private readonly api = inject(DashboardService);
 
   readonly dashboardsSignal = signal<Dashboard[]>([]);
   readonly dashboardByIdSignal = signal<DataModel | null>(null);

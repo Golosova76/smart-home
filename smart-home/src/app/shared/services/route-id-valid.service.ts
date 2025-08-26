@@ -10,8 +10,8 @@ import { Tab } from '@/app/shared/models/data.model';
   providedIn: 'root',
 })
 export class RouteIdValidService {
-  router = inject(Router);
-  handlerService = inject(DashboardHandlerService);
+  private readonly router = inject(Router);
+  private readonly handlerService = inject(DashboardHandlerService);
 
   readonly dashboardsSignal = this.handlerService.dashboardsSignal;
   readonly tabsSignal = this.handlerService.tabsSignal;

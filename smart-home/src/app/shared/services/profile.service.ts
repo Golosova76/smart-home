@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ProfileService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   readonly profile = signal<UserProfile | null>(null);
 
