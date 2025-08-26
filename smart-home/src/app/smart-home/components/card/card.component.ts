@@ -3,7 +3,8 @@ import { Component, input, OnInit } from '@angular/core';
 import {
   Card,
   Device,
-  DeviceItem, ITEM_TYPES,
+  DeviceItem,
+  ITEM_TYPES,
   Sensor,
   SensorItem,
 } from '@/app/shared/models/data.model';

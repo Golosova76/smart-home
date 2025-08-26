@@ -1,19 +1,15 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Dashboard } from '@/app/shared/models/dashboard.model';
-import {Observable, tap} from 'rxjs';
+import { Observable } from 'rxjs';
 import { BASE_API_URL } from '@/app/shared/constants';
-import { DataModel, Tab } from '@/app/shared/models/data.model';
+import { DataModel } from '@/app/shared/models/data.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DashboardService {
   private http = inject(HttpClient);
-
-  readonly dashboardsSignal = signal<Dashboard[]>([]);
-  readonly dashboardByIdSignal = signal<DataModel | null>(null);
-  readonly tabsSignal = signal<Tab[]>([]);
 
   getDashboards(): Observable<Dashboard[]> {
     return this.http.get<Dashboard[]>(`${BASE_API_URL}dashboards`);
@@ -30,11 +26,4 @@ export class DashboardService {
   deleteDashboard(id: string): Observable<void> {
     return this.http.delete<void>(`${BASE_API_URL}dashboards/${id}`);
   }
-
-  loadDashboards(): Observable<Dashboard[]> {
-    return this.getDashboards().pipe(
-      tap(list => this.dashboardsSignal.set(list))
-    );
-  }
-
 }

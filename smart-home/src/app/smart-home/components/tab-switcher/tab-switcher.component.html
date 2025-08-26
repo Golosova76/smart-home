@@ -11,10 +11,19 @@
     }
   </div>
   <div class="dash-actions">
-    <button (click)="onEditClick()" type="button" class="dash-action-button edit">
+    <button
+      (click)="onEditClick()"
+      type="button"
+      class="dash-action-button edit"
+    >
       <span class="material-symbols-outlined dash-action-icon">edit</span>
     </button>
-    <button (click)="onDelete()" type="button" [class.disable]="editMode()" class="dash-action-button delete">
+    <button
+      [class.disable]="editMode()"
+      (click)="onDelete()"
+      type="button"
+      class="dash-action-button delete"
+    >
       <span class="material-symbols-outlined dash-action-icon">delete</span>
     </button>
   </div>

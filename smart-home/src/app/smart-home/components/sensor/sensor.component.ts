@@ -1,6 +1,10 @@
 import { Component, input } from '@angular/core';
 
-import {LAYOUT_TYPES, LayoutType, Sensor} from '@/app/shared/models/data.model';
+import {
+  LAYOUT_TYPES,
+  LayoutType,
+  Sensor,
+} from '@/app/shared/models/data.model';
 import { SensorValuePipe } from '@/app/shared/pipes/sensor-value.pipe';
 
 @Component({
