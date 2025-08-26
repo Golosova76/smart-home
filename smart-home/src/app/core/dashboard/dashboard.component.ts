@@ -52,17 +52,8 @@ export class DashboardComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          const dashboardIdValid = this.routeIds.dashboardIdValid();
           const tabIdValid = this.routeIds.tabIdValid();
-          const dashboardIdRouteSignal = this.routeIds.dashboardIdRouteSignal();
-          const tabIdRouteSignal = this.routeIds.tabIdRouteSignal();
-
-          if (
-            dashboardIdValid &&
-            tabIdValid &&
-            (dashboardIdValid !== dashboardIdRouteSignal ||
-              tabIdValid !== tabIdRouteSignal)
-          ) {
+          if (tabIdValid) {
             this.routeIds.selectTab(tabIdValid);
           }
         },

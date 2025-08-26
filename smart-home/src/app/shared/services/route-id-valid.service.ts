@@ -1,5 +1,5 @@
 import { computed, inject, Injectable, Signal } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { DashboardHandlerService } from '@/app/shared/services/dashboard-handler.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map, startWith } from 'rxjs';
@@ -10,7 +10,6 @@ import { Tab } from '@/app/shared/models/data.model';
   providedIn: 'root',
 })
 export class RouteIdValidService {
-  route = inject(ActivatedRoute);
   router = inject(Router);
   handlerService = inject(DashboardHandlerService);
 
@@ -78,6 +77,14 @@ export class RouteIdValidService {
     const tabIdValid = this.getValidTabId(this.tabsSignal(), tabId);
     if (!dashboardIdValid || !tabIdValid) return;
 
+    const dashboardIdRouteSignal = this.dashboardIdRouteSignal();
+    const tabIdRouteSignal = this.tabIdRouteSignal();
+
+    if (dashboardIdValid === dashboardIdRouteSignal &&
+      tabIdValid === tabIdRouteSignal
+    ) {
+      return;
+    }
     this.router
       .navigate(['/dashboard', dashboardIdValid, tabIdValid])
       .catch(() => {});
