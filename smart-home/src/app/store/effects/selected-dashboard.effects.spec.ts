@@ -3,17 +3,15 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Observable } from 'rxjs';
 
 import { SelectedDashboardEffects } from './selected-dashboard.effects';
+import {Actions} from '@ngrx/effects';
 
 describe('SelectedDashboardEffects', () => {
-  let actions$: Observable<any>;
+  let actions$: Observable<Actions>;
   let effects: SelectedDashboardEffects;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        SelectedDashboardEffects,
-        provideMockActions(() => actions$)
-      ]
+      providers: [SelectedDashboardEffects, provideMockActions(() => actions$)],
     });
 
     effects = TestBed.inject(SelectedDashboardEffects);

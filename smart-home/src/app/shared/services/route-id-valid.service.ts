@@ -5,6 +5,9 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map, startWith } from 'rxjs';
 import { Dashboard } from '@/app/shared/models/dashboard.model';
 import { Tab } from '@/app/shared/models/data.model';
+import { Store } from '@ngrx/store';
+import { selectTabs } from '@/app/store/selectors/selected-dashboard.selectors';
+import { AppState } from '@/app/store/state/app.state';
 
 @Injectable({
   providedIn: 'root',
@@ -12,9 +15,11 @@ import { Tab } from '@/app/shared/models/data.model';
 export class RouteIdValidService {
   private readonly router = inject(Router);
   private readonly handlerService = inject(DashboardHandlerService);
+  private store = inject<Store<AppState>>(Store);
 
   readonly dashboardsSignal = this.handlerService.dashboardsSignal;
-  readonly tabsSignal = this.handlerService.tabsSignal;
+  // readonly tabsSignal = this.handlerService.tabsSignal;
+  readonly tabsSignal: Signal<Tab[]> = this.store.selectSignal(selectTabs);
 
   private readParamFromTree(parameters: string): string | null {
     let route = this.router.routerState.root;
@@ -80,7 +85,8 @@ export class RouteIdValidService {
     const dashboardIdRouteSignal = this.dashboardIdRouteSignal();
     const tabIdRouteSignal = this.tabIdRouteSignal();
 
-    if (dashboardIdValid === dashboardIdRouteSignal &&
+    if (
+      dashboardIdValid === dashboardIdRouteSignal &&
       tabIdValid === tabIdRouteSignal
     ) {
       return;

@@ -1,8 +1,9 @@
 import { Component, computed, inject } from '@angular/core';
 import { CardListComponent } from '@/app/smart-home/components/card-list/card-list.component';
-import { ActivatedRoute } from '@angular/router';
-import { DashboardHandlerService } from '@/app/shared/services/dashboard-handler.service';
-import { toSignal } from '@angular/core/rxjs-interop';
+import * as SD from '@/app/store/selectors/selected-dashboard.selectors';
+import { Store } from '@ngrx/store';
+import { AppState } from '@/app/store/state/app.state';
+import { RouteIdValidService } from '@/app/shared/services/route-id-valid.service';
 
 @Component({
   selector: 'app-dashboard-tab',
@@ -11,19 +12,15 @@ import { toSignal } from '@angular/core/rxjs-interop';
   styleUrl: './dashboard-tab.component.scss',
 })
 export class DashboardTabComponent {
-  private route = inject(ActivatedRoute);
-  handlerService = inject(DashboardHandlerService);
+  private store = inject<Store<AppState>>(Store);
+  private readonly routeIds = inject(RouteIdValidService);
 
-  readonly dashboardByIdSignal = this.handlerService.dashboardByIdSignal;
-  readonly tabsSignal = this.handlerService.tabsSignal;
-
-  readonly paramMap = toSignal(this.route.paramMap);
-  readonly tabIdRoute = computed(() => this.paramMap()?.get('tabId') ?? null);
+  readonly tabsSignal = this.store.selectSignal(SD.selectTabs);
+  readonly selectedTabId = this.routeIds.selectedTabId;
 
   readonly cards = computed(() => {
-    const dataModel = this.dashboardByIdSignal();
-    const tabIdRoute = this.tabIdRoute();
-    if (!dataModel || !tabIdRoute) return [];
-    return this.tabsSignal().find((tab) => tab.id === tabIdRoute)?.cards ?? [];
+    const tabId = this.selectedTabId();
+    if (!tabId) return [];
+    return this.tabsSignal().find((t) => t.id === tabId)?.cards ?? [];
   });
 }

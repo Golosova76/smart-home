@@ -1,12 +1,17 @@
 import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
 
 import { TabSwitcherComponent } from '@/app/smart-home/components/tab-switcher/tab-switcher.component';
-import { Router, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { map, switchMap } from 'rxjs';
 import { ModalConfirmDeleteComponent } from '@/app/smart-home/components/modal/modal-confirm-delete/modal-confirm-delete.component';
 import { DashboardHandlerService } from '@/app/shared/services/dashboard-handler.service';
 import { RouteIdValidService } from '@/app/shared/services/route-id-valid.service';
+import { Store } from '@ngrx/store';
+
+import * as SD from '@/app/store/selectors/selected-dashboard.selectors';
+import * as A from '@/app/store/actions/dashboard.actions';
+import { AppState } from '@/app/store/state/app.state';
 
 @Component({
   imports: [TabSwitcherComponent, RouterOutlet, ModalConfirmDeleteComponent],
@@ -16,13 +21,13 @@ import { RouteIdValidService } from '@/app/shared/services/route-id-valid.servic
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent {
-  router = inject(Router);
-  destroyRef = inject(DestroyRef);
-  handlerService = inject(DashboardHandlerService);
-  routeIds = inject(RouteIdValidService);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly handlerService = inject(DashboardHandlerService);
+  private readonly routeIds = inject(RouteIdValidService);
+  private store = inject<Store<AppState>>(Store);
 
   // массив tab где tabId
-  readonly tabsSignal = this.handlerService.tabsSignal;
+  readonly tabsSignal = this.store.selectSignal(SD.selectTabs);
 
   readonly dashboardIdRouteSignal = this.routeIds.dashboardIdValid;
 
@@ -30,6 +35,8 @@ export class DashboardComponent {
   readonly isEditMode = signal<boolean>(false);
 
   readonly selectedTabId = this.routeIds.selectedTabId;
+
+  // readonly workingCopy = this.store.selectSignal(SD.selectWorkingCopy)
 
   onTabSelected(tabId: string) {
     this.routeIds.selectTab(tabId);
@@ -39,28 +46,9 @@ export class DashboardComponent {
     effect(() => {
       const dashboardId = this.routeIds.dashboardIdValid();
       if (dashboardId) {
-        this.initTabs(dashboardId);
+        this.store.dispatch(A.selectDashboard({ dashboardId }));
       }
     });
-  }
-
-  private initTabs(dashboardId: string) {
-    if (!dashboardId) return;
-
-    this.handlerService
-      .loadDashboardById(dashboardId)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: () => {
-          const tabIdValid = this.routeIds.tabIdValid();
-          if (tabIdValid) {
-            this.routeIds.selectTab(tabIdValid);
-          }
-        },
-        error: (error) => {
-          console.error('Ошибка загрузки Dashboard:', error);
-        },
-      });
   }
 
   openDeleteModal() {

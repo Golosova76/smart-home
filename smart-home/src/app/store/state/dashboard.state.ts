@@ -1,6 +1,6 @@
-import {DataModel} from '@/app/shared/models/data.model';
+import { DataModel } from '@/app/shared/models/data.model';
 
-export  interface SelectedDashboardState {
+export interface SelectedDashboardState {
   dashboardId: string | null;
   editMode: boolean;
   deepCopy: DataModel | null;
