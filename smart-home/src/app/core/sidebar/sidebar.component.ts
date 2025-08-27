@@ -1,4 +1,4 @@
-import { Component, HostBinding, input } from '@angular/core';
+import { Component, HostBinding, signal } from '@angular/core';
 
 import { SidebarFooterComponent } from '@/app/core/sidebar/sidebar-footer/sidebar-footer.component';
 import { SidebarHeaderComponent } from '@/app/core/sidebar/sidebar-header/sidebar-header.component';
@@ -16,10 +16,14 @@ import { SidebarMainComponent } from '@/app/core/sidebar/sidebar-main/sidebar-ma
   templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent {
-  opened = input<boolean>(true);
+  sidebarCollapsed = signal<boolean>(false);
 
-  @HostBinding('class.closed')
-  get isCosed() {
-    return !this.opened();
+  @HostBinding('class.collapsed')
+  get isCollapsed(): boolean {
+    return this.sidebarCollapsed();
+  }
+
+  toggleSidebar(): void {
+    this.sidebarCollapsed.update((visible) => !visible);
   }
 }

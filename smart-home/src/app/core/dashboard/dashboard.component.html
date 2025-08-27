@@ -1,7 +1,11 @@
-<app-tab-switcher
-  [tabs]="tabs"
-  [activeTabId]="selectedTabId"
-  (selectTab)="onTabSelected($event)"
-></app-tab-switcher>
+@let tabs = tabsSignal();
 
-<app-card-list [cards]="cards"></app-card-list>
+@if (tabs.length > 0) {
+  <app-tab-switcher
+    [tabs]="tabs"
+    [activeTabId]="selectedTabId()"
+    (selectTab)="onTabSelected($event)"
+  ></app-tab-switcher>
+}
+
+<router-outlet></router-outlet>

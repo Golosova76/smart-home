@@ -1,6 +1,24 @@
+@mixin margin-bottom10 {
+  &:not(:last-child) {
+    margin-bottom: 10px;
+  }
+}
+
 @mixin margin-bottom20 {
   &:not(:last-child) {
     margin-bottom: 20px;
+  }
+}
+
+@mixin margin-bottom30 {
+  &:not(:last-child) {
+    margin-bottom: 30px;
+  }
+}
+
+@mixin margin-bottom40 {
+  &:not(:last-child) {
+    margin-bottom: 40px;
   }
 }
 

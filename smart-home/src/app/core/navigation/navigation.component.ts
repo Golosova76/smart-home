@@ -1,20 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
-import { DashboardComponent } from '@/app/core/dashboard/dashboard.component';
 import { SidebarComponent } from '@/app/core/sidebar/sidebar.component';
-import { HeaderComponent } from '@/app/core/header/header.component';
+import { RouterOutlet } from '@angular/router';
+import { AuthService } from '@/app/core/auth/services/auth/auth.service';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  imports: [SidebarComponent, DashboardComponent, HeaderComponent],
+  imports: [SidebarComponent, RouterOutlet, AsyncPipe],
   selector: 'app-navigation',
   standalone: true,
   styleUrl: './navigation.component.scss',
   templateUrl: './navigation.component.html',
 })
 export class NavigationComponent {
-  isSidebarVisible = window.innerWidth > 1024;
+  authService = inject(AuthService);
 
-  toggleSidebar() {
-    this.isSidebarVisible = !this.isSidebarVisible;
-  }
+  isAuth$ = this.authService.isAuth$;
 }

@@ -2,18 +2,21 @@
 
 .nav-wrapper {
   padding: 5px;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .menu-items {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  .menu-item.active {
-    background-color: var(--active-primary);
+}
+
+.menu-item.active {
+  background-color: var(--active-primary);
+  color: var(--active-text);
+  .sidebar-icon {
     color: var(--active-text);
-    .sidebar-icon {
-      color: var(--active-text);
-    }
   }
 }
 
@@ -21,14 +24,29 @@
   @include m.flex-column;
   padding: 5px;
   border-radius: 4px;
+  cursor: pointer;
+  font-weight: var(--font-weight-title);
+  &:hover {
+    color: var(--active-text);
+  }
 }
 
 .menu-item-link {
   @include m.flex-column;
+  width: 100%;
 }
 
 .sidebar-icon {
   width: 24px;
   height: 24px;
   color: var(--light-border);
+}
+
+.empty-state-dashboards {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 12px;
+  line-height: 1.2;
 }

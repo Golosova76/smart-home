@@ -1,0 +1,48 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-form">
+  <h1 class="h1">Welcome home</h1>
+
+  <div class="form-body">
+    <label class="control-label">
+      <span class="control-title">Username<span>*</span></span>
+      <input
+        formControlName="username"
+        class="login-input"
+        name="username"
+        type="text"
+        placeholder="username"
+      />
+    </label>
+
+    <label class="control-label">
+      <span class="control-title">Password<span>*</span></span>
+      <div class="control-pass-input">
+        <input
+          [type]="isPasswordVisible() ? 'text' : 'password'"
+          formControlName="password"
+          name="password"
+          class="login-input"
+          placeholder="password"
+        />
+        <button
+          [class.active]="isPasswordVisible()"
+          (click)="togglePasswordVisible()"
+          class="password-eye-button"
+        >
+          @if (!isPasswordVisible()) {
+            <span class="material-symbols-outlined pass-icon"
+              >visibility_off</span
+            >
+          } @else {
+            <span class="material-symbols-outlined pass-icon">visibility</span>
+          }
+        </button>
+      </div>
+    </label>
+  </div>
+
+  <button class="btn btn-login" type="submit">LOG IN</button>
+
+  @if (errorMessage()) {
+    <div class="error-message">{{ errorMessage() }}</div>
+  }
+</form>

@@ -1,14 +1,24 @@
-<nav class="nav-wrapper">
-  <ul class="menu-items">
-    <li class="menu-item active">
-      <a href="" class="menu-item-link">
-        <svg icon="dashboard" class="sidebar-icon"></svg>
-        <span class="item-title">Overview</span>
-      </a>
-    </li>
-    <li class="menu-item">
-      <svg icon="info" class="sidebar-icon"></svg>
-      <span class="item-title">About</span>
-    </li>
-  </ul>
-</nav>
+@let dashboards = dashboardsSignal();
+
+@if (dashboards.length === 0) {
+  <div class="empty-state-dashboards">
+    {{ emptyDashboardText() }}
+  </div>
+} @else {
+  <nav class="nav-wrapper">
+    <ul class="menu-items">
+      @for (dashboard of dashboards; track dashboard.id) {
+        <li routerLinkActive="active" class="menu-item">
+          <a [routerLink]="['/dashboard', dashboard.id]" class="menu-item-link">
+            <span class="material-symbols-outlined dash-icon">{{
+              dashboard.icon
+            }}</span>
+            @if (!sidebarCollapsed()) {
+              <div class="item-title">{{ dashboard.title }}</div>
+            }
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+}

@@ -1,10 +1,11 @@
 @use "styles/mixins" as m;
 
 .card-wrapper {
-  padding: 20px;
+  padding: 10px;
   background-color: var(--active-text);
   border-radius: 5px;
-  width: 100%;
+  break-inside: avoid;
+  margin-bottom: 20px;
   min-width: 0;
   &.active-card {
     box-shadow: 0 0 15px var(--box-shadow-active);
@@ -35,6 +36,7 @@
     justify-content: start;
   }
 }
+
 .verticalLayout {
   .card-content {
     display: grid;

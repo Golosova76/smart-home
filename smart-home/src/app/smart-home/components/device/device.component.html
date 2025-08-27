@@ -1,6 +1,6 @@
 @if (device()) {
   @switch (layout()) {
-    @case ("horizontalLayout") {
+    @case (LAYOUT.HORIZONTAL) {
       <div class="device-wrapper horizontal">
         <div class="device-label">{{ device()?.label }}</div>
         <span class="material-symbols-outlined device-icon">{{
@@ -9,30 +9,30 @@
         <div class="device-state">{{ device()?.state }}</div>
       </div>
     }
-    @case ("verticalLayout") {
+    @case (LAYOUT.VERTICAL) {
       <div class="device-wrapper vertical">
         <span
-          class="material-symbols-outlined device-icon"
           [appLightActiveDevice]="!!device()?.state"
+          class="material-symbols-outlined device-icon"
         >
           {{ device()?.icon }}
         </span>
         <div class="device-label">{{ device()?.label }}</div>
         <div class="device-state">
           <label class="switch">
-            <input name="switch" type="checkbox" [checked]="device()?.state" />
+            <input [checked]="device()?.state" name="switch" type="checkbox" />
             <span class="slider"></span>
           </label>
         </div>
       </div>
     }
-    @case ("singleDevice") {
+    @case (LAYOUT.SINGLE_DEVICE) {
       <div class="device-wrapper single">
         <div class="device-block">
           <div class="device-label">{{ device()?.label }}</div>
           <span
-            class="material-symbols-outlined device-icon"
             [ngClass]="device()?.state ? 'icon-on' : 'icon-off'"
+            class="material-symbols-outlined device-icon"
           >
             {{ device()?.icon }}
           </span>

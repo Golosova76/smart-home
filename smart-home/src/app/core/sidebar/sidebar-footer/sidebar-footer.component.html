@@ -1,6 +1,13 @@
 <footer class="footer">
-  <div class="footer-avatar">
-    <img ngSrc="assets/image/avatar.jpg" alt="" height="640" width="640" />
-  </div>
-  <div class="footer-text">RS School. Angular</div>
+  @if (profile(); as user) {
+    <div class="footer-initials">{{ user.initials }}</div>
+    @if (!sidebarCollapsed()) {
+      <div class="footer-text">{{ user.fullName }}</div>
+      <span (click)="onLogout()" class="material-symbols-outlined logout-icon"
+        >logout</span
+      >
+    }
+  } @else {
+    <div class="no-profile">No profile data</div>
+  }
 </footer>

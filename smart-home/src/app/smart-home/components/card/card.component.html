@@ -1,19 +1,19 @@
 @if (card()) {
   <div
-    class="card-wrapper"
     [ngClass]="card()?.layout"
     [appLightActiveCard]="devices"
+    class="card-wrapper"
   >
     <div class="card-header">
-      <h2 class="card-title">{{ card()?.title }}</h2>
+      <h2 class="h2 card-title">{{ card()?.title }}</h2>
       @if (hasGroupToggle) {
         <div class="card-state switch">
           <label class="switch">
             <input
-              name="switch"
-              type="checkbox"
               [checked]="groupToggleState"
               (change)="groupToggleChange($event)"
+              name="switch"
+              type="checkbox"
             />
             <span class="slider"></span>
           </label>

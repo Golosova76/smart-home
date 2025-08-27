@@ -1,9 +1,15 @@
 <div class="header">
-  <app-sidebar-header></app-sidebar-header>
+  <app-sidebar-header
+    [sidebarCollapsed]="sidebarCollapsed()"
+    (menuClicked)="toggleSidebar()"
+  >
+  </app-sidebar-header>
 </div>
 <div class="main">
-  <app-sidebar-main></app-sidebar-main>
+  <app-sidebar-main [sidebarCollapsed]="sidebarCollapsed()"></app-sidebar-main>
 </div>
 <div class="footer">
-  <app-sidebar-footer></app-sidebar-footer>
+  <app-sidebar-footer
+    [sidebarCollapsed]="sidebarCollapsed()"
+  ></app-sidebar-footer>
 </div>
