@@ -26,4 +26,8 @@ export class DashboardService {
   deleteDashboard(id: string): Observable<void> {
     return this.http.delete<void>(`${BASE_API_URL}dashboards/${id}`);
   }
+
+  saveDashboardById(id: string, payload: DataModel): Observable<DataModel> {
+    return this.http.put<DataModel>(`${BASE_API_URL}dashboards/${id}`, payload);
+  }
 }

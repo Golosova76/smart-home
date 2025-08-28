@@ -12,6 +12,7 @@ import { Store } from '@ngrx/store';
 import * as SD from '@/app/store/selectors/selected-dashboard.selectors';
 import * as A from '@/app/store/actions/dashboard.actions';
 import { AppState } from '@/app/store/state/app.state';
+import {Tab} from '@/app/shared/models/data.model';
 
 @Component({
   imports: [TabSwitcherComponent, RouterOutlet, ModalConfirmDeleteComponent],
@@ -27,12 +28,12 @@ export class DashboardComponent {
   private store = inject<Store<AppState>>(Store);
 
   // массив tab где tabId
-  readonly tabsSignal = this.store.selectSignal(SD.selectTabs);
+  readonly tabsSignal = this.store.selectSignal<Tab[]>(SD.selectTabs);
 
   readonly dashboardIdRouteSignal = this.routeIds.dashboardIdValid;
 
   readonly isDeleteOpenModal = signal<boolean>(false);
-  readonly isEditMode = signal<boolean>(false);
+  readonly isEditMode = this.store.selectSignal<boolean>(SD.selectIsEditModeEnabled);
 
   readonly selectedTabId = this.routeIds.selectedTabId;
 
@@ -94,6 +95,17 @@ export class DashboardComponent {
   }
 
   onEditClick() {
-    this.isEditMode.update((v) => !v);
+    this.store.dispatch(A.enterEditMode())
   }
+
+  onSave() {
+    this.store.dispatch(A.saveDashboard());
+    this.store.dispatch(A.exitEditMode());
+  }
+
+  onDiscard() {
+    this.store.dispatch(A.discardChanges());
+    this.store.dispatch(A.exitEditMode());
+  }
+
 }

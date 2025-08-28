@@ -1,7 +1,7 @@
 import { createSelector } from '@ngrx/store';
 import { selectedDashboardFeature } from '@/app/store/reducers/dashboard.reducer';
 
-// весь срез состояния фичи (раньше: selectSelectedDashboardFeatureState)
+// весь срез состояния фичи
 export const selectFeatureState =
   selectedDashboardFeature.selectSelectedDashboardState;
 
@@ -27,3 +27,8 @@ export const selectCardsByTabId = (tabId: string | null) =>
   createSelector(selectTabs, (tabs) =>
     tabId ? (tabs.find((tab) => tab.id === tabId)?.cards ?? []) : [],
   );
+
+export const selectIsDeleteDisabled = createSelector(
+  selectIsEditModeEnabled,
+  (edit) => edit,
+);

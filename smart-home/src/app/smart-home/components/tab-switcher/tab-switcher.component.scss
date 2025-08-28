@@ -1,7 +1,7 @@
 @use "styles/mixins" as m;
 
 .nav-tabs {
-  height: 56px;
+  min-height: 56px;
   border-bottom: 1px solid var(--light-border);
   border-right: 1px solid var(--light-border);
   padding: 10px 10px 10px 20px;
@@ -40,8 +40,37 @@
   }
 }
 
-.dash-action-button.delete.disable {
+.dash-action-button.delete.disable,
+.tab-button.arrow-forward.disable,
+.tab-button.arrow-back.disable {
   opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
+}
+
+.edit-title-tab {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid var(--light-border);
+  padding: 10px;
+  .material-symbols-outlined {
+    font-size: 16px;
+  }
+}
+
+.add-tab,
+.discard,
+.save {
+  border: 1px solid var(--light-border);
+  padding: 10px;
+}
+
+.add-tab {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+  .material-symbols-outlined {
+    font-size: 20px;
+  }
 }

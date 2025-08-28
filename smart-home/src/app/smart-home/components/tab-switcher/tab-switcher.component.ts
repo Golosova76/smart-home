@@ -13,6 +13,8 @@ export class TabSwitcherComponent {
   @Output() readonly selectTab = new EventEmitter<string>();
   @Output() readonly deleteClick = new EventEmitter<void>();
   @Output() readonly editClick = new EventEmitter<void>();
+  @Output() readonly saveClick = new EventEmitter<void>();
+  @Output() readonly discardClick = new EventEmitter<void>();
 
   readonly activeTabId = input<string | null>(null);
   readonly editMode = input<boolean>(false);
@@ -30,5 +32,12 @@ export class TabSwitcherComponent {
 
   onEditClick() {
     this.editClick.emit();
+  }
+
+  onSave() {
+    this.saveClick.emit();
+  }
+  onDiscard() {
+    this.discardClick.emit();
   }
 }
