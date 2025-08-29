@@ -38,13 +38,13 @@ export const saveSelectedDashboardFailure = createAction(
 export const TabActionsTitleMove = createActionGroup({
     source: 'SelectedDashboard/TabsTitle',
     events: {
-        'Move Tab Left': props<{ tabId: string }>(),
-        'Move Tab Right': props<{ tabId: string }>(),
+      'Add Tab': props<{ title: string }>(),
+      'Remove Tab': props<{ tabId: string }>(),
 
-        'Start Edit': props<{ tabId: string; currentTitle: string }>(),
-        'End Edit': emptyProps(),
+      'Reorder Tab': props<{ tabId: string; direction: 'left' | 'right' }>(),
 
-
-
+      'Start Title Edit': props<{ tabId: string; currentTitle: string }>(),
+      'Commit Title Edit': props<{ tabId: string; newTitle: string }>(),
+      'End Title Edit': emptyProps(),
     }
 })

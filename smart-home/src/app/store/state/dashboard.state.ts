@@ -7,6 +7,9 @@ export interface SelectedDashboardState {
   workingCopy: DataModel | null;
   loading: boolean;
   error: string | null;
+
+  editTabId: string | null;
+  tabTitleDraftTitle: string
 }
 
 export const initialState: SelectedDashboardState = {
@@ -16,4 +19,7 @@ export const initialState: SelectedDashboardState = {
   workingCopy: null,
   loading: false,
   error: null,
+
+  editTabId: null,
+  tabTitleDraftTitle: '',
 };
