@@ -6,7 +6,7 @@ import {
   LoginCredentials,
   TokenResponse,
 } from '@/app/shared/models/login.model';
-import { BASE_API_URL } from '@/app/shared/constants';
+import { BASE_API_URL } from '@/app/shared/utils/constants';
 import { Router } from '@angular/router';
 import { ProfileService } from '@/app/shared/services/profile.service';
 

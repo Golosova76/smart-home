@@ -4,11 +4,19 @@
   [tabs]="tabs"
   [activeTabId]="selectedTabId()"
   [editMode]="isEditMode()"
+  [editTabId]="editTabId()"
+  [tabTitleDraft]="tabTitleDraft()"
   (selectTab)="onTabSelected($event)"
   (deleteClick)="openDeleteModal()"
   (editClick)="onEditClick()"
   (saveClick)="onSave()"
   (discardClick)="onDiscard()"
+  (startTitleEdit)="onStartTitleEdit($event)"
+  (endTitleEdit)="onEndTitleEdit()"
+  (commitTitleEdit)="onCommitTitleEdit($event)"
+  (reorderTab)="onReorderTab($event)"
+  (addTabClick)="openAddTabModal()"
+  (removeTabClick)="openRemoveTabModal()"
 ></app-tab-switcher>
 
 <router-outlet></router-outlet>
@@ -25,5 +33,18 @@
     [labelDelete]="dashboardIdRouteSignal() ?? ''"
     (closed)="closeDelete()"
     (deleted)="onDelete()"
+  ></app-modal-confirm-delete>
+}
+
+@if (isAddTabOpenModal()) {
+ <app-modal-create-tabs (submitted)="onAddTabSubmit($event)" (closed)="closeDelete()"></app-modal-create-tabs>
+}
+
+@if (isDeleteTabOpenModal()) {
+  <app-modal-confirm-delete
+    [entityDelete]="'tab'"
+    [labelDelete]="dashboardIdTabSignal() ?? ''"
+    (closed)="closeDelete()"
+    (deleted)="onRemoveTab()"
   ></app-modal-confirm-delete>
 }

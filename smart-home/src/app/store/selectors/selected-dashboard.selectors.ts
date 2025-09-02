@@ -18,6 +18,10 @@ export const selectIsLoading = selectedDashboardFeature.selectLoading;
 
 export const selectError = selectedDashboardFeature.selectError;
 
+export const selectEditTabId = selectedDashboardFeature.selectEditTabId;
+
+export const selectTabTitleDraft = selectedDashboardFeature.selectTabTitleDraft;
+
 export const selectTabs = createSelector(
   selectWorkingCopy,
   (working) => working?.tabs ?? [],

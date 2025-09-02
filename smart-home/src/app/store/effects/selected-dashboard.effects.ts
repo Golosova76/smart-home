@@ -4,7 +4,11 @@ import { DashboardService } from '@/app/shared/services/dashboard.service';
 import * as A from '@/app/store/actions/dashboard.actions';
 import { catchError, map, of, switchMap, tap, withLatestFrom } from 'rxjs';
 import { Store } from '@ngrx/store';
-import {selectDashboardId, selectTabs, selectWorkingCopy} from '@/app/store/selectors/selected-dashboard.selectors';
+import {
+  selectDashboardId,
+  selectTabs,
+  selectWorkingCopy,
+} from '@/app/store/selectors/selected-dashboard.selectors';
 import { RouteIdValidService } from '@/app/shared/services/route-id-valid.service';
 import { AppState } from '@/app/store/state/app.state';
 
@@ -57,9 +61,12 @@ export class SelectedDashboardEffects {
       withLatestFrom(
         this.store.select(selectDashboardId),
         this.store.select(selectWorkingCopy),
-        ),
+      ),
       switchMap(([, dashboardId, data]) => {
-        if (!dashboardId || !data) return of(A.saveSelectedDashboardFailure({error: 'Nothing to save'}));
+        if (!dashboardId || !data)
+          return of(
+            A.saveSelectedDashboardFailure({ error: 'Nothing to save' }),
+          );
 
         return this.api.saveDashboardById(dashboardId, data).pipe(
           map((data) => A.saveSelectedDashboardSuccess({ data })),
@@ -68,11 +75,10 @@ export class SelectedDashboardEffects {
               A.saveSelectedDashboardFailure({ error: this.toMessage(error) }),
             ),
           ),
-        )
-
-      })
-    )
-  )
+        );
+      }),
+    ),
+  );
 
   private toMessage(error: unknown): string {
     if (typeof error === 'string') return error;

@@ -9,7 +9,7 @@ export interface SelectedDashboardState {
   error: string | null;
 
   editTabId: string | null;
-  tabTitleDraftTitle: string
+  tabTitleDraft: string;
 }
 
 export const initialState: SelectedDashboardState = {
@@ -21,5 +21,5 @@ export const initialState: SelectedDashboardState = {
   error: null,
 
   editTabId: null,
-  tabTitleDraftTitle: '',
+  tabTitleDraft: '',
 };

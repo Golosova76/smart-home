@@ -12,10 +12,18 @@ import { Store } from '@ngrx/store';
 import * as SD from '@/app/store/selectors/selected-dashboard.selectors';
 import * as A from '@/app/store/actions/dashboard.actions';
 import { AppState } from '@/app/store/state/app.state';
-import {Tab} from '@/app/shared/models/data.model';
+import { Tab } from '@/app/shared/models/data.model';
+import {
+  ModalCreateTabsComponent
+} from '@/app/smart-home/components/modal/modal-create-tabs/modal-create-tabs.component';
 
 @Component({
-  imports: [TabSwitcherComponent, RouterOutlet, ModalConfirmDeleteComponent],
+  imports: [
+    TabSwitcherComponent,
+    RouterOutlet,
+    ModalConfirmDeleteComponent,
+    ModalCreateTabsComponent,
+  ],
   selector: 'app-dashboard',
   standalone: true,
   styleUrl: './dashboard.component.scss',
@@ -29,13 +37,25 @@ export class DashboardComponent {
 
   // массив tab где tabId
   readonly tabsSignal = this.store.selectSignal<Tab[]>(SD.selectTabs);
+  readonly editTabId = this.store.selectSignal<string | null>(
+    SD.selectEditTabId,
+  );
+  readonly tabTitleDraft = this.store.selectSignal<string>(
+    SD.selectTabTitleDraft,
+  );
 
   readonly dashboardIdRouteSignal = this.routeIds.dashboardIdValid;
+  readonly dashboardIdTabSignal = this.routeIds.tabIdValid;
+  readonly selectedTabId = this.routeIds.selectedTabId;
+
+  readonly isAddTabOpenModal = signal<boolean>(false);
 
   readonly isDeleteOpenModal = signal<boolean>(false);
-  readonly isEditMode = this.store.selectSignal<boolean>(SD.selectIsEditModeEnabled);
+  readonly isDeleteTabOpenModal = signal<boolean>(false);
 
-  readonly selectedTabId = this.routeIds.selectedTabId;
+  readonly isEditMode = this.store.selectSignal<boolean>(
+    SD.selectIsEditModeEnabled,
+  );
 
   // readonly workingCopy = this.store.selectSignal(SD.selectWorkingCopy)
 
@@ -59,8 +79,29 @@ export class DashboardComponent {
     this.isDeleteOpenModal.set(true);
   }
 
+  openAddTabModal() {
+    if (!this.isEditMode()) {
+      return;
+    }
+    this.isAddTabOpenModal.set(true);
+  }
+
+  onAddTabSubmit(title: string): void {
+    this.store.dispatch(A.TabActionsTitleMove.addTab({ title }));
+    this.closeDelete();
+  }
+
   closeDelete() {
     this.isDeleteOpenModal.set(false);
+    this.isAddTabOpenModal.set(false);
+    this.isDeleteTabOpenModal.set(false);
+  }
+
+  onRemoveTab(): void {
+    const id = this.dashboardIdTabSignal();
+    if (!id) return;
+    this.store.dispatch(A.TabActionsTitleMove.removeTab({ tabId: id }));
+    this.closeDelete();
   }
 
   onDelete() {
@@ -95,7 +136,7 @@ export class DashboardComponent {
   }
 
   onEditClick() {
-    this.store.dispatch(A.enterEditMode())
+    this.store.dispatch(A.enterEditMode());
   }
 
   onSave() {
@@ -108,4 +149,31 @@ export class DashboardComponent {
     this.store.dispatch(A.exitEditMode());
   }
 
+  onStartTitleEdit(event: { tabId: string; currentTitle: string }) {
+    this.store.dispatch(A.TabActionsTitleMove.startTitleEdit(event));
+  }
+
+  onEndTitleEdit() {
+    this.store.dispatch(A.TabActionsTitleMove.endTitleEdit());
+  }
+
+  onCommitTitleEdit(event: { tabId: string; newTitle: string }) {
+    this.store.dispatch(A.TabActionsTitleMove.commitTitleEdit(event));
+  }
+
+  onReorderTab(event: { tabId: string; direction: 'left' | 'right' }) {
+    this.store.dispatch(
+      A.TabActionsTitleMove.reorderTab({
+        tabId: event.tabId,
+        direction: event.direction,
+      }),
+    );
+  }
+
+  openRemoveTabModal() {
+    if (!this.isEditMode()) {
+      return;
+    }
+    this.isDeleteTabOpenModal.set(true);
+  }
 }

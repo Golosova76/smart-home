@@ -1,7 +1,7 @@
 <app-modal-shell>
   <app-modal-header
     [entityActions]="'Delete'"
-    [entityDelete]="'dashboard'"
+    [entityDelete]="entityDelete()"
     (closed)="closed.emit()"
   ></app-modal-header>
   <div class="modal-body">

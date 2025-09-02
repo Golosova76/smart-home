@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TOKEN_KEY } from '@/app/shared/constants';
+import { TOKEN_KEY } from '@/app/shared/utils/constants';
 
 @Injectable({
   providedIn: 'root',

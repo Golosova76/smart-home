@@ -11,8 +11,8 @@ import {
   styleUrl: './modal-header.component.scss',
 })
 export class ModalHeaderComponent {
-  entityDelete = input.required<EntityDelete>();
-  entityActions = input.required<EntityActions>();
+  entityDelete = input<EntityDelete>();
+  entityActions = input<EntityActions>();
 
   closed = output<void>();
 

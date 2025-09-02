@@ -1,4 +1,9 @@
-import {createAction, createActionGroup, emptyProps, props} from '@ngrx/store';
+import {
+  createAction,
+  createActionGroup,
+  emptyProps,
+  props,
+} from '@ngrx/store';
 import { DataModel } from '@/app/shared/models/data.model';
 
 export const selectDashboard = createAction(
@@ -24,27 +29,26 @@ export const saveDashboard = createAction('[Dashboard] Save Dashboard');
 
 export const discardChanges = createAction('[Dashboard] Discard Changes');
 
-
 export const saveSelectedDashboardSuccess = createAction(
-    '[SelectedDashboard/API] Save Success SelectedDashboard',
-    props<{ data: DataModel }>(),
-)
+  '[SelectedDashboard/API] Save Success SelectedDashboard',
+  props<{ data: DataModel }>(),
+);
 
 export const saveSelectedDashboardFailure = createAction(
-    '[SelectedDashboard/API] Save Failure SelectedDashboard',
-    props<{ error: string }>(),
-)
+  '[SelectedDashboard/API] Save Failure SelectedDashboard',
+  props<{ error: string }>(),
+);
 
 export const TabActionsTitleMove = createActionGroup({
-    source: 'SelectedDashboard/TabsTitle',
-    events: {
-      'Add Tab': props<{ title: string }>(),
-      'Remove Tab': props<{ tabId: string }>(),
+  source: 'SelectedDashboard/TabsTitle',
+  events: {
+    'Add Tab': props<{ title: string }>(),
+    'Remove Tab': props<{ tabId: string }>(),
 
-      'Reorder Tab': props<{ tabId: string; direction: 'left' | 'right' }>(),
+    'Reorder Tab': props<{ tabId: string; direction: 'left' | 'right' }>(),
 
-      'Start Title Edit': props<{ tabId: string; currentTitle: string }>(),
-      'Commit Title Edit': props<{ tabId: string; newTitle: string }>(),
-      'End Title Edit': emptyProps(),
-    }
-})
+    'Start Title Edit': props<{ tabId: string; currentTitle: string }>(),
+    'Commit Title Edit': props<{ tabId: string; newTitle: string }>(),
+    'End Title Edit': emptyProps(),
+  },
+});

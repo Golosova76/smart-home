@@ -14,11 +14,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { uniqueIdValidator } from '@/app/shared/unique-id.validator';
+import { uniqueIdValidator } from '@/app/shared/utils/unique-id.validator';
 import { FormErrorComponent } from '@/app/shared/components/form-error/form-error.component';
 import { Dashboard, EntityActions } from '@/app/shared/models/dashboard.model';
 import { Router } from '@angular/router';
-import { capitalize, normalizeId } from '@/app/shared/capitalize';
+import { capitalize, normalizeId } from '@/app/shared/utils/capitalize';
 import { ModalShellComponent } from '@/app/smart-home/components/modal/modal-shell/modal-shell.component';
 import { ModalHeaderComponent } from '@/app/smart-home/components/modal/components/modal-header/modal-header.component';
 import { ModalFooterComponent } from '@/app/smart-home/components/modal/components/modal-footer/modal-footer.component';

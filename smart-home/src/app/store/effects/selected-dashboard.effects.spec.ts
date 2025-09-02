@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
-import {Observable, of} from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { SelectedDashboardEffects } from './selected-dashboard.effects';
-import {Actions} from '@ngrx/effects';
+import { Actions } from '@ngrx/effects';
 
 describe('SelectedDashboardEffects', () => {
   let actions$: Observable<Actions>;
