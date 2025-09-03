@@ -62,7 +62,7 @@
           <button [class.disable]="i === tabs().length - 1" (click)="onReorder(tab.id, 'right')" type="button" class="tab-button arrow-forward">
             <span class="material-symbols-outlined forward-action-icon">arrow_forward</span>
           </button>
-          <button (click)="onRemoveTab()" type="button" class="tab-button delete-tab">
+          <button (click)="onRemoveTab(tab.id)" type="button" class="tab-button delete-tab">
             <span class="material-symbols-outlined dash-action-icon">delete</span>
           </button>
         </div>

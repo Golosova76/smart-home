@@ -16,7 +16,7 @@ export class TabSwitcherComponent {
   readonly saveClick = output<void>();
   readonly discardClick = output<void>();
   readonly addTabClick = output<void>();
-  readonly removeTabClick = output<void>();
+  readonly removeTabClick = output<string>();
 
   //tab
   readonly selectTab = output<string>();
@@ -49,8 +49,8 @@ export class TabSwitcherComponent {
     this.addTabClick.emit();
   }
 
-  onRemoveTab() {
-    this.removeTabClick.emit();
+  onRemoveTab(tabId: string) {
+    this.removeTabClick.emit(tabId);
   }
 
   onEditClick() {

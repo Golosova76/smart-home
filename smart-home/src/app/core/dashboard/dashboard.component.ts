@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
+import {Component, computed, DestroyRef, effect, inject, signal} from '@angular/core';
 
 import { TabSwitcherComponent } from '@/app/smart-home/components/tab-switcher/tab-switcher.component';
 import { RouterOutlet } from '@angular/router';
@@ -52,10 +52,19 @@ export class DashboardComponent {
 
   readonly isDeleteOpenModal = signal<boolean>(false);
   readonly isDeleteTabOpenModal = signal<boolean>(false);
+  readonly tabToDeleteId = signal<string | null>(null);
 
   readonly isEditMode = this.store.selectSignal<boolean>(
     SD.selectIsEditModeEnabled,
   );
+
+  readonly tabToDeleteName = computed(() => {
+    const tabId = this.tabToDeleteId();
+    if (!tabId) return '';
+
+    const tab = this.tabsSignal().find(tab => tab.id === tabId);
+    return tab?.title || '';
+  });
 
   // readonly workingCopy = this.store.selectSignal(SD.selectWorkingCopy)
 
@@ -95,13 +104,15 @@ export class DashboardComponent {
     this.isDeleteOpenModal.set(false);
     this.isAddTabOpenModal.set(false);
     this.isDeleteTabOpenModal.set(false);
+    this.tabToDeleteId.set(null);
   }
 
   onRemoveTab(): void {
-    const id = this.dashboardIdTabSignal();
+    const id = this.tabToDeleteId();
     if (!id) return;
     this.store.dispatch(A.TabActionsTitleMove.removeTab({ tabId: id }));
     this.closeDelete();
+    this.tabToDeleteId.set(null);
   }
 
   onDelete() {
@@ -170,10 +181,11 @@ export class DashboardComponent {
     );
   }
 
-  openRemoveTabModal() {
+  openRemoveTabModal(tabId: string) {
     if (!this.isEditMode()) {
       return;
     }
+    this.tabToDeleteId.set(tabId);
     this.isDeleteTabOpenModal.set(true);
   }
 }

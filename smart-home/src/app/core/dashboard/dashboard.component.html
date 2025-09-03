@@ -16,7 +16,7 @@
   (commitTitleEdit)="onCommitTitleEdit($event)"
   (reorderTab)="onReorderTab($event)"
   (addTabClick)="openAddTabModal()"
-  (removeTabClick)="openRemoveTabModal()"
+  (removeTabClick)="openRemoveTabModal($event)"
 ></app-tab-switcher>
 
 <router-outlet></router-outlet>
@@ -43,7 +43,7 @@
 @if (isDeleteTabOpenModal()) {
   <app-modal-confirm-delete
     [entityDelete]="'tab'"
-    [labelDelete]="dashboardIdTabSignal() ?? ''"
+    [labelDelete]="tabToDeleteName()"
     (closed)="closeDelete()"
     (deleted)="onRemoveTab()"
   ></app-modal-confirm-delete>
