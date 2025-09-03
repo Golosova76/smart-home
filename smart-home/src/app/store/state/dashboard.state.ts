@@ -10,6 +10,9 @@ export interface SelectedDashboardState {
 
   editTabId: string | null;
   tabTitleDraft: string;
+
+  editCard: { tabId: string; cardId: string } | null;
+  cardTitleDraft: string;
 }
 
 export const initialState: SelectedDashboardState = {
@@ -22,4 +25,7 @@ export const initialState: SelectedDashboardState = {
 
   editTabId: null,
   tabTitleDraft: '',
+
+  editCard: null,
+  cardTitleDraft: '',
 };

@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import {Component, computed, inject, signal} from '@angular/core';
 import { CardListComponent } from '@/app/smart-home/components/card-list/card-list.component';
 import * as SD from '@/app/store/selectors/selected-dashboard.selectors';
 import { Store } from '@ngrx/store';
@@ -18,9 +18,28 @@ export class DashboardTabComponent {
   readonly tabsSignal = this.store.selectSignal(SD.selectTabs);
   readonly selectedTabId = this.routeIds.selectedTabId;
 
+  readonly isAddCardOpenModal = signal<boolean>(false);
+
+  readonly isEditMode = this.store.selectSignal<boolean>(
+    SD.selectIsEditModeEnabled,
+  );
+
   readonly cards = computed(() => {
     const tabId = this.selectedTabId();
     if (!tabId) return [];
-    return this.tabsSignal().find((t) => t.id === tabId)?.cards ?? [];
+
+    const selectCardsByTabId = SD.selectCardsByTabId(tabId);
+    return this.store.selectSignal(selectCardsByTabId)();
   });
+
+  openAddCardModal() {
+    if (!this.isEditMode()) {
+      return;
+    }
+    this.isAddCardOpenModal.set(true);
+  }
+
+  closeAddCardModal() {
+    this.isAddCardOpenModal.set(false);
+  }
 }

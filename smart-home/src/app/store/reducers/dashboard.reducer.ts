@@ -8,6 +8,8 @@ import { DataModel } from '@/app/shared/models/data.model';
 
 import * as Mut from '@/app/shared/utils/selected-dashboard';
 
+import * as MutCard from '@/app/shared/utils/selected-dashboard-card';
+
 export const SELECTED_DASHBOARD_FEATURE_KEY = 'selectedDashboard';
 
 export const reducer = createReducer<SelectedDashboardState>(
@@ -178,6 +180,58 @@ export const reducer = createReducer<SelectedDashboardState>(
       workingCopy: next,
       error,
     };
+  }),
+
+  on(A.TabActionsTitleMove.addCard, (state, { tabId, layout, title }) => {
+    const { next, error } = Mut.produceWorkingCopy(state.workingCopy, (draft) =>
+      MutCard.mutateAddCard(draft, { tabId, layout, title }),
+    );
+    return { ...state, workingCopy: next, error };
+  }),
+
+  on(A.TabActionsTitleMove.startCardTitleEdit, (state, { tabId, cardId, currentTitle }) => ({
+    ...state,
+    editCard: { tabId, cardId },
+    cardTitleDraft: currentTitle,
+    error: null,
+  })),
+
+  on(A.TabActionsTitleMove.commitCardTitleEdit, (state, { tabId, cardId, newTitle }) => {
+    const { next, error } = Mut.produceWorkingCopy(state.workingCopy, (draft) =>
+      MutCard.mutateCommitCardTitleEdit(draft, { tabId, cardId, newTitle }),
+    );
+
+    if (error) {
+      return { ...state, error };
+    }
+
+    return {
+      ...state,
+      workingCopy: next,
+      error: null,
+      editCard: null,
+      cardTitleDraft: '',
+    };
+  }),
+
+  on(A.TabActionsTitleMove.endCardTitleEdit, (state) => ({
+    ...state,
+    editCard: null,
+    cardTitleDraft: '',
+  })),
+
+  on(A.TabActionsTitleMove.reorderCard, (state, { tabId, cardId, newIndex }) => {
+    const { next, error } = Mut.produceWorkingCopy(state.workingCopy, (draft) =>
+      MutCard.mutateReorderCard(draft, { tabId, cardId, newIndex })
+    );
+    return { ...state, workingCopy: next, error };
+  }),
+
+  on(A.TabActionsTitleMove.removeCard, (state, { tabId, cardId }) => {
+    const { next, error } = Mut.produceWorkingCopy(state.workingCopy, (draft) =>
+      MutCard.mutateRemoveCard(draft, { tabId, cardId })
+    );
+    return { ...state, workingCopy: next, error };
   }),
 );
 

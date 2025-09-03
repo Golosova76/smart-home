@@ -1,0 +1,36 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.tab-button {
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  font-weight: var(--font-weight-title);
+  &:hover {
+    color: var(--active-text);
+  }
+  &.active {
+    border-bottom: 2px solid red;
+  }
+  &:focus-visible {
+    outline: 2px solid var(--active-text);
+    outline-offset: 2px;
+  }
+}
+
+.add-wrapper {
+  padding: 20px;
+}
+
+.add-card {
+  border: 1px solid var(--light-border);
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+  .material-symbols-outlined {
+    font-size: 20px;
+  }
+}

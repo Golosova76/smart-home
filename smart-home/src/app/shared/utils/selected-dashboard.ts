@@ -20,7 +20,7 @@ function validateTabTitle(
 
   const id = normalizeToKebabCase(trimmed);
   const exists = existingTabs.some(
-    (t) => t.id === id && (!excludeId || t.id !== excludeId),
+    (tab) => tab.id === id && (!excludeId || tab.id !== excludeId),
   );
   if (exists) return `The tab with the name "${trimmed}" already exists`;
 
@@ -73,7 +73,7 @@ export function mutateReorderTab(
   parameters: { tabId: string; direction: 'left' | 'right' },
 ): string | null {
   const tabs = draft.tabs ?? [];
-  const index = tabs.findIndex((t) => t.id === parameters.tabId);
+  const index = tabs.findIndex((tab) => tab.id === parameters.tabId);
   if (index === -1) return 'The tab was not found';
 
   const index_ = parameters.direction === 'left' ? index - 1 : index + 1;
@@ -104,7 +104,7 @@ export function mutateRemoveTab(
   parameters: { tabId: string },
 ): string | null {
   const tabs = draft.tabs ?? [];
-  const index = tabs.findIndex((t) => t.id === parameters.tabId);
+  const index = tabs.findIndex((tab) => tab.id === parameters.tabId);
   if (index === -1) return 'The tab was not found';
 
   tabs.splice(index, 1);

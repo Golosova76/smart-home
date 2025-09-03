@@ -4,7 +4,7 @@ import {
   emptyProps,
   props,
 } from '@ngrx/store';
-import { DataModel } from '@/app/shared/models/data.model';
+import {DataModel, LayoutType} from '@/app/shared/models/data.model';
 
 export const selectDashboard = createAction(
   '[SelectedDashboard] Select Dashboard',
@@ -50,5 +50,13 @@ export const TabActionsTitleMove = createActionGroup({
     'Start Title Edit': props<{ tabId: string; currentTitle: string }>(),
     'Commit Title Edit': props<{ tabId: string; newTitle: string }>(),
     'End Title Edit': emptyProps(),
+
+    'Add Card': props<{ tabId: string; layout: LayoutType; title: string }>(),
+    'Remove Card': props<{ tabId: string; cardId: string }>(),
+    'Reorder Card': props<{ tabId: string; cardId: string; newIndex: number }>(),
+
+    'Start Card Title Edit': props<{ tabId: string; cardId: string; currentTitle: string }>(),
+    'Commit Card Title Edit': props<{ tabId: string; cardId: string; newTitle: string }>(),
+    'End Card Title Edit': emptyProps(),
   },
 });
