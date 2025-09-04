@@ -34,3 +34,10 @@
     font-size: 20px;
   }
 }
+
+.empty-tab {
+  display: flex;
+  padding-top: 20px;
+  padding-left: 20px;
+  font-size: var(--font-size-h1);
+}

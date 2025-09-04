@@ -5,7 +5,7 @@
   background-color: var(--active-text);
   border-radius: 5px;
   break-inside: avoid;
-  margin-bottom: 20px;
+  @include m.margin-bottom20;
   min-width: 0;
   &.active-card {
     box-shadow: 0 0 15px var(--box-shadow-active);
@@ -16,13 +16,18 @@
 
 .card-header {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
   @include m.margin-bottom20;
 }
 
-.card-state.switch {
-  @include m.switch;
+.tab-toggle {
+  .material-symbols-outlined.toggle-action-icon {
+    font-size: 38px;
+    color: var(--active-swich-back);
+  }
 }
+
 
 .singleDevice {
 }

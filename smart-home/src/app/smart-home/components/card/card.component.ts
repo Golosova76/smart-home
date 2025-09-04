@@ -1,4 +1,4 @@
-import { Component, input, OnInit } from '@angular/core';
+import {Component, computed, inject, input, OnInit} from '@angular/core';
 
 import {
   Card,
@@ -13,6 +13,10 @@ import { SensorComponent } from '@/app/smart-home/components/sensor/sensor.compo
 import { DeviceComponent } from '@/app/smart-home/components/device/device.component';
 
 import { LightActiveCardDirective } from '@/app/shared/directives/light-active-card.directive';
+import {Store} from '@ngrx/store';
+import {AppState} from '@/app/store/state/app.state';
+import {RouteIdValidService} from '@/app/shared/services/route-id-valid.service';
+import * as SD from '@/app/store/selectors/selected-dashboard.selectors';
 
 @Component({
   selector: 'app-card',
@@ -27,33 +31,37 @@ import { LightActiveCardDirective } from '@/app/shared/directives/light-active-c
   styleUrl: './card.component.scss',
 })
 export class CardComponent implements OnInit {
-  card = input<Card>();
+  private store = inject<Store<AppState>>(Store);
+  private readonly routeIds = inject(RouteIdValidService);
+
+  cardId = input<string | null>(null);
+
+  readonly selectedTabId = this.routeIds.selectedTabId;
+
+  readonly isEmptyCard = computed(() => !this.card()?.items?.length);
+
+  readonly isEditMode = this.store.selectSignal<boolean>(
+    SD.selectIsEditModeEnabled,
+  );
+
+  readonly card = computed(() => {
+    const tabId = this.selectedTabId();
+    const cardId = this.cardId();
+    if (!tabId || !cardId) return null;
+
+    const selectCardById = SD.selectCardById(tabId, cardId);
+    return this.store.selectSignal(selectCardById)();
+  });
 
   readonly TYPES = ITEM_TYPES;
 
   devices: Device[] = [];
   sensors: Sensor[] = [];
 
+  readonly hasGroupToggle = computed(() => this.devices().length > 1);
+
   ngOnInit() {
     this.updateItems();
-  }
-
-  groupToggleChange(event: Event) {
-    const input = event.target;
-    if (input && input instanceof HTMLInputElement) {
-      const newState = input.checked;
-      for (const device of this.devices) {
-        device.state = newState;
-      }
-    }
-  }
-
-  get groupToggleState(): boolean {
-    return this.devices.some((device) => device.state); // хотя бы одно устройство включено
-  }
-
-  get hasGroupToggle(): boolean {
-    return this.devices.length > 1;
   }
 
   private updateItems() {

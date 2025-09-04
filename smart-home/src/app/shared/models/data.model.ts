@@ -7,6 +7,7 @@ export interface DeviceItem {
   icon: string;
   label: string;
   state: boolean;
+  id: string;
 }
 
 export interface SensorItem {
@@ -14,6 +15,7 @@ export interface SensorItem {
   icon: string;
   label: string;
   value: { amount: number; unit: string };
+  id: string;
 }
 
 export type Item = DeviceItem | SensorItem;
