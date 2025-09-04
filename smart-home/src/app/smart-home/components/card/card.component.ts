@@ -1,12 +1,8 @@
 import {Component, computed, inject, input, OnInit} from '@angular/core';
 
 import {
-  Card,
   Device,
-  DeviceItem,
-  ITEM_TYPES,
   Sensor,
-  SensorItem,
 } from '@/app/shared/models/data.model';
 import { NgClass } from '@angular/common';
 import { SensorComponent } from '@/app/smart-home/components/sensor/sensor.component';
@@ -17,6 +13,8 @@ import {Store} from '@ngrx/store';
 import {AppState} from '@/app/store/state/app.state';
 import {RouteIdValidService} from '@/app/shared/services/route-id-valid.service';
 import * as SD from '@/app/store/selectors/selected-dashboard.selectors';
+import * as AD from '@/app/store/selectors/devices.selectors';
+import { AvailableItemsActions as D } from '@/app/store/actions/devices.actions';
 
 @Component({
   selector: 'app-card',
@@ -39,6 +37,8 @@ export class CardComponent implements OnInit {
   readonly selectedTabId = this.routeIds.selectedTabId;
 
   readonly isEmptyCard = computed(() => !this.card()?.items?.length);
+  readonly hasGroupToggle = computed(() => (this.card()?.items?.length ?? 0) > 1);
+
 
   readonly isEditMode = this.store.selectSignal<boolean>(
     SD.selectIsEditModeEnabled,
@@ -53,26 +53,14 @@ export class CardComponent implements OnInit {
     return this.store.selectSignal(selectCardById)();
   });
 
-  readonly TYPES = ITEM_TYPES;
-
   devices: Device[] = [];
   sensors: Sensor[] = [];
 
-  readonly hasGroupToggle = computed(() => this.devices().length > 1);
+  readonly device = this.store.selectSignal<Device[]>(AD.selectDevicesNoType);
+  readonly sensor = this.store.selectSignal<Sensor[]>(AD.selectSensorsNoType);
 
   ngOnInit() {
-    this.updateItems();
+    //this.store.dispatch(D.load());
   }
 
-  private updateItems() {
-    const items = this.card()?.items ?? [];
-
-    this.sensors = items
-      .filter((item): item is SensorItem => item.type === this.TYPES.SENSOR)
-      .map(({ type, ...sensor }) => sensor);
-
-    this.devices = items
-      .filter((item): item is DeviceItem => item.type === this.TYPES.DEVICE)
-      .map(({ type, ...device }) => device);
-  }
 }

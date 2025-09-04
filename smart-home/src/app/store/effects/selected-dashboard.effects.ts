@@ -2,7 +2,15 @@ import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { DashboardService } from '@/app/shared/services/dashboard.service';
 import * as A from '@/app/store/actions/dashboard.actions';
-import { catchError, map, of, switchMap, tap, withLatestFrom } from 'rxjs';
+import {
+  catchError,
+  filter,
+  map,
+  of,
+  switchMap,
+  tap,
+  withLatestFrom,
+} from 'rxjs';
 import { Store } from '@ngrx/store';
 import {
   selectDashboardId,
@@ -11,6 +19,8 @@ import {
 } from '@/app/store/selectors/selected-dashboard.selectors';
 import { RouteIdValidService } from '@/app/shared/services/route-id-valid.service';
 import { AppState } from '@/app/store/state/app.state';
+import { AvailableItemsActions } from '@/app/store/actions/devices.actions';
+import { availableItemsFeature } from '@/app/store/reducers/devices.reducer';
 
 @Injectable()
 export class SelectedDashboardEffects {
@@ -77,6 +87,22 @@ export class SelectedDashboardEffects {
           ),
         );
       }),
+    ),
+  );
+
+  loadDevices$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AvailableItemsActions.load),
+      withLatestFrom(this.store.select(availableItemsFeature.selectLoaded)),
+      filter(([, loaded]) => !loaded),
+      switchMap(() =>
+        this.api.getDevices().pipe(
+          map((result) => AvailableItemsActions.loadSuccess({ devices: result.devices })),
+          catchError((error: unknown) =>
+            of(AvailableItemsActions.loadFailure({ error: this.toMessage(error) })),
+          ),
+        ),
+      ),
     ),
   );
 

@@ -1,0 +1,11 @@
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
+import { Item } from '@/app/shared/models/data.model';
+
+export const AvailableItemsActions = createActionGroup({
+  source: 'AvailableItems',
+  events: {
+    Load: emptyProps(),
+    LoadSuccess: props<{ devices: Item[] }>(),
+    LoadFailure: props<{ error: string }>(),
+  },
+});

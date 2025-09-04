@@ -51,3 +51,7 @@ export interface Tab {
 export interface DataModel {
   tabs: Tab[];
 }
+
+export interface Devices {
+  devices: Item[];
+}
