@@ -7,5 +7,10 @@ export const AvailableItemsActions = createActionGroup({
     Load: emptyProps(),
     LoadSuccess: props<{ devices: Item[] }>(),
     LoadFailure: props<{ error: string }>(),
+    'Update Card Items': props<{
+      tabId: string;
+      cardId: string;
+      items: Item[];
+    }>(),
   },
 });

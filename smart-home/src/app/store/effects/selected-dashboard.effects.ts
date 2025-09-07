@@ -97,7 +97,7 @@ export class SelectedDashboardEffects {
       filter(([, loaded]) => !loaded),
       switchMap(() =>
         this.api.getDevices().pipe(
-          map((result) => AvailableItemsActions.loadSuccess({ devices: result.devices })),
+          map((result) => AvailableItemsActions.loadSuccess({ devices: result })),
           catchError((error: unknown) =>
             of(AvailableItemsActions.loadFailure({ error: this.toMessage(error) })),
           ),

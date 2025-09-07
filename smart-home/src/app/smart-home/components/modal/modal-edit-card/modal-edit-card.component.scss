@@ -1,0 +1,147 @@
+@use "styles/mixins" as m;
+
+.modal-wrapper {
+  background-color: var(--modal-background-color);
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: var(--light-solid);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.5s ease-out;
+  pointer-events: none;
+}
+
+.modal-content {
+  @include m.flex-center-center-column;
+  color: var(--color404);
+  pointer-events: auto;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @include m.margin-bottom20;
+  padding: 10px;
+  background-color: var(--active-swich-back);
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+
+.modal-body {
+  padding: 15px;
+}
+
+.form {
+  @include m.flex-center-center-column;
+}
+
+.form-field {
+  @include m.margin-bottom20;
+}
+
+.form-label {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  align-items: center;
+  gap: 10px;
+  @include m.margin-bottom10;
+}
+
+.form-control-title {
+  font-size: var(--font-size-title);
+  font-weight: var(--font-weight-title);
+  span {
+    color: var(--active-icon);
+  }
+}
+
+.modal-footer {
+  @include m.flex-column;
+  justify-content: flex-end;
+  padding: 10px;
+  background-color: var(--active-swich-back);
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  button {
+    max-width: 100px;
+    border: none;
+    background-color: var(--active-text);
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: var(--font-size-title);
+    font-weight: var(--font-weight-title);
+    color: var(--light-solid);
+    &:hover {
+      color: var(--color404);
+    }
+  }
+}
+
+.modal-close {
+  &:hover {
+    .close-icon {
+      color: var(--active-icon);
+    }
+  }
+}
+
+.modal-footer-submit.disable {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.modal-footer .modal-footer-delete {
+  color: var(--active-icon);
+  &:hover {
+    color: var(--active-icon);
+    outline: 1px solid var(--active-icon);
+  }
+}
+
+select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #bdbdbd;
+  border-radius: 0.4rem;
+  background-color: #fff;
+  font-size: 0.9rem;
+  color: #2c3e50;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    border-color: #4cafef;
+  }
+
+  &:focus {
+    border-color: #2196f3;
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
+    outline: none;
+  }
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+

@@ -13,21 +13,20 @@ export const selectAvailableItemsState = availableItemsFeature.selectAvailableIt
 export const selectItems  = availableItemsFeature.selectItems;
 export const selectLoading = availableItemsFeature.selectLoading;
 export const selectError   = availableItemsFeature.selectError;
+export const selectLoaded   = availableItemsFeature.selectLoaded;
 
-export const selectDevicesNoType = createSelector(
+export const selectDevices = createSelector(
   selectItems,
   (items): Device[] =>
     items
       .filter((item): item is DeviceItem => item.type === ITEM_TYPES.DEVICE)
-      .map(({ type, ...rest }) => rest)
 );
 
-export const selectSensorsNoType = createSelector(
+export const selectSensors = createSelector(
   selectItems,
   (items): Sensor[] =>
     items
       .filter((item): item is SensorItem => item.type === ITEM_TYPES.SENSOR)
-      .map(({ type, ...rest }) => rest)
 );
 
 export const selectItemById = (id: string | null) =>

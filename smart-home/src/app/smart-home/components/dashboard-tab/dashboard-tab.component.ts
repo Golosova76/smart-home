@@ -1,4 +1,4 @@
-import {Component, computed, inject, signal} from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CardListComponent } from '@/app/smart-home/components/card-list/card-list.component';
 import * as SD from '@/app/store/selectors/selected-dashboard.selectors';
 import { Store } from '@ngrx/store';
@@ -10,6 +10,7 @@ import {
 
 import * as A from '@/app/store/actions/dashboard.actions';
 import {LayoutType} from '@/app/shared/models/data.model';
+import { AvailableItemsActions as D } from '@/app/store/actions/devices.actions';
 
 @Component({
   selector: 'app-dashboard-tab',
@@ -36,6 +37,8 @@ export class DashboardTabComponent {
     const selectCardsByTabId = SD.selectCardsByTabId(tabId);
     return this.store.selectSignal(selectCardsByTabId)();
   });
+
+
 
   openAddCardModal() {
     if (!this.isEditMode()) {

@@ -1,0 +1,61 @@
+<div class="modal-wrapper">
+  <div role="dialog" aria-modal="true" aria-labelledby="cdm-title" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Edit card</h3>
+        <button
+          (click)="closeModal()"
+          type="button"
+          class="modal-close"
+          aria-label="Close"
+        >
+          <span class="material-symbols-outlined close-icon">close</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form [formGroup]="form" class="form">
+          <div class="form-field">
+            <label class="form-label">
+              <div class="form-control-title"> {{ currentTitle() }} </div>
+            </label>
+          </div>
+          <div class="form-field">
+            <label for="device-select" class="form-label">Device</label>
+            <select id="device-select" formControlName="deviceId">
+              <option [ngValue]="null">— не выбирать —</option>
+              @for (device of devices(); track device.id) {
+                <option [ngValue]="device.id">{{ device.label }}</option>
+              }
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="sensor-select" class="form-label">Sensor</label>
+            <select id="sensor-select" formControlName="sensorId">
+              <option [ngValue]="null">— не выбирать —</option>
+              @for (sensor of sensors(); track sensor.id) {
+                <option [ngValue]="sensor.id">{{ sensor.label }}</option>
+              }
+            </select>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button (click)="closeModal()" type="button" class="modal-footer-close">
+          Cancel
+        </button>
+        <button
+          [disabled]="disabled()"
+          [class.disable]="disabled()"
+          (click)="onSubmit()"
+          type="button"
+          class="modal-footer-submit"
+        >
+          Edit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -9,6 +9,7 @@ import { DataModel } from '@/app/shared/models/data.model';
 import * as Mut from '@/app/shared/utils/selected-dashboard';
 
 import * as MutCard from '@/app/shared/utils/selected-dashboard-card';
+import { AvailableItemsActions } from '@/app/store/actions/devices.actions';
 
 export const SELECTED_DASHBOARD_FEATURE_KEY = 'selectedDashboard';
 
@@ -232,6 +233,25 @@ export const reducer = createReducer<SelectedDashboardState>(
       MutCard.mutateRemoveCard(draft, { tabId, cardId })
     );
     return { ...state, workingCopy: next, error };
+  }),
+
+  on( AvailableItemsActions.updateCardItems, (state, { tabId, cardId, items }) => {
+    if (!state.workingCopy) return state;
+
+    const next: DataModel = structuredClone(state.workingCopy);
+
+    const card = next.tabs
+      .find(t => t.id === tabId)
+      ?.cards.find(c => c.id === cardId);
+
+    if (card) {
+      card.items = items;
+    }
+
+    return {
+      ...state,
+      workingCopy: next,
+    };
   }),
 );
 

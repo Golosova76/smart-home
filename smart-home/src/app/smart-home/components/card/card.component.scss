@@ -17,6 +17,7 @@
 .card-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 40px;
   @include m.margin-bottom20;
 }
@@ -28,6 +29,16 @@
   }
 }
 
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  .tab-button.edit-title.card {
+    .material-symbols-outlined {
+      font-size: 18px;
+    }
+  }
+}
 
 .singleDevice {
 }

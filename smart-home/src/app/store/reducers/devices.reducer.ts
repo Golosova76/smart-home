@@ -30,10 +30,12 @@ const reducer = createReducer(
     loading: false,
     error,
   })),
+
+
 );
 
 export const availableItemsFeature = createFeature({
   name: 'availableItems',
   reducer,
 });
-console.log('Сгенерированные селекторы:', Object.keys(availableItemsFeature));
+
