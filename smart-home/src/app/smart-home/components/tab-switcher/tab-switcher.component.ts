@@ -21,7 +21,10 @@ export class TabSwitcherComponent {
   //tab
   readonly selectTab = output<string>();
 
-  readonly reorderTab = output<{ tabId: string; direction: 'left' | 'right' }>();
+  readonly reorderTab = output<{
+    tabId: string;
+    direction: 'left' | 'right';
+  }>();
 
   readonly startTitleEdit = output<{ tabId: string; currentTitle: string }>();
   readonly commitTitleEdit = output<{ tabId: string; newTitle: string }>();
@@ -33,8 +36,6 @@ export class TabSwitcherComponent {
   readonly editTabId = input<string | null>(null);
   readonly tabTitleDraft = input<string>('');
   readonly tabs = input<Tab[]>([]);
-
-
 
   onTabClick(tabId: string) {
     this.selectTab.emit(tabId);

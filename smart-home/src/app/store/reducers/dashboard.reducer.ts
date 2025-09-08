@@ -9,7 +9,7 @@ import { DataModel } from '@/app/shared/models/data.model';
 import * as Mut from '@/app/shared/utils/selected-dashboard';
 
 import * as MutCard from '@/app/shared/utils/selected-dashboard-card';
-import { AvailableItemsActions } from '@/app/store/actions/devices.actions';
+import { TabActionsTitleMove } from '@/app/store/actions/dashboard.actions';
 
 export const SELECTED_DASHBOARD_FEATURE_KEY = 'selectedDashboard';
 
@@ -190,30 +190,38 @@ export const reducer = createReducer<SelectedDashboardState>(
     return { ...state, workingCopy: next, error };
   }),
 
-  on(A.TabActionsTitleMove.startCardTitleEdit, (state, { tabId, cardId, currentTitle }) => ({
-    ...state,
-    editCard: { tabId, cardId },
-    cardTitleDraft: currentTitle,
-    error: null,
-  })),
-
-  on(A.TabActionsTitleMove.commitCardTitleEdit, (state, { tabId, cardId, newTitle }) => {
-    const { next, error } = Mut.produceWorkingCopy(state.workingCopy, (draft) =>
-      MutCard.mutateCommitCardTitleEdit(draft, { tabId, cardId, newTitle }),
-    );
-
-    if (error) {
-      return { ...state, error };
-    }
-
-    return {
+  on(
+    A.TabActionsTitleMove.startCardTitleEdit,
+    (state, { tabId, cardId, currentTitle }) => ({
       ...state,
-      workingCopy: next,
+      editCard: { tabId, cardId },
+      cardTitleDraft: currentTitle,
       error: null,
-      editCard: null,
-      cardTitleDraft: '',
-    };
-  }),
+    }),
+  ),
+
+  on(
+    A.TabActionsTitleMove.commitCardTitleEdit,
+    (state, { tabId, cardId, newTitle }) => {
+      const { next, error } = Mut.produceWorkingCopy(
+        state.workingCopy,
+        (draft) =>
+          MutCard.mutateCommitCardTitleEdit(draft, { tabId, cardId, newTitle }),
+      );
+
+      if (error) {
+        return { ...state, error };
+      }
+
+      return {
+        ...state,
+        workingCopy: next,
+        error: null,
+        editCard: null,
+        cardTitleDraft: '',
+      };
+    },
+  ),
 
   on(A.TabActionsTitleMove.endCardTitleEdit, (state) => ({
     ...state,
@@ -221,43 +229,67 @@ export const reducer = createReducer<SelectedDashboardState>(
     cardTitleDraft: '',
   })),
 
-  on(A.TabActionsTitleMove.reorderCard, (state, { tabId, cardId, newIndex }) => {
-    const { next, error } = Mut.produceWorkingCopy(state.workingCopy, (draft) =>
-      MutCard.mutateReorderCard(draft, { tabId, cardId, newIndex })
-    );
-    return { ...state, workingCopy: next, error };
-  }),
+  on(
+    A.TabActionsTitleMove.reorderCard,
+    (state, { tabId, cardId, newIndex }) => {
+      const { next, error } = Mut.produceWorkingCopy(
+        state.workingCopy,
+        (draft) =>
+          MutCard.mutateReorderCard(draft, { tabId, cardId, newIndex }),
+      );
+      return { ...state, workingCopy: next, error };
+    },
+  ),
 
   on(A.TabActionsTitleMove.removeCard, (state, { tabId, cardId }) => {
     const { next, error } = Mut.produceWorkingCopy(state.workingCopy, (draft) =>
-      MutCard.mutateRemoveCard(draft, { tabId, cardId })
+      MutCard.mutateRemoveCard(draft, { tabId, cardId }),
     );
     return { ...state, workingCopy: next, error };
   }),
 
-  on( AvailableItemsActions.updateCardItems, (state, { tabId, cardId, items }) => {
+  on(TabActionsTitleMove.addItemToCard, (state, { tabId, cardId, item }) => {
     if (!state.workingCopy) return state;
 
-    const next: DataModel = structuredClone(state.workingCopy);
-
+    const next = structuredClone(state.workingCopy);
     const card = next.tabs
-      .find(t => t.id === tabId)
-      ?.cards.find(c => c.id === cardId);
+      .find((tab) => tab.id === tabId)
+      ?.cards.find((card) => card.id === cardId);
+    if (!card) return state;
 
-    if (card) {
-      card.items = items;
+    const exists = card.items?.some((item) => item.id === item.id);
+    if (!exists) {
+      card.items = [...(card.items ?? []), item];
     }
 
-    return {
-      ...state,
-      workingCopy: next,
-    };
+    return { ...state, workingCopy: next };
   }),
+
+  on(
+    A.TabActionsTitleMove.removeItemFromCard,
+    (state, { tabId, cardId, itemId }) => {
+      if (!state.workingCopy) return state;
+
+      const next = structuredClone(state.workingCopy);
+
+      const card = next.tabs
+        .find((t) => t.id === tabId)
+        ?.cards.find((c) => c.id === cardId);
+
+      if (!card) return state;
+
+      const items = card.items ?? [];
+      const exists = items.some((item) => item.id === itemId);
+      if (!exists) return state;
+
+      card.items = items.filter((item) => item.id !== itemId);
+
+      return { ...state, workingCopy: next };
+    },
+  ),
 );
 
 export const selectedDashboardFeature = createFeature({
   name: SELECTED_DASHBOARD_FEATURE_KEY,
   reducer,
 });
-
-

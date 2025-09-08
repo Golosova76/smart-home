@@ -36,11 +36,12 @@ export const selectCardsByTabId = (tabId: string | null) =>
 // по tabId и cardId возвращает одну конкретную карточку или null
 export const selectCardById = (tabId: string | null, cardId: string | null) =>
   createSelector(selectCardsByTabId(tabId), (cards) =>
-    cardId ? cards.find((card) => card.id === cardId) ?? null : null,
+    cardId ? (cards.find((card) => card.id === cardId) ?? null) : null,
   );
 
 export const selectEditCard = selectedDashboardFeature.selectEditCard;
-export const selectCardTitleDraft = selectedDashboardFeature.selectCardTitleDraft;
+export const selectCardTitleDraft =
+  selectedDashboardFeature.selectCardTitleDraft;
 
 export const selectCardIndex = (tabId: string, cardId: string) =>
   createSelector(selectCardsByTabId(tabId), (cards) =>
@@ -48,12 +49,18 @@ export const selectCardIndex = (tabId: string, cardId: string) =>
   );
 
 export const selectCanMoveCardLeft = (tabId: string, cardId: string) =>
-  createSelector(selectCardIndex(tabId, cardId), selectCardsByTabId(tabId),
-    (index, cards) => index > 0 && index < cards.length);
+  createSelector(
+    selectCardIndex(tabId, cardId),
+    selectCardsByTabId(tabId),
+    (index, cards) => index > 0 && index < cards.length,
+  );
 
 export const selectCanMoveCardRight = (tabId: string, cardId: string) =>
-  createSelector(selectCardIndex(tabId, cardId), selectCardsByTabId(tabId),
-    (index, cards) => index >= 0 && index < cards.length - 1);
+  createSelector(
+    selectCardIndex(tabId, cardId),
+    selectCardsByTabId(tabId),
+    (index, cards) => index >= 0 && index < cards.length - 1,
+  );
 
 export const selectIsDeleteDisabled = createSelector(
   selectIsEditModeEnabled,

@@ -8,9 +8,8 @@ describe('ModalEditCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ModalEditCardComponent]
-    })
-    .compileComponents();
+      imports: [ModalEditCardComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ModalEditCardComponent);
     component = fixture.componentInstance;

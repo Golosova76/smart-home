@@ -11,26 +11,47 @@
           <button type="button" class="tab-button edit-title card">
             <span class="material-symbols-outlined dash-action-icon">edit</span>
           </button>
+          <button
+            (click)="onCardDelete()"
+            type="button"
+            class="tab-button delete-item"
+          >
+            <span class="material-symbols-outlined dash-action-icon"
+              >delete</span
+            >
+          </button>
         }
       </div>
       @if (isEditMode()) {
         <button (click)="openEditCardModal()" type="button" class="tab-vert">
-          <span class="material-symbols-outlined vert-action-icon">more_vert</span>
+          <span class="material-symbols-outlined vert-action-icon"
+            >more_vert</span
+          >
         </button>
       }
     </div>
     <div class="card-content">
       @if (!isEmptyCard()) {
         @for (sensor of sensors(); track sensor.id) {
-          <app-sensor [sensor]="sensor" [layout]="card()?.layout"></app-sensor>
+          <app-sensor
+            [cardId]="cardId()"
+            [sensor]="sensor"
+            [layout]="card()?.layout"
+          ></app-sensor>
         }
         @if (hasGroupToggle()) {
           <button type="button" class="tab-toggle">
-            <span class="material-symbols-outlined toggle-action-icon">toggle_on</span>
+            <span class="material-symbols-outlined toggle-action-icon"
+              >toggle_on</span
+            >
           </button>
         }
         @for (device of devices(); track device.id) {
-          <app-device [device]="device" [layout]="card()?.layout"></app-device>
+          <app-device
+            [cardId]="cardId()"
+            [device]="device"
+            [layout]="card()?.layout"
+          ></app-device>
         }
       } @else {
         <div class="empty-card">
@@ -38,12 +59,37 @@
         </div>
       }
     </div>
+    @if (isEditMode()) {
+      <div class="card-reorder">
+        <button
+          [class.disable]="cardIndex() === 0"
+          (click)="moveLeft()"
+          type="button"
+          class="tab-button arrow-back"
+        >
+          <span class="material-symbols-outlined back-action-icon"
+            >arrow_back</span
+          >
+        </button>
+
+        <button
+          [class.disable]="cardIndex() === cardsCount() - 1"
+          (click)="moveRight()"
+          type="button"
+          class="tab-button arrow-forward"
+        >
+          <span class="material-symbols-outlined forward-action-icon"
+            >arrow_forward</span
+          >
+        </button>
+      </div>
+    }
   </div>
 }
 
 @if (isEditCardOpenModal()) {
-  <app-modal-edit-card (submitted)="onCardEdit($event)" (closed)="closeDelete()"></app-modal-edit-card>
+  <app-modal-edit-card
+    (submitted)="onCardEdit($event)"
+    (closed)="closeDelete()"
+  ></app-modal-edit-card>
 }
-
-
-

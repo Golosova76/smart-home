@@ -1,11 +1,18 @@
-import {Component, output} from '@angular/core';
-import {ModalShellComponent} from '@/app/smart-home/components/modal/modal-shell/modal-shell.component';
-import {ModalHeaderComponent} from '@/app/smart-home/components/modal/components/modal-header/modal-header.component';
-import {ModalFooterComponent} from '@/app/smart-home/components/modal/components/modal-footer/modal-footer.component';
-import {AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {LayoutType} from '@/app/shared/models/data.model';
-import {FormErrorComponent} from '@/app/shared/components/form-error/form-error.component';
-import {capitalize} from '@/app/shared/utils/capitalize';
+import { Component, output } from '@angular/core';
+import { ModalShellComponent } from '@/app/smart-home/components/modal/modal-shell/modal-shell.component';
+import { ModalHeaderComponent } from '@/app/smart-home/components/modal/components/modal-header/modal-header.component';
+import { ModalFooterComponent } from '@/app/smart-home/components/modal/components/modal-footer/modal-footer.component';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { LayoutType } from '@/app/shared/models/data.model';
+import { FormErrorComponent } from '@/app/shared/components/form-error/form-error.component';
+import { capitalize } from '@/app/shared/utils/capitalize';
 
 @Component({
   selector: 'app-modal-create-card',
@@ -15,10 +22,10 @@ import {capitalize} from '@/app/shared/utils/capitalize';
     ModalFooterComponent,
     FormErrorComponent,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './modal-create-card.component.html',
-  styleUrl: './modal-create-card.component.scss'
+  styleUrl: './modal-create-card.component.scss',
 })
 export class ModalCreateCardComponent {
   readonly closed = output<void>();
@@ -29,9 +36,7 @@ export class ModalCreateCardComponent {
       Validators.required,
       Validators.maxLength(50),
     ]),
-    layout: new FormControl<LayoutType | null>(null, [
-      Validators.required,
-    ]),
+    layout: new FormControl<LayoutType | null>(null, [Validators.required]),
   });
 
   closeModal() {
@@ -52,12 +57,11 @@ export class ModalCreateCardComponent {
     if (!title || !layout) return;
     const capitalizedTitle = capitalize(title);
 
-    this.submitted.emit({title: capitalizedTitle.trim(), layout });
+    this.submitted.emit({ title: capitalizedTitle.trim(), layout });
   }
 
   get titleControl(): FormControl<string | null> | null {
     const control: AbstractControl | null = this.form.get('title');
     return control instanceof FormControl ? control : null;
   }
-
 }

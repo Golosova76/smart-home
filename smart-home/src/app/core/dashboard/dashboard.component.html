@@ -37,7 +37,10 @@
 }
 
 @if (isAddTabOpenModal()) {
- <app-modal-create-tabs (submitted)="onAddTabSubmit($event)" (closed)="closeDelete()"></app-modal-create-tabs>
+  <app-modal-create-tabs
+    (submitted)="onAddTabSubmit($event)"
+    (closed)="closeDelete()"
+  ></app-modal-create-tabs>
 }
 
 @if (isDeleteTabOpenModal()) {

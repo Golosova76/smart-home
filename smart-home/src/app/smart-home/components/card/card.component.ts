@@ -3,14 +3,12 @@ import {
   computed,
   inject,
   input,
-  OnInit,
   signal,
 } from '@angular/core';
 
 import {
   Device,
   DeviceItem,
-  Item,
   ITEM_TYPES,
   Sensor,
   SensorItem,
@@ -20,15 +18,13 @@ import { SensorComponent } from '@/app/smart-home/components/sensor/sensor.compo
 import { DeviceComponent } from '@/app/smart-home/components/device/device.component';
 
 import { LightActiveCardDirective } from '@/app/shared/directives/light-active-card.directive';
-import {Store} from '@ngrx/store';
-import {AppState} from '@/app/store/state/app.state';
-import {RouteIdValidService} from '@/app/shared/services/route-id-valid.service';
+import { Store } from '@ngrx/store';
+import { AppState } from '@/app/store/state/app.state';
+import { RouteIdValidService } from '@/app/shared/services/route-id-valid.service';
 import * as SD from '@/app/store/selectors/selected-dashboard.selectors';
 import * as AD from '@/app/store/selectors/devices.selectors';
 import { ModalEditCardComponent } from '@/app/smart-home/components/modal/modal-edit-card/modal-edit-card.component';
-import { AvailableItemsActions } from '@/app/store/actions/devices.actions';
-import { selectItemById } from '@/app/store/selectors/devices.selectors';
-
+import { TabActionsTitleMove } from '@/app/store/actions/dashboard.actions';
 
 @Component({
   selector: 'app-card',
@@ -55,6 +51,10 @@ export class CardComponent {
 
   readonly isEmptyCard = computed(() => !this.card()?.items?.length);
   readonly hasGroupToggle = computed(() => (this.devices()?.length ?? 0) > 1);
+  readonly disableLeft = computed(() => this.cardIndex() <= 0);
+  readonly disableRight = computed(
+    () => this.cardsCount() <= 1 || this.cardIndex() === this.cardsCount() - 1,
+  );
 
   readonly isEditMode = this.store.selectSignal<boolean>(
     SD.selectIsEditModeEnabled,
@@ -81,6 +81,21 @@ export class CardComponent {
       .map(({ type, ...rest }) => rest),
   );
 
+  readonly cardsInTab = computed(() => {
+    const tabId = this.selectedTabId();
+    if (!tabId) return [];
+    const sel = SD.selectCardsByTabId(tabId);
+    return this.store.selectSignal(sel)() ?? [];
+  });
+
+  readonly cardIndex = computed(() => {
+    const id = this.cardId();
+    const list = this.cardsInTab();
+    return id ? list.findIndex((c) => c.id === id) : -1;
+  });
+
+  readonly cardsCount = computed(() => this.cardsInTab().length);
+
   openEditCardModal(): void {
     this.isEditCardOpenModal.set(true);
   }
@@ -89,31 +104,67 @@ export class CardComponent {
     this.isEditCardOpenModal.set(false);
   }
 
-  onCardEdit(payload: { deviceId: string | null; sensorId: string | null }): void {
+  onCardEdit({
+    deviceId,
+    sensorId,
+  }: {
+    deviceId: string | null;
+    sensorId: string | null;
+  }): void {
     const tabId = this.selectedTabId();
     const cardId = this.cardId();
     if (!tabId || !cardId) return;
 
-    // Берём из справочника ГОТОВЫЕ объекты
-    const device: DeviceItem | null =
-      payload.deviceId ? (this.store.selectSignal(selectItemById(payload.deviceId))() as DeviceItem | null) : null;
+    if (sensorId) {
+      const sensor = this.store.selectSignal(AD.selectSensorById(sensorId))(); // SensorItem
+      this.store.dispatch(
+        TabActionsTitleMove.addItemToCard({ tabId, cardId, item: sensor }),
+      );
+      this.closeDelete();
+      return;
+    }
 
-    const sensor: SensorItem | null =
-      payload.sensorId ? (this.store.selectSignal(selectItemById(payload.sensorId))() as SensorItem | null) : null;
+    if (deviceId) {
+      const device = this.store.selectSignal(AD.selectDeviceById(deviceId))(); // DeviceItem
+      this.store.dispatch(
+        TabActionsTitleMove.addItemToCard({ tabId, cardId, item: device }),
+      );
+      this.closeDelete();
+    }
+  }
 
-    const items: Item[] = [];
-    if (device) items.push(device);
-    if (sensor) items.push(sensor);
+  onCardDelete(): void {
+    const tabId = this.selectedTabId();
+    const cardId = this.cardId();
+    if (!tabId || !cardId) return;
 
+    this.store.dispatch(TabActionsTitleMove.removeCard({ tabId, cardId }));
+  }
+
+  onReorderCard(targetIndex: number): void {
+    const tabId = this.selectedTabId();
+    const cardId = this.cardId();
+    const from = this.cardIndex();
+    const count = this.cardsCount();
+
+    if (!tabId || !cardId || from < 0 || count <= 1) return;
+
+    const max = count - 1;
+    const newIndex = Math.max(0, Math.min(targetIndex, max));
+    if (newIndex === from) return;
 
     this.store.dispatch(
-      AvailableItemsActions.updateCardItems({
-        tabId,
-        cardId,
-        items,
-      }),
+      TabActionsTitleMove.reorderCard({ tabId, cardId, newIndex }),
     );
+  }
 
-    this.closeDelete();
+  moveLeft(): void {
+    if (this.disableLeft()) return;
+    this.onReorderCard(this.cardIndex() - 1);
+  }
+
+  moveRight(): void {
+    if (this.disableRight()) return;
+    this.onReorderCard(this.cardIndex() + 1);
   }
 }

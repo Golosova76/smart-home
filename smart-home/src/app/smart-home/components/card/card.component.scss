@@ -5,7 +5,7 @@
   background-color: var(--active-text);
   border-radius: 5px;
   break-inside: avoid;
-  @include m.margin-bottom20;
+  margin-bottom: 20px;
   min-width: 0;
   &.active-card {
     box-shadow: 0 0 15px var(--box-shadow-active);
@@ -23,6 +23,7 @@
 }
 
 .tab-toggle {
+  text-align: right;
   .material-symbols-outlined.toggle-action-icon {
     font-size: 38px;
     color: var(--active-swich-back);
@@ -41,6 +42,11 @@
 }
 
 .singleDevice {
+  .card-reorder {
+    .material-symbols-outlined {
+      font-size: 18px;
+    }
+  }
 }
 
 .horizontalLayout {
@@ -50,6 +56,12 @@
     gap: 20px;
     justify-items: start;
     justify-content: start;
+    @include m.margin-bottom10;
+  }
+  .card-reorder {
+    .material-symbols-outlined {
+      font-size: 18px;
+    }
   }
 }
 
@@ -59,5 +71,35 @@
     grid-template-columns: 1fr; // только 1 колонка
     gap: 20px;
     justify-items: start;
+    @include m.margin-bottom10;
   }
+  .card-reorder {
+    .material-symbols-outlined {
+      font-size: 18px;
+    }
+  }
+}
+
+.tab-button {
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  font-weight: var(--font-weight-title);
+  color: var(--background-color404-hover);
+  &:hover {
+    color: var(--active-icon);
+  }
+  &.active {
+    border-bottom: 2px solid red;
+  }
+  &:focus-visible {
+    outline: 2px solid var(--active-text);
+    outline-offset: 2px;
+  }
+}
+
+.tab-button.arrow-forward.disable,
+.tab-button.arrow-back.disable {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
 }

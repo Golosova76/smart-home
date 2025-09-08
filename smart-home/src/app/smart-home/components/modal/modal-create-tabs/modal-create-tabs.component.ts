@@ -1,4 +1,4 @@
-import { Component, output, signal } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { ModalHeaderComponent } from '@/app/smart-home/components/modal/components/modal-header/modal-header.component';
 import { ModalFooterComponent } from '@/app/smart-home/components/modal/components/modal-footer/modal-footer.component';
 import { FormErrorComponent } from '@/app/shared/components/form-error/form-error.component';
@@ -11,7 +11,6 @@ import {
 } from '@angular/forms';
 import { ModalShellComponent } from '@/app/smart-home/components/modal/modal-shell/modal-shell.component';
 import { capitalize } from '@/app/shared/utils/capitalize';
-
 
 @Component({
   selector: 'app-modal-create-tabs',
@@ -27,7 +26,7 @@ import { capitalize } from '@/app/shared/utils/capitalize';
 })
 export class ModalCreateTabsComponent {
   readonly closed = output<void>();
-  readonly submitted = output<string >();
+  readonly submitted = output<string>();
 
   form = new FormGroup({
     title: new FormControl<string | null>(null, [

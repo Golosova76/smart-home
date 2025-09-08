@@ -1,5 +1,5 @@
-import {Card, DataModel, LayoutType} from '@/app/shared/models/data.model';
-import {normalizeToKebabCase} from '@/app/shared/utils/selected-dashboard';
+import { Card, DataModel, LayoutType } from '@/app/shared/models/data.model';
+import { normalizeToKebabCase } from '@/app/shared/utils/selected-dashboard';
 
 function validateCardTitle(
   title: string,
@@ -8,7 +8,8 @@ function validateCardTitle(
 ): string | null {
   const trimmed = title.trim();
   if (!trimmed) return 'The name cannot be empty';
-  if (trimmed.length > 50) return 'The name is too long (maximum 50 characters)';
+  if (trimmed.length > 50)
+    return 'The name is too long (maximum 50 characters)';
 
   const id = normalizeToKebabCase(trimmed);
   const exists = existingCards.some(
@@ -25,7 +26,7 @@ export function mutateAddCard(
 ): string | null {
   const { tabId, layout, title } = parameters;
 
-  const tab = draft.tabs?.find(tab => tab.id === tabId);
+  const tab = draft.tabs?.find((tab) => tab.id === tabId);
   if (!tab) return 'The tab was not found';
 
   const cards = tab.cards ?? (tab.cards = []);
@@ -58,7 +59,11 @@ export function mutateCommitCardTitleEdit(
   const index = cards.findIndex((card) => card.id === parameters.cardId);
   if (index === -1) return 'The card was not found';
 
-  const validationError = validateCardTitle(parameters.newTitle, cards, cards[index].id);
+  const validationError = validateCardTitle(
+    parameters.newTitle,
+    cards,
+    cards[index].id,
+  );
   if (validationError) return validationError;
 
   const nextTitle = parameters.newTitle.trim();
@@ -80,10 +85,12 @@ export function mutateRemoveCard(
   const tab = draft.tabs?.find((tab) => tab.id === parameters.tabId);
   if (!tab) return 'The tab was not found';
 
-  const idx = (tab.cards ?? []).findIndex((card) => card.id === parameters.cardId);
-  if (idx === -1) return 'The card was not found';
+  const index = (tab.cards ?? []).findIndex(
+    (card) => card.id === parameters.cardId,
+  );
+  if (index === -1) return 'The card was not found';
 
-  tab.cards!.splice(idx, 1);
+  tab.cards!.splice(index, 1);
   return null;
 }
 

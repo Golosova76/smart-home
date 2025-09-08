@@ -21,7 +21,7 @@
 
 .device-wrapper.vertical {
   display: grid;
-  grid-template-columns: 24px 1fr 1fr;
+  grid-template-columns: 24px 1fr 1fr 24px;
   align-items: center;
   width: 100%;
   gap: 15px;
@@ -35,7 +35,6 @@
   }
   .device-state {
     justify-self: center;
-
   }
 }
 
@@ -57,5 +56,10 @@
       width: 24px;
       height: 24px;
     }
+  }
+  .device-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
   }
 }

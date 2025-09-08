@@ -4,7 +4,7 @@ import {
   emptyProps,
   props,
 } from '@ngrx/store';
-import {DataModel, Item, LayoutType} from '@/app/shared/models/data.model';
+import { DataModel, Item, LayoutType } from '@/app/shared/models/data.model';
 
 export const selectDashboard = createAction(
   '[SelectedDashboard] Select Dashboard',
@@ -53,14 +53,29 @@ export const TabActionsTitleMove = createActionGroup({
 
     'Add Card': props<{ tabId: string; layout: LayoutType; title: string }>(),
     'Remove Card': props<{ tabId: string; cardId: string }>(),
-    'Reorder Card': props<{ tabId: string; cardId: string; newIndex: number }>(),
+    'Reorder Card': props<{
+      tabId: string;
+      cardId: string;
+      newIndex: number;
+    }>(),
 
-    'Start Card Title Edit': props<{ tabId: string; cardId: string; currentTitle: string }>(),
-    'Commit Card Title Edit': props<{ tabId: string; cardId: string; newTitle: string }>(),
+    'Start Card Title Edit': props<{
+      tabId: string;
+      cardId: string;
+      currentTitle: string;
+    }>(),
+    'Commit Card Title Edit': props<{
+      tabId: string;
+      cardId: string;
+      newTitle: string;
+    }>(),
     'End Card Title Edit': emptyProps(),
 
     'Add Item To Card': props<{ tabId: string; cardId: string; item: Item }>(),
-    'Remove Item From Card': props<{ tabId: string; cardId: string; itemId: string }>(),
+    'Remove Item From Card': props<{
+      tabId: string;
+      cardId: string;
+      itemId: string;
+    }>(),
   },
 });
-

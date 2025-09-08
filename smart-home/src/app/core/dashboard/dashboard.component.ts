@@ -1,4 +1,11 @@
-import {Component, computed, DestroyRef, effect, inject, signal} from '@angular/core';
+import {
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 
 import { TabSwitcherComponent } from '@/app/smart-home/components/tab-switcher/tab-switcher.component';
 import { RouterOutlet } from '@angular/router';
@@ -13,9 +20,7 @@ import * as SD from '@/app/store/selectors/selected-dashboard.selectors';
 import * as A from '@/app/store/actions/dashboard.actions';
 import { AppState } from '@/app/store/state/app.state';
 import { Tab } from '@/app/shared/models/data.model';
-import {
-  ModalCreateTabsComponent
-} from '@/app/smart-home/components/modal/modal-create-tabs/modal-create-tabs.component';
+import { ModalCreateTabsComponent } from '@/app/smart-home/components/modal/modal-create-tabs/modal-create-tabs.component';
 
 @Component({
   imports: [
@@ -62,7 +67,7 @@ export class DashboardComponent {
     const tabId = this.tabToDeleteId();
     if (!tabId) return '';
 
-    const tab = this.tabsSignal().find(tab => tab.id === tabId);
+    const tab = this.tabsSignal().find((tab) => tab.id === tabId);
     return tab?.title || '';
   });
 

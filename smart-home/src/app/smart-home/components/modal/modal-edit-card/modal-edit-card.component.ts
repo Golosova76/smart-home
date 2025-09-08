@@ -1,19 +1,14 @@
-import { Component, inject, input, output, signal } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import {
   FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import {
-  Device,
-  LayoutType,
-  Sensor,
-} from '@/app/shared/models/data.model';
+import { Device, LayoutType, Sensor } from '@/app/shared/models/data.model';
 import * as Cat from '@/app/store/selectors/devices.selectors';
 import { Store } from '@ngrx/store';
 import { AppState } from '@/app/store/state/app.state';
-
 
 @Component({
   selector: 'app-modal-edit-card',
@@ -52,11 +47,6 @@ export class ModalEditCardComponent {
 
   onSubmit() {
     const { deviceId, sensorId } = this.form.getRawValue();
-
-    console.log('📌 Выбранные значения:', {
-      deviceId,
-      sensorId,
-    });
 
     this.submitted.emit({ deviceId, sensorId });
   }

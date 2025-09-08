@@ -8,11 +8,19 @@
 
 @if (isEditMode()) {
   <div class="add-wrapper">
-    <button (click)="openAddCardModal()" type="button" class="tab-button add-card">
-      <span class="material-symbols-outlined add-action-icon">add</span>Add Card</button>
+    <button
+      (click)="openAddCardModal()"
+      type="button"
+      class="tab-button add-card"
+    >
+      <span class="material-symbols-outlined add-action-icon">add</span>Add Card
+    </button>
   </div>
 
   @if (isAddCardOpenModal()) {
-    <app-modal-create-card (submitted)="onAddCardSubmit($event)" (closed)="closeDelete()" ></app-modal-create-card>
+    <app-modal-create-card
+      (submitted)="onAddCardSubmit($event)"
+      (closed)="closeDelete()"
+    ></app-modal-create-card>
   }
 }

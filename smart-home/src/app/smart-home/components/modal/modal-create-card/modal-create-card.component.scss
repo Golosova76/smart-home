@@ -71,7 +71,6 @@
   text-align: center;
 }
 
-
 .form {
   @include m.flex-center-center-column;
 }
@@ -116,4 +115,3 @@
   cursor: not-allowed;
   pointer-events: none;
 }
-
