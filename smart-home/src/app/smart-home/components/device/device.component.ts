@@ -10,7 +10,10 @@ import { LightActiveDeviceDirective } from '@/app/shared/directives/light-active
 import { Store } from '@ngrx/store';
 import { AppState } from '@/app/store/state/app.state';
 import { RouteIdValidService } from '@/app/shared/services/route-id-valid.service';
-import { TabActionsTitleMove } from '@/app/store/actions/dashboard.actions';
+import {
+  DevicesActions,
+  TabActionsTitleMove,
+} from '@/app/store/actions/dashboard.actions';
 import * as SD from '@/app/store/selectors/selected-dashboard.selectors';
 
 @Component({
@@ -52,6 +55,18 @@ export class DeviceComponent {
 
     this.store.dispatch(
       TabActionsTitleMove.removeItemFromCard({ tabId, cardId, itemId }),
+    );
+  }
+
+  onToggleClick() {
+    const device = this.device();
+    if (!device) return;
+
+    this.store.dispatch(
+      DevicesActions.toggleDeviceState({
+        deviceId: device.id,
+        newState: !device.state,
+      }),
     );
   }
 }

@@ -58,9 +58,9 @@
 <ng-template #toggleBtn>
   <button
     [attr.aria-pressed]="isOn()"
+    (click)="onToggleClick()"
     type="button"
     class="device-toggle"
-    disabled
   >
     <span [ngClass]="toggleClasses()" class="material-symbols-outlined">
       {{ toggleIcon() }}

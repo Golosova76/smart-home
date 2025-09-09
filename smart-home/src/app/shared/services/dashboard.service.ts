@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Dashboard } from '@/app/shared/models/dashboard.model';
 import { Observable } from 'rxjs';
 import { BASE_API_URL } from '@/app/shared/utils/constants';
-import { DataModel, Item } from '@/app/shared/models/data.model';
+import { DataModel, DeviceState, Item } from '@/app/shared/models/data.model';
 
 @Injectable({
   providedIn: 'root',
@@ -33,5 +33,11 @@ export class DashboardService {
 
   getDevices() {
     return this.http.get<Item[]>(`${BASE_API_URL}devices`);
+  }
+
+  toggleDeviceState(deviceId: string, newState: boolean) {
+    return this.http.patch<DeviceState>(`${BASE_API_URL}devices/${deviceId}`, {
+      state: newState,
+    });
   }
 }

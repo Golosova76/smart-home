@@ -40,9 +40,15 @@
           ></app-sensor>
         }
         @if (hasGroupToggle()) {
-          <button type="button" class="tab-toggle">
-            <span class="material-symbols-outlined toggle-action-icon"
-              >toggle_on</span
+          <button
+            (click)="onGroupToggleClick()"
+            type="button"
+            class="tab-toggle"
+          >
+            <span
+              [ngClass]="groupToggleClasses()"
+              class="material-symbols-outlined toggle-action-icon"
+              >{{ groupToggleIcon() }}</span
             >
           </button>
         }

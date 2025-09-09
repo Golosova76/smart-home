@@ -55,3 +55,8 @@ export interface DataModel {
 export interface Devices {
   devices: Item[];
 }
+
+export interface DeviceState {
+  id: string;
+  state: boolean;
+}

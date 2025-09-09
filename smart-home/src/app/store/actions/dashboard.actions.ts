@@ -79,3 +79,18 @@ export const TabActionsTitleMove = createActionGroup({
     }>(),
   },
 });
+
+export const DevicesActions = createActionGroup({
+  source: 'DevicesActions',
+  events: {
+    'Toggle Device State': props<{ deviceId: string; newState: boolean }>(),
+    'Toggle Device State Success': props<{
+      deviceId: string;
+      state: boolean;
+    }>(),
+    'Toggle Device State Failure': props<{
+      deviceId: string;
+      error: unknown;
+    }>(),
+  },
+});

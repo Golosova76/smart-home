@@ -9,7 +9,11 @@ import { DataModel } from '@/app/shared/models/data.model';
 import * as Mut from '@/app/shared/utils/selected-dashboard';
 
 import * as MutCard from '@/app/shared/utils/selected-dashboard-card';
-import { TabActionsTitleMove } from '@/app/store/actions/dashboard.actions';
+import {
+  DevicesActions,
+  TabActionsTitleMove,
+} from '@/app/store/actions/dashboard.actions';
+import { setDeviceStateById } from '@/app/shared/utils/selected-dashboard-card';
 
 export const SELECTED_DASHBOARD_FEATURE_KEY = 'selectedDashboard';
 
@@ -285,6 +289,17 @@ export const reducer = createReducer<SelectedDashboardState>(
       card.items = items.filter((item) => item.id !== itemId);
 
       return { ...state, workingCopy: next };
+    },
+  ),
+
+  on(
+    DevicesActions.toggleDeviceStateSuccess,
+    (state, { deviceId, state: confirmed }) => {
+      if (!state.workingCopy) return state;
+      return {
+        ...state,
+        workingCopy: setDeviceStateById(state.workingCopy, deviceId, confirmed),
+      };
     },
   ),
 );

@@ -1,4 +1,9 @@
-import { Card, DataModel, LayoutType } from '@/app/shared/models/data.model';
+import {
+  Card,
+  DataModel, DeviceItem,
+  ITEM_TYPES,
+  LayoutType,
+} from '@/app/shared/models/data.model';
 import { normalizeToKebabCase } from '@/app/shared/utils/selected-dashboard';
 
 function validateCardTitle(
@@ -111,4 +116,28 @@ export function mutateReorderCard(
   const [moved] = cards.splice(from, 1);
   cards.splice(to, 0, moved);
   return null;
+}
+
+export function setDeviceStateById(
+  workingCopy: DataModel,
+  deviceId: string,
+  nextState: boolean,
+): DataModel {
+  const copy = structuredClone(workingCopy);
+
+  for (const tab of copy.tabs ?? []) {
+    for (const card of tab.cards ?? []) {
+      const item = (card.items ?? []).find(
+        (item): item is DeviceItem =>
+          item?.type === ITEM_TYPES.DEVICE && item?.id === deviceId,
+      );
+
+      if (item) {
+        item.state = nextState;
+        return copy;
+      }
+    }
+  }
+
+  return workingCopy;
 }

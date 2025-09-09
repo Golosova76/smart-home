@@ -1,10 +1,4 @@
-import {
-  Component,
-  computed,
-  inject,
-  input,
-  signal,
-} from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 
 import {
   Device,
@@ -24,7 +18,10 @@ import { RouteIdValidService } from '@/app/shared/services/route-id-valid.servic
 import * as SD from '@/app/store/selectors/selected-dashboard.selectors';
 import * as AD from '@/app/store/selectors/devices.selectors';
 import { ModalEditCardComponent } from '@/app/smart-home/components/modal/modal-edit-card/modal-edit-card.component';
-import { TabActionsTitleMove } from '@/app/store/actions/dashboard.actions';
+import {
+  DevicesActions,
+  TabActionsTitleMove,
+} from '@/app/store/actions/dashboard.actions';
 
 @Component({
   selector: 'app-card',
@@ -55,6 +52,19 @@ export class CardComponent {
   readonly disableRight = computed(
     () => this.cardsCount() <= 1 || this.cardIndex() === this.cardsCount() - 1,
   );
+
+  readonly groupIsOn = computed<boolean>(() =>
+    this.devices().some((d) => d.state),
+  );
+
+  readonly groupToggleIcon = computed(() =>
+    this.groupIsOn() ? 'toggle_on' : 'toggle_off',
+  );
+
+  readonly groupToggleClasses = computed(() => ({
+    on: this.groupIsOn(),
+    off: !this.groupIsOn(),
+  }));
 
   readonly isEditMode = this.store.selectSignal<boolean>(
     SD.selectIsEditModeEnabled,
@@ -166,5 +176,17 @@ export class CardComponent {
   moveRight(): void {
     if (this.disableRight()) return;
     this.onReorderCard(this.cardIndex() + 1);
+  }
+
+  onGroupToggleClick() {
+    const next = !this.groupIsOn();
+    for (const d of this.devices()) {
+      this.store.dispatch(
+        DevicesActions.toggleDeviceState({
+          deviceId: d.id,
+          newState: next,
+        }),
+      );
+    }
   }
 }

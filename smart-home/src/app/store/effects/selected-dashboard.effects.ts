@@ -6,6 +6,7 @@ import {
   catchError,
   filter,
   map,
+  mergeMap,
   of,
   switchMap,
   tap,
@@ -21,6 +22,7 @@ import { RouteIdValidService } from '@/app/shared/services/route-id-valid.servic
 import { AppState } from '@/app/store/state/app.state';
 import { AvailableItemsActions } from '@/app/store/actions/devices.actions';
 import { availableItemsFeature } from '@/app/store/reducers/devices.reducer';
+import { DevicesActions } from '@/app/store/actions/dashboard.actions';
 
 @Injectable()
 export class SelectedDashboardEffects {
@@ -90,7 +92,7 @@ export class SelectedDashboardEffects {
     ),
   );
 
-  loadDevices$ = createEffect(() =>
+  readonly loadDevices$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AvailableItemsActions.load),
       withLatestFrom(this.store.select(availableItemsFeature.selectLoaded)),
@@ -109,6 +111,31 @@ export class SelectedDashboardEffects {
           ),
         ),
       ),
+    ),
+  );
+
+  readonly toggleDevice$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(DevicesActions.toggleDeviceState),
+      mergeMap((action: { deviceId: string; newState: boolean }) => {
+        const { deviceId, newState } = action;
+        return this.api.toggleDeviceState(deviceId, newState).pipe(
+          map((resp: { id?: string; state: boolean }) =>
+            DevicesActions.toggleDeviceStateSuccess({
+              deviceId: resp.id ?? deviceId,
+              state: resp.state,
+            }),
+          ),
+          catchError((error: unknown) =>
+            of(
+              DevicesActions.toggleDeviceStateFailure({
+                deviceId,
+                error,
+              }),
+            ),
+          ),
+        );
+      }),
     ),
   );
 
