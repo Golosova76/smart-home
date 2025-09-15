@@ -1,12 +1,12 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CardListComponent } from '@/app/smart-home/components/card-list/card-list.component';
-import * as SD from '@/app/store/selectors/selected-dashboard.selectors';
+import * as dashboardsSelectors from '@/app/store/selectors/selected-dashboard.selectors';
 import { Store } from '@ngrx/store';
 import { AppState } from '@/app/store/state/app.state';
 import { RouteIdValidService } from '@/app/shared/services/route-id-valid.service';
 import { ModalCreateCardComponent } from '@/app/smart-home/components/modal/modal-create-card/modal-create-card.component';
 
-import * as A from '@/app/store/actions/dashboard.actions';
+import * as dashboardActions from '@/app/store/actions/dashboard.actions';
 import { LayoutType } from '@/app/shared/models/data.model';
 
 @Component({
@@ -24,14 +24,14 @@ export class DashboardTabComponent {
   readonly isAddCardOpenModal = signal<boolean>(false);
 
   readonly isEditMode = this.store.selectSignal<boolean>(
-    SD.selectIsEditModeEnabled,
+    dashboardsSelectors.selectIsEditModeEnabled,
   );
 
   readonly cards = computed(() => {
     const tabId = this.selectedTabId();
     if (!tabId) return [];
 
-    const selectCardsByTabId = SD.selectCardsByTabId(tabId);
+    const selectCardsByTabId = dashboardsSelectors.selectCardsByTabId(tabId);
     return this.store.selectSignal(selectCardsByTabId)();
   });
 
@@ -52,7 +52,7 @@ export class DashboardTabComponent {
     const tabId = this.selectedTabId();
     if (!tabId) return;
     this.store.dispatch(
-      A.TabActionsTitleMove.addCard({ tabId, layout, title }),
+      dashboardActions.TabActionsTitleMove.addCard({ tabId, layout, title }),
     );
     this.closeDelete();
   }

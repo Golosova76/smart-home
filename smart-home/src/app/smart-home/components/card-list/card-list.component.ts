@@ -2,7 +2,7 @@ import { Component, inject, input, OnInit } from '@angular/core';
 
 import { Card } from '@/app/shared/models/data.model';
 import { CardComponent } from '@/app/smart-home/components/card/card.component';
-import { AvailableItemsActions as D } from '@/app/store/actions/devices.actions';
+import { AvailableItemsActions as devicesAction } from '@/app/store/actions/devices.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from '@/app/store/state/app.state';
 
@@ -19,6 +19,6 @@ export class CardListComponent implements OnInit {
   cards = input<Card[]>([]);
 
   ngOnInit() {
-    this.store.dispatch(D.load());
+    this.store.dispatch(devicesAction.load());
   }
 }

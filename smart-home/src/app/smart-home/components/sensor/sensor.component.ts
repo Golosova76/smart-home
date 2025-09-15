@@ -7,7 +7,7 @@ import {
 } from '@/app/shared/models/data.model';
 import { SensorValuePipe } from '@/app/shared/pipes/sensor-value.pipe';
 import { NgTemplateOutlet } from '@angular/common';
-import * as SD from '@/app/store/selectors/selected-dashboard.selectors';
+import * as dashboardsSelectors from '@/app/store/selectors/selected-dashboard.selectors';
 import { Store } from '@ngrx/store';
 import { AppState } from '@/app/store/state/app.state';
 import { RouteIdValidService } from '@/app/shared/services/route-id-valid.service';
@@ -31,7 +31,7 @@ export class SensorComponent {
   readonly selectedTabId = this.routeIds.selectedTabId;
   cardId = input<string | null>(null);
   readonly isEditMode = this.store.selectSignal<boolean>(
-    SD.selectIsEditModeEnabled,
+    dashboardsSelectors.selectIsEditModeEnabled,
   );
 
   onItemDelete(): void {

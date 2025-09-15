@@ -6,7 +6,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { Device, LayoutType, Sensor } from '@/app/shared/models/data.model';
-import * as Cat from '@/app/store/selectors/devices.selectors';
+import * as devicesSelectors from '@/app/store/selectors/devices.selectors';
 import { Store } from '@ngrx/store';
 import { AppState } from '@/app/store/state/app.state';
 
@@ -28,8 +28,8 @@ export class ModalEditCardComponent {
   readonly currentTitle = input<string>('');
   readonly layout = input<LayoutType>();
 
-  readonly devices = this.store.selectSignal<Device[]>(Cat.selectDevices);
-  readonly sensors = this.store.selectSignal<Sensor[]>(Cat.selectSensors);
+  readonly devices = this.store.selectSignal<Device[]>(devicesSelectors.selectDevices);
+  readonly sensors = this.store.selectSignal<Sensor[]>(devicesSelectors.selectSensors);
 
   readonly form = new FormGroup({
     title: new FormControl<string>(''),

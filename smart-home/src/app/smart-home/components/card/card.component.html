@@ -8,9 +8,6 @@
       <div class="header-title">
         <h2 class="h2 card-title">{{ card()?.title }}</h2>
         @if (isEditMode()) {
-          <button type="button" class="tab-button edit-title card">
-            <span class="material-symbols-outlined dash-action-icon">edit</span>
-          </button>
           <button
             (click)="onCardDelete()"
             type="button"

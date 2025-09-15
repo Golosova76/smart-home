@@ -14,7 +14,7 @@ import {
   DevicesActions,
   TabActionsTitleMove,
 } from '@/app/store/actions/dashboard.actions';
-import * as SD from '@/app/store/selectors/selected-dashboard.selectors';
+import * as dashboardsSelectors from '@/app/store/selectors/selected-dashboard.selectors';
 
 @Component({
   selector: 'app-device',
@@ -33,7 +33,7 @@ export class DeviceComponent {
   readonly selectedTabId = this.routeIds.selectedTabId;
   cardId = input<string | null>(null);
   readonly isEditMode = this.store.selectSignal<boolean>(
-    SD.selectIsEditModeEnabled,
+    dashboardsSelectors.selectIsEditModeEnabled,
   );
 
   readonly isOn = computed(() => !!this.device()?.state);

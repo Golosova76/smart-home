@@ -194,44 +194,6 @@ export const reducer = createReducer<SelectedDashboardState>(
     return { ...state, workingCopy: next, error };
   }),
 
-  on(
-    A.TabActionsTitleMove.startCardTitleEdit,
-    (state, { tabId, cardId, currentTitle }) => ({
-      ...state,
-      editCard: { tabId, cardId },
-      cardTitleDraft: currentTitle,
-      error: null,
-    }),
-  ),
-
-  on(
-    A.TabActionsTitleMove.commitCardTitleEdit,
-    (state, { tabId, cardId, newTitle }) => {
-      const { next, error } = Mut.produceWorkingCopy(
-        state.workingCopy,
-        (draft) =>
-          MutCard.mutateCommitCardTitleEdit(draft, { tabId, cardId, newTitle }),
-      );
-
-      if (error) {
-        return { ...state, error };
-      }
-
-      return {
-        ...state,
-        workingCopy: next,
-        error: null,
-        editCard: null,
-        cardTitleDraft: '',
-      };
-    },
-  ),
-
-  on(A.TabActionsTitleMove.endCardTitleEdit, (state) => ({
-    ...state,
-    editCard: null,
-    cardTitleDraft: '',
-  })),
 
   on(
     A.TabActionsTitleMove.reorderCard,
@@ -261,7 +223,9 @@ export const reducer = createReducer<SelectedDashboardState>(
       ?.cards.find((card) => card.id === cardId);
     if (!card) return state;
 
-    const exists = card.items?.some((item) => item.id === item.id);
+    //const exists = card.items?.some((item) => item.id === item.id);
+    const exists = card.items.some(itemExists => itemExists.id === item.id);
+
     if (!exists) {
       card.items = [...(card.items ?? []), item];
     }

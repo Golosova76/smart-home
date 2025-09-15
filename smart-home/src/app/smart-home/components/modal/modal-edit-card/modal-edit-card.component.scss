@@ -40,6 +40,12 @@
 .modal-body {
   padding: 15px;
 }
+.modal-title {
+  padding-right: 15px;
+  padding-left: 15px;
+  font-size: 16px;
+  font-weight: bold;
+}
 
 .form {
   @include m.flex-center-center-column;

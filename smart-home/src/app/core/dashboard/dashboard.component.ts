@@ -16,8 +16,8 @@ import { DashboardHandlerService } from '@/app/shared/services/dashboard-handler
 import { RouteIdValidService } from '@/app/shared/services/route-id-valid.service';
 import { Store } from '@ngrx/store';
 
-import * as SD from '@/app/store/selectors/selected-dashboard.selectors';
-import * as A from '@/app/store/actions/dashboard.actions';
+import * as dashboardsSelectors from '@/app/store/selectors/selected-dashboard.selectors';
+import * as dashboardActions from '@/app/store/actions/dashboard.actions';
 import { AppState } from '@/app/store/state/app.state';
 import { Tab } from '@/app/shared/models/data.model';
 import { ModalCreateTabsComponent } from '@/app/smart-home/components/modal/modal-create-tabs/modal-create-tabs.component';
@@ -41,16 +41,16 @@ export class DashboardComponent {
   private store = inject<Store<AppState>>(Store);
 
   // массив tab где tabId
-  readonly tabsSignal = this.store.selectSignal<Tab[]>(SD.selectTabs);
+  readonly tabsSignal = this.store.selectSignal<Tab[]>(dashboardsSelectors.selectTabs);
   readonly editTabId = this.store.selectSignal<string | null>(
-    SD.selectEditTabId,
+    dashboardsSelectors.selectEditTabId,
   );
   readonly tabTitleDraft = this.store.selectSignal<string>(
-    SD.selectTabTitleDraft,
+    dashboardsSelectors.selectTabTitleDraft,
   );
 
   readonly dashboardIdRouteSignal = this.routeIds.dashboardIdValid;
-  readonly dashboardIdTabSignal = this.routeIds.tabIdValid;
+
   readonly selectedTabId = this.routeIds.selectedTabId;
 
   readonly isAddTabOpenModal = signal<boolean>(false);
@@ -60,7 +60,7 @@ export class DashboardComponent {
   readonly tabToDeleteId = signal<string | null>(null);
 
   readonly isEditMode = this.store.selectSignal<boolean>(
-    SD.selectIsEditModeEnabled,
+    dashboardsSelectors.selectIsEditModeEnabled,
   );
 
   readonly tabToDeleteName = computed(() => {
@@ -71,8 +71,6 @@ export class DashboardComponent {
     return tab?.title || '';
   });
 
-  // readonly workingCopy = this.store.selectSignal(SD.selectWorkingCopy)
-
   onTabSelected(tabId: string) {
     this.routeIds.selectTab(tabId);
   }
@@ -81,7 +79,7 @@ export class DashboardComponent {
     effect(() => {
       const dashboardId = this.routeIds.dashboardIdValid();
       if (dashboardId) {
-        this.store.dispatch(A.selectDashboard({ dashboardId }));
+        this.store.dispatch(dashboardActions.selectDashboard({ dashboardId }));
       }
     });
   }
@@ -101,7 +99,7 @@ export class DashboardComponent {
   }
 
   onAddTabSubmit(title: string): void {
-    this.store.dispatch(A.TabActionsTitleMove.addTab({ title }));
+    this.store.dispatch(dashboardActions.TabActionsTitleMove.addTab({ title }));
     this.closeDelete();
   }
 
@@ -115,7 +113,7 @@ export class DashboardComponent {
   onRemoveTab(): void {
     const id = this.tabToDeleteId();
     if (!id) return;
-    this.store.dispatch(A.TabActionsTitleMove.removeTab({ tabId: id }));
+    this.store.dispatch(dashboardActions.TabActionsTitleMove.removeTab({ tabId: id }));
     this.closeDelete();
     this.tabToDeleteId.set(null);
   }
@@ -152,34 +150,34 @@ export class DashboardComponent {
   }
 
   onEditClick() {
-    this.store.dispatch(A.enterEditMode());
+    this.store.dispatch(dashboardActions.enterEditMode());
   }
 
   onSave() {
-    this.store.dispatch(A.saveDashboard());
-    this.store.dispatch(A.exitEditMode());
+    this.store.dispatch(dashboardActions.saveDashboard());
+    this.store.dispatch(dashboardActions.exitEditMode());
   }
 
   onDiscard() {
-    this.store.dispatch(A.discardChanges());
-    this.store.dispatch(A.exitEditMode());
+    this.store.dispatch(dashboardActions.discardChanges());
+    this.store.dispatch(dashboardActions.exitEditMode());
   }
 
   onStartTitleEdit(event: { tabId: string; currentTitle: string }) {
-    this.store.dispatch(A.TabActionsTitleMove.startTitleEdit(event));
+    this.store.dispatch(dashboardActions.TabActionsTitleMove.startTitleEdit(event));
   }
 
   onEndTitleEdit() {
-    this.store.dispatch(A.TabActionsTitleMove.endTitleEdit());
+    this.store.dispatch(dashboardActions.TabActionsTitleMove.endTitleEdit());
   }
 
   onCommitTitleEdit(event: { tabId: string; newTitle: string }) {
-    this.store.dispatch(A.TabActionsTitleMove.commitTitleEdit(event));
+    this.store.dispatch(dashboardActions.TabActionsTitleMove.commitTitleEdit(event));
   }
 
   onReorderTab(event: { tabId: string; direction: 'left' | 'right' }) {
     this.store.dispatch(
-      A.TabActionsTitleMove.reorderTab({
+      dashboardActions.TabActionsTitleMove.reorderTab({
         tabId: event.tabId,
         direction: event.direction,
       }),

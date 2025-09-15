@@ -59,18 +59,6 @@ export const TabActionsTitleMove = createActionGroup({
       newIndex: number;
     }>(),
 
-    'Start Card Title Edit': props<{
-      tabId: string;
-      cardId: string;
-      currentTitle: string;
-    }>(),
-    'Commit Card Title Edit': props<{
-      tabId: string;
-      cardId: string;
-      newTitle: string;
-    }>(),
-    'End Card Title Edit': emptyProps(),
-
     'Add Item To Card': props<{ tabId: string; cardId: string; item: Item }>(),
     'Remove Item From Card': props<{
       tabId: string;

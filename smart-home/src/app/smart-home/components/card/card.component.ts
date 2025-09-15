@@ -15,8 +15,8 @@ import { LightActiveCardDirective } from '@/app/shared/directives/light-active-c
 import { Store } from '@ngrx/store';
 import { AppState } from '@/app/store/state/app.state';
 import { RouteIdValidService } from '@/app/shared/services/route-id-valid.service';
-import * as SD from '@/app/store/selectors/selected-dashboard.selectors';
-import * as AD from '@/app/store/selectors/devices.selectors';
+import * as dashboardsSelectors from '@/app/store/selectors/selected-dashboard.selectors';
+import * as devicesSelectors from '@/app/store/selectors/devices.selectors';
 import { ModalEditCardComponent } from '@/app/smart-home/components/modal/modal-edit-card/modal-edit-card.component';
 import {
   DevicesActions,
@@ -67,7 +67,7 @@ export class CardComponent {
   }));
 
   readonly isEditMode = this.store.selectSignal<boolean>(
-    SD.selectIsEditModeEnabled,
+    dashboardsSelectors.selectIsEditModeEnabled,
   );
 
   readonly card = computed(() => {
@@ -75,7 +75,7 @@ export class CardComponent {
     const cardId = this.cardId();
     if (!tabId || !cardId) return null;
 
-    const selectCardById = SD.selectCardById(tabId, cardId);
+    const selectCardById = dashboardsSelectors.selectCardById(tabId, cardId);
     return this.store.selectSignal(selectCardById)();
   });
 
@@ -94,7 +94,7 @@ export class CardComponent {
   readonly cardsInTab = computed(() => {
     const tabId = this.selectedTabId();
     if (!tabId) return [];
-    const sel = SD.selectCardsByTabId(tabId);
+    const sel = dashboardsSelectors.selectCardsByTabId(tabId);
     return this.store.selectSignal(sel)() ?? [];
   });
 
@@ -126,7 +126,7 @@ export class CardComponent {
     if (!tabId || !cardId) return;
 
     if (sensorId) {
-      const sensor = this.store.selectSignal(AD.selectSensorById(sensorId))(); // SensorItem
+      const sensor = this.store.selectSignal(devicesSelectors.selectSensorById(sensorId))(); // SensorItem
       this.store.dispatch(
         TabActionsTitleMove.addItemToCard({ tabId, cardId, item: sensor }),
       );
@@ -135,7 +135,7 @@ export class CardComponent {
     }
 
     if (deviceId) {
-      const device = this.store.selectSignal(AD.selectDeviceById(deviceId))(); // DeviceItem
+      const device = this.store.selectSignal(devicesSelectors.selectDeviceById(deviceId))(); // DeviceItem
       this.store.dispatch(
         TabActionsTitleMove.addItemToCard({ tabId, cardId, item: device }),
       );
