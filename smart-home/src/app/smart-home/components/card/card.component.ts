@@ -2,7 +2,7 @@ import { Component, computed, inject, input, signal } from '@angular/core';
 
 import {
   Device,
-  DeviceItem,
+  DeviceItem, Item,
   ITEM_TYPES,
   Sensor,
   SensorItem,
@@ -22,6 +22,7 @@ import {
   DevicesActions,
   TabActionsTitleMove,
 } from '@/app/store/actions/dashboard.actions';
+import {AvailableItemsActions} from '@/app/store/actions/devices.actions';
 
 @Component({
   selector: 'app-card',
@@ -114,33 +115,32 @@ export class CardComponent {
     this.isEditCardOpenModal.set(false);
   }
 
-  onCardEdit({
-    deviceId,
-    sensorId,
-  }: {
-    deviceId: string | null;
-    sensorId: string | null;
-  }): void {
+  onCardEdit(
+    { deviceId, sensorId }: { deviceId: string | null; sensorId: string | null },
+  ): void {
     const tabId = this.selectedTabId();
     const cardId = this.cardId();
     if (!tabId || !cardId) return;
 
+    const itemsToAdd: Item[] = [];
+
     if (sensorId) {
-      const sensor = this.store.selectSignal(devicesSelectors.selectSensorById(sensorId))(); // SensorItem
-      this.store.dispatch(
-        TabActionsTitleMove.addItemToCard({ tabId, cardId, item: sensor }),
-      );
-      this.closeDelete();
-      return;
+      const sensor = this.store.selectSignal(devicesSelectors.selectSensorById(sensorId))();
+      if (sensor) itemsToAdd.push(sensor); // sensor уже с type: 'sensor'
     }
 
     if (deviceId) {
-      const device = this.store.selectSignal(devicesSelectors.selectDeviceById(deviceId))(); // DeviceItem
-      this.store.dispatch(
-        TabActionsTitleMove.addItemToCard({ tabId, cardId, item: device }),
-      );
-      this.closeDelete();
+      const device = this.store.selectSignal(devicesSelectors.selectDeviceById(deviceId))();
+      if (device) itemsToAdd.push(device); // device уже с type: 'device'
     }
+
+    if (itemsToAdd.length > 0) {
+      this.store.dispatch(
+        AvailableItemsActions.updateCardItems({ tabId, cardId, items: itemsToAdd }),
+      );
+    }
+
+    this.closeDelete();
   }
 
   onCardDelete(): void {

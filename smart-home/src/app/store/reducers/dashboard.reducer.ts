@@ -14,6 +14,7 @@ import {
   TabActionsTitleMove,
 } from '@/app/store/actions/dashboard.actions';
 import { setDeviceStateById } from '@/app/shared/utils/selected-dashboard-card';
+import {AvailableItemsActions} from '@/app/store/actions/devices.actions';
 
 export const SELECTED_DASHBOARD_FEATURE_KEY = 'selectedDashboard';
 
@@ -214,24 +215,39 @@ export const reducer = createReducer<SelectedDashboardState>(
     return { ...state, workingCopy: next, error };
   }),
 
-  on(TabActionsTitleMove.addItemToCard, (state, { tabId, cardId, item }) => {
-    if (!state.workingCopy) return state;
+  on(
+    TabActionsTitleMove.addItemToCard,
+    (state, { tabId, cardId, item }): SelectedDashboardState => {
+      if (!state.workingCopy) return state;
 
-    const next = structuredClone(state.workingCopy);
-    const card = next.tabs
-      .find((tab) => tab.id === tabId)
-      ?.cards.find((card) => card.id === cardId);
-    if (!card) return state;
+      const next = structuredClone(state.workingCopy);
+      const tab  = next.tabs.find(t => t.id === tabId);
+      const card = tab?.cards.find(c => c.id === cardId);
+      if (!card) return state;
 
-    //const exists = card.items?.some((item) => item.id === item.id);
-    const exists = card.items.some(itemExists => itemExists.id === item.id);
+      // Дубли разрешены — просто добавляем в конец
+      card.items = [...card.items, item];
 
-    if (!exists) {
-      card.items = [...(card.items ?? []), item];
-    }
+      return { ...state, workingCopy: next };
+    },
+  ),
 
-    return { ...state, workingCopy: next };
-  }),
+  on(
+    AvailableItemsActions.updateCardItems,
+    (state, { tabId, cardId, items }): SelectedDashboardState => {
+      if (!state.workingCopy) return state;
+
+      const next = structuredClone(state.workingCopy);
+      const tab  = next.tabs.find(t => t.id === tabId);
+      const card = tab?.cards.find(c => c.id === cardId);
+      if (!card) return state;
+
+      // Дубли разрешены — аппенд пачки
+      card.items = [...card.items, ...items];
+
+      return { ...state, workingCopy: next };
+    },
+  ),
 
   on(
     A.TabActionsTitleMove.removeItemFromCard,
