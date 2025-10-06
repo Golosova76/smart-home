@@ -1,0 +1,19 @@
+<app-modal-shell>
+  <app-modal-header
+    [entityActions]="'Delete'"
+    [entityDelete]="entityDelete()"
+    (closed)="closed.emit()"
+  ></app-modal-header>
+  <div class="modal-body">
+    <div class="modal-text">
+      This will delete the
+      <strong>{{ entityDelete() }} {{ labelDelete() | upperFirst }}</strong>
+    </div>
+  </div>
+  <app-modal-footer
+    [entityActions]="'Delete'"
+    [variant]="'delete'"
+    (closed)="closed.emit()"
+    (delete)="onDeleted()"
+  ></app-modal-footer>
+</app-modal-shell>

@@ -1,13 +1,27 @@
 @use "styles/mixins" as m;
 
 .nav-tabs {
-  height: 56px;
+  min-height: 56px;
   border-bottom: 1px solid var(--light-border);
   border-right: 1px solid var(--light-border);
   padding: 10px 10px 10px 20px;
-  @include m.flex-column;
+  @include m.flex-center-between;
   gap: 20px;
   background-color: var(--active-primary);
+}
+
+.tabs-actions {
+  @include m.flex-column20;
+}
+
+.dash-actions {
+  @include m.flex-column20;
+}
+
+.dash-action-button {
+  &:hover {
+    color: var(--active-text);
+  }
 }
 
 .tab-button {
@@ -23,5 +37,40 @@
   &:focus-visible {
     outline: 2px solid var(--active-text);
     outline-offset: 2px;
+  }
+}
+
+.dash-action-button.delete.disable,
+.tab-button.arrow-forward.disable,
+.tab-button.arrow-back.disable {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.edit-title-tab {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid var(--light-border);
+  padding: 10px;
+  .material-symbols-outlined {
+    font-size: 16px;
+  }
+}
+
+.add-tab,
+.discard,
+.save {
+  border: 1px solid var(--light-border);
+  padding: 10px;
+}
+
+.add-tab {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+  .material-symbols-outlined {
+    font-size: 20px;
   }
 }

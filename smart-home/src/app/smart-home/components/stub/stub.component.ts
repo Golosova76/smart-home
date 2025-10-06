@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { DashboardService } from '@/app/shared/services/dashboard.service';
+import { DashboardHandlerService } from '@/app/shared/services/dashboard-handler.service';
 
 @Component({
   selector: 'app-stub',
@@ -8,7 +8,7 @@ import { DashboardService } from '@/app/shared/services/dashboard.service';
   styleUrl: './stub.component.scss',
 })
 export class StubComponent {
-  dashboardService = inject(DashboardService);
+  handlerService = inject(DashboardHandlerService);
 
-  readonly dashboardsSignal = this.dashboardService.dashboardsSignal;
+  readonly dashboardsSignal = this.handlerService.dashboardsSignal;
 }

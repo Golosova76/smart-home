@@ -1,0 +1,50 @@
+@use "styles/mixins" as m;
+
+.modal-body {
+  padding: 15px;
+}
+
+.form {
+  @include m.flex-center-center-column;
+}
+
+.form-field {
+  @include m.margin-bottom20;
+}
+
+.form-label {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  align-items: center;
+  gap: 10px;
+  @include m.margin-bottom10;
+}
+
+.form-control-title {
+  font-size: var(--font-size-title);
+  font-weight: var(--font-weight-title);
+  span {
+    color: var(--active-icon);
+  }
+}
+
+.control-input {
+  width: 100%;
+  display: block;
+  border: 1px solid var(--light-border);
+  border-radius: 2px;
+  padding: 8px 10px;
+  background-color: var(--light-solid);
+  line-height: 150%;
+  color: var(--active-text);
+}
+
+.control-input:-webkit-autofill {
+  -webkit-text-fill-color: var(--active-text);
+  -webkit-box-shadow: 0 0 0 1000px #fff inset;
+}
+.modal-footer-submit.disable {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}

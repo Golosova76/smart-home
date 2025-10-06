@@ -1,29 +1,63 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CardListComponent } from '@/app/smart-home/components/card-list/card-list.component';
-import { DashboardService } from '@/app/shared/services/dashboard.service';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import * as dashboardsSelectors from '@/app/store/selectors/selected-dashboard.selectors';
+import { Store } from '@ngrx/store';
+import { AppState } from '@/app/store/state/app.state';
+import { RouteIdValidService } from '@/app/shared/services/route-id-valid.service';
+import { ModalCreateCardComponent } from '@/app/smart-home/components/modal/modal-create-card/modal-create-card.component';
+
+import * as dashboardActions from '@/app/store/actions/dashboard.actions';
+import { LayoutType } from '@/app/shared/models/data.model';
 
 @Component({
   selector: 'app-dashboard-tab',
-  imports: [CardListComponent],
+  imports: [CardListComponent, ModalCreateCardComponent],
   templateUrl: './dashboard-tab.component.html',
   styleUrl: './dashboard-tab.component.scss',
 })
 export class DashboardTabComponent {
-  dashboardService = inject(DashboardService);
-  private route = inject(ActivatedRoute);
+  private store = inject<Store<AppState>>(Store);
+  private readonly routeIds = inject(RouteIdValidService);
 
-  readonly dashboardByIdSignal = this.dashboardService.dashboardByIdSignal;
-  readonly tabsSignal = this.dashboardService.tabsSignal;
+  readonly selectedTabId = this.routeIds.selectedTabId;
 
-  readonly paramMap = toSignal(this.route.paramMap);
-  readonly tabIdRoute = computed(() => this.paramMap()?.get('tabId') ?? null);
+  readonly isAddCardOpenModal = signal<boolean>(false);
+
+  readonly isEditMode = this.store.selectSignal<boolean>(
+    dashboardsSelectors.selectIsEditModeEnabled,
+  );
 
   readonly cards = computed(() => {
-    const dataModel = this.dashboardByIdSignal();
-    const tabIdRoute = this.tabIdRoute();
-    if (!dataModel || !tabIdRoute) return [];
-    return this.tabsSignal().find((tab) => tab.id === tabIdRoute)?.cards ?? [];
+    const tabId = this.selectedTabId();
+    if (!tabId) return [];
+
+    const selectCardsByTabId = dashboardsSelectors.selectCardsByTabId(tabId);
+    return this.store.selectSignal(selectCardsByTabId)();
   });
+
+  openAddCardModal() {
+    if (!this.isEditMode()) {
+      return;
+    }
+    this.isAddCardOpenModal.set(true);
+  }
+
+  onAddCardSubmit({
+    layout,
+    title,
+  }: {
+    layout: LayoutType;
+    title: string;
+  }): void {
+    const tabId = this.selectedTabId();
+    if (!tabId) return;
+    this.store.dispatch(
+      dashboardActions.TabActionsTitleMove.addCard({ tabId, layout, title }),
+    );
+    this.closeDelete();
+  }
+
+  closeDelete() {
+    this.isAddCardOpenModal.set(false);
+  }
 }

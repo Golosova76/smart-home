@@ -1,32 +1,98 @@
 @if (card()) {
   <div
     [ngClass]="card()?.layout"
-    [appLightActiveCard]="devices"
+    [appLightActiveCard]="devices()"
     class="card-wrapper"
   >
     <div class="card-header">
-      <h2 class="h2 card-title">{{ card()?.title }}</h2>
-      @if (hasGroupToggle) {
-        <div class="card-state switch">
-          <label class="switch">
-            <input
-              [checked]="groupToggleState"
-              (change)="groupToggleChange($event)"
-              name="switch"
-              type="checkbox"
-            />
-            <span class="slider"></span>
-          </label>
-        </div>
+      <div class="header-title">
+        <h2 class="h2 card-title">{{ card()?.title }}</h2>
+        @if (isEditMode()) {
+          <button
+            (click)="onCardDelete()"
+            type="button"
+            class="tab-button delete-item"
+          >
+            <span class="material-symbols-outlined dash-action-icon"
+              >delete</span
+            >
+          </button>
+        }
+      </div>
+      @if (isEditMode()) {
+        <button (click)="openEditCardModal()" type="button" class="tab-vert">
+          <span class="material-symbols-outlined vert-action-icon"
+            >more_vert</span
+          >
+        </button>
       }
     </div>
     <div class="card-content">
-      @for (sensor of sensors; track sensor.label) {
-        <app-sensor [sensor]="sensor" [layout]="card()?.layout"></app-sensor>
-      }
-      @for (device of devices; track device.label) {
-        <app-device [device]="device" [layout]="card()?.layout"></app-device>
+      @if (!isEmptyCard()) {
+        @for (sensor of sensors(); track sensor.id) {
+          <app-sensor
+            [cardId]="cardId()"
+            [sensor]="sensor"
+            [layout]="card()?.layout"
+          ></app-sensor>
+        }
+        @if (hasGroupToggle()) {
+          <button
+            (click)="onGroupToggleClick()"
+            type="button"
+            class="tab-toggle"
+          >
+            <span
+              [ngClass]="groupToggleClasses()"
+              class="material-symbols-outlined toggle-action-icon"
+              >{{ groupToggleIcon() }}</span
+            >
+          </button>
+        }
+        @for (device of devices(); track device.id) {
+          <app-device
+            [cardId]="cardId()"
+            [device]="device"
+            [layout]="card()?.layout"
+          ></app-device>
+        }
+      } @else {
+        <div class="empty-card">
+          <p>This card doesn’t have any items yet.</p>
+        </div>
       }
     </div>
+    @if (isEditMode()) {
+      <div class="card-reorder">
+        <button
+          [class.disable]="cardIndex() === 0"
+          (click)="moveLeft()"
+          type="button"
+          class="tab-button arrow-back"
+        >
+          <span class="material-symbols-outlined back-action-icon"
+            >arrow_back</span
+          >
+        </button>
+
+        <button
+          [class.disable]="cardIndex() === cardsCount() - 1"
+          (click)="moveRight()"
+          type="button"
+          class="tab-button arrow-forward"
+        >
+          <span class="material-symbols-outlined forward-action-icon"
+            >arrow_forward</span
+          >
+        </button>
+      </div>
+    }
   </div>
+}
+
+@if (isEditCardOpenModal()) {
+  <app-modal-edit-card
+    (submitted)="onCardEdit($event)"
+    (closed)="closeDelete()"
+  ></app-modal-edit-card>
 }

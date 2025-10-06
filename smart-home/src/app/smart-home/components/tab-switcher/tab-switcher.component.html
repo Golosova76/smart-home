@@ -1,11 +1,133 @@
-<nav class="nav-tabs">
-  @for (tab of tabs(); track tab.id) {
-    <button
-      [class.active]="tab.id === activeTabId()"
-      (click)="onTabClick(tab.id)"
-      class="tab-button"
-    >
-      {{ tab.title }}
-    </button>
-  }
-</nav>
+@if (!editMode()) {
+  <nav class="nav-tabs">
+    <div class="tabs-actions">
+      @for (tab of tabs(); track tab.id) {
+        <button
+          [class.active]="tab.id === activeTabId()"
+          (click)="onTabClick(tab.id)"
+          class="tab-button"
+        >
+          {{ tab.title }}
+        </button>
+      }
+    </div>
+    <div class="dash-actions">
+      <button
+        (click)="onEditClick()"
+        type="button"
+        class="dash-action-button edit"
+      >
+        <span class="material-symbols-outlined dash-action-icon">edit</span>
+      </button>
+      <button
+        [class.disable]="editMode()"
+        (click)="onDelete()"
+        type="button"
+        class="dash-action-button delete"
+      >
+        <span class="material-symbols-outlined dash-action-icon">delete</span>
+      </button>
+    </div>
+  </nav>
+}
+
+@if (editMode()) {
+  <nav class="nav-tabs edit-mode">
+    <div class="tabs-actions">
+      @for (tab of tabs(); let i = $index; track tab.id) {
+        <div class="edit-title-tab">
+          <button
+            [class.disable]="i === 0"
+            (click)="onReorder(tab.id, 'left')"
+            type="button"
+            class="tab-button arrow-back"
+          >
+            <span class="material-symbols-outlined back-action-icon"
+              >arrow_back</span
+            >
+          </button>
+          @if (!isEditing(tab.id)) {
+            <button
+              [class.active]="tab.id === activeTabId()"
+              (click)="onTabClick(tab.id)"
+              type="button"
+              class="tab-button"
+            >
+              {{ tab.title }}
+            </button>
+            <button
+              (click)="onStartEdit(tab)"
+              type="button"
+              class="tab-button edit-title"
+            >
+              <span class="material-symbols-outlined dash-action-icon"
+                >edit</span
+              >
+            </button>
+          } @else {
+            <input
+              #titleInput
+              [value]="tabTitleDraft()"
+              type="text"
+              name="tab-title"
+              class="tab-title-input"
+            />
+            <button
+              (click)="onCommitEdit(tab.id, titleInput)"
+              type="button"
+              class="tab-button save-tab"
+            >
+              <span class="material-symbols-outlined dash-action-icon"
+                >save</span
+              >
+            </button>
+            <button
+              (click)="onEndEdit()"
+              type="button"
+              class="tab-button delete-tab"
+            >
+              <span class="material-symbols-outlined dash-action-icon"
+                >close</span
+              >
+            </button>
+          }
+          <button
+            [class.disable]="i === tabs().length - 1"
+            (click)="onReorder(tab.id, 'right')"
+            type="button"
+            class="tab-button arrow-forward"
+          >
+            <span class="material-symbols-outlined forward-action-icon"
+              >arrow_forward</span
+            >
+          </button>
+          <button
+            (click)="onRemoveTab(tab.id)"
+            type="button"
+            class="tab-button delete-tab"
+          >
+            <span class="material-symbols-outlined dash-action-icon"
+              >delete</span
+            >
+          </button>
+        </div>
+      }
+      <button (click)="onAddTab()" type="button" class="tab-button add-tab">
+        <span class="material-symbols-outlined add-action-icon">add</span>Add
+        Tab
+      </button>
+    </div>
+    <div class="dash-actions">
+      <button
+        (click)="onDiscard()"
+        type="button"
+        class="dash-action-button discard"
+      >
+        Discard
+      </button>
+      <button (click)="onSave()" type="button" class="dash-action-button save">
+        Save
+      </button>
+    </div>
+  </nav>
+}

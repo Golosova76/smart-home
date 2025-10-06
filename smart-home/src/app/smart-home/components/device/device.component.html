@@ -6,7 +6,10 @@
         <span class="material-symbols-outlined device-icon">{{
           device()?.icon
         }}</span>
-        <div class="device-state">{{ device()?.state }}</div>
+        <ng-container [ngTemplateOutlet]="toggleBtn"></ng-container>
+        @if (isEditMode()) {
+          <ng-container [ngTemplateOutlet]="deleteBtn"></ng-container>
+        }
       </div>
     }
     @case (LAYOUT.VERTICAL) {
@@ -18,12 +21,10 @@
           {{ device()?.icon }}
         </span>
         <div class="device-label">{{ device()?.label }}</div>
-        <div class="device-state">
-          <label class="switch">
-            <input [checked]="device()?.state" name="switch" type="checkbox" />
-            <span class="slider"></span>
-          </label>
-        </div>
+        <ng-container [ngTemplateOutlet]="toggleBtn"></ng-container>
+        @if (isEditMode()) {
+          <ng-container [ngTemplateOutlet]="deleteBtn"></ng-container>
+        }
       </div>
     }
     @case (LAYOUT.SINGLE_DEVICE) {
@@ -37,8 +38,32 @@
             {{ device()?.icon }}
           </span>
         </div>
-        <div class="device-state">{{ device()?.state | deviceState }}</div>
+        <div class="device-actions">
+          <ng-container [ngTemplateOutlet]="toggleBtn"></ng-container>
+          @if (isEditMode()) {
+            <ng-container [ngTemplateOutlet]="deleteBtn"></ng-container>
+          }
+        </div>
       </div>
     }
   }
 }
+
+<ng-template #deleteBtn>
+  <button (click)="onItemDelete()" type="button" class="tab-button delete-item">
+    <span class="material-symbols-outlined dash-action-icon">delete</span>
+  </button>
+</ng-template>
+
+<ng-template #toggleBtn>
+  <button
+    [attr.aria-pressed]="isOn()"
+    (click)="onToggleClick()"
+    type="button"
+    class="device-toggle"
+  >
+    <span [ngClass]="toggleClasses()" class="material-symbols-outlined">
+      {{ toggleIcon() }}
+    </span>
+  </button>
+</ng-template>

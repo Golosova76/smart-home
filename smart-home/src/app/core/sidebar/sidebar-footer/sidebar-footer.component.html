@@ -1,13 +1,30 @@
 <footer class="footer">
-  @if (profile(); as user) {
-    <div class="footer-initials">{{ user.initials }}</div>
+  <button (click)="openCreate()" type="button" class="footer-add">
+    <span class="material-symbols-outlined add-icon">add</span>
     @if (!sidebarCollapsed()) {
-      <div class="footer-text">{{ user.fullName }}</div>
-      <span (click)="onLogout()" class="material-symbols-outlined logout-icon"
-        >logout</span
-      >
+      <span class="footer-text">Add Dashboard</span>
     }
+  </button>
+  @if (profile(); as user) {
+    <div class="footer-profile">
+      <div class="footer-initials">{{ user.initials }}</div>
+      @if (!sidebarCollapsed()) {
+        <div class="footer-text">{{ user.fullName }}</div>
+        <span (click)="onLogout()" class="material-symbols-outlined logout-icon"
+          >logout</span
+        >
+      }
+    </div>
   } @else {
     <div class="no-profile">No profile data</div>
   }
 </footer>
+
+@if (isCreateOpenModal()) {
+  <app-modal-create-dashboards
+    [entityActions]="'Add'"
+    [checkId]="checkId()"
+    (closed)="closeCreate()"
+    (submitted)="handleCreate($event)"
+  ></app-modal-create-dashboards>
+}

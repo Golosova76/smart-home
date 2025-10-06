@@ -1,0 +1,12 @@
+@use "styles/mixins" as m;
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @include m.margin-bottom20;
+  padding: 10px;
+  background-color: var(--active-swich-back);
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}

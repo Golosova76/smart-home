@@ -7,6 +7,7 @@ export interface DeviceItem {
   icon: string;
   label: string;
   state: boolean;
+  id: string;
 }
 
 export interface SensorItem {
@@ -14,24 +15,25 @@ export interface SensorItem {
   icon: string;
   label: string;
   value: { amount: number; unit: string };
+  id: string;
 }
 
 export type Item = DeviceItem | SensorItem;
 
 export const ITEM_TYPES = {
   DEVICE: 'device',
-  SENSOR: 'sensor'
+  SENSOR: 'sensor',
 } as const;
 
-export type ItemType = typeof ITEM_TYPES[keyof typeof ITEM_TYPES];
+export type ItemType = (typeof ITEM_TYPES)[keyof typeof ITEM_TYPES];
 
 export const LAYOUT_TYPES = {
   HORIZONTAL: 'horizontalLayout',
   SINGLE_DEVICE: 'singleDevice',
-  VERTICAL: 'verticalLayout'
+  VERTICAL: 'verticalLayout',
 } as const;
 
-export type LayoutType = typeof LAYOUT_TYPES[keyof typeof LAYOUT_TYPES];
+export type LayoutType = (typeof LAYOUT_TYPES)[keyof typeof LAYOUT_TYPES];
 
 export interface Card {
   id: string;
@@ -48,4 +50,13 @@ export interface Tab {
 
 export interface DataModel {
   tabs: Tab[];
+}
+
+export interface Devices {
+  devices: Item[];
+}
+
+export interface DeviceState {
+  id: string;
+  state: boolean;
 }

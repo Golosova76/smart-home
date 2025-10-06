@@ -9,6 +9,9 @@
         <div class="sensor-value">
           {{ sensor()?.value | sensorValue }}
         </div>
+        @if (isEditMode()) {
+          <ng-container [ngTemplateOutlet]="deleteBtn"></ng-container>
+        }
       </div>
     }
     @case (LAYOUT.VERTICAL) {
@@ -20,6 +23,9 @@
         <div class="sensor-value">
           {{ sensor()?.value | sensorValue }}
         </div>
+        @if (isEditMode()) {
+          <ng-container [ngTemplateOutlet]="deleteBtn"></ng-container>
+        }
       </div>
     }
     @case (LAYOUT.SINGLE_DEVICE) {
@@ -33,7 +39,15 @@
         <div class="sensor-value">
           {{ sensor()?.value | sensorValue }}
         </div>
+        @if (isEditMode()) {
+          <ng-container [ngTemplateOutlet]="deleteBtn"></ng-container>
+        }
       </div>
     }
   }
 }
+<ng-template #deleteBtn>
+  <button (click)="onItemDelete()" type="button" class="tab-button delete-item">
+    <span class="material-symbols-outlined dash-action-icon">delete</span>
+  </button>
+</ng-template>

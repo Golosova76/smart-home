@@ -1,0 +1,57 @@
+<app-modal-shell>
+  <app-modal-header
+    [entityActions]="'Add'"
+    [entityDelete]="'dashboard'"
+    (closed)="closeModal()"
+  ></app-modal-header>
+  <div class="modal-body">
+    <form [formGroup]="form" id="createDashboardForm" class="form">
+      <div class="form-field">
+        <label class="form-label">
+          <span class="form-control-title">ID<span>*</span></span>
+          <input
+            formControlName="id"
+            class="control-input"
+            name="id"
+            type="text"
+            placeholder="ID"
+          />
+        </label>
+        <app-form-error [control]="idControl"></app-form-error>
+      </div>
+      <div class="form-field">
+        <label class="form-label">
+          <span class="form-control-title">Name<span>*</span></span>
+          <input
+            formControlName="title"
+            class="control-input"
+            name="name"
+            type="text"
+            placeholder="Name"
+          />
+        </label>
+        <app-form-error [control]="titleControl"></app-form-error>
+      </div>
+      <div class="form-field">
+        <label class="form-label">
+          <span class="form-control-title">Icon<span>*</span></span>
+          <input
+            formControlName="icon"
+            class="control-input"
+            name="icon"
+            type="text"
+            placeholder="Icon"
+          />
+        </label>
+        <app-form-error [control]="iconControl"></app-form-error>
+      </div>
+    </form>
+  </div>
+  <app-modal-footer
+    [entityActions]="'Add'"
+    [disabled]="form.invalid"
+    [class.disable]="!canSubmit"
+    (closed)="closeModal()"
+    (submit)="onSubmit()"
+  ></app-modal-footer>
+</app-modal-shell>

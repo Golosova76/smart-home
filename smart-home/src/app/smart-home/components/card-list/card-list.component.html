@@ -1,5 +1,5 @@
 <div class="card-container">
   @for (card of cards(); track card.id) {
-    <app-card [card]="card"></app-card>
+    <app-card [cardId]="card.id"></app-card>
   }
 </div>

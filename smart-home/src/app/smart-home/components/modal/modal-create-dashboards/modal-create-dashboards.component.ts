@@ -1,0 +1,137 @@
+import {
+  Component,
+  effect,
+  inject,
+  input,
+  OnInit,
+  output,
+} from '@angular/core';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { uniqueIdValidator } from '@/app/shared/utils/unique-id.validator';
+import { FormErrorComponent } from '@/app/shared/components/form-error/form-error.component';
+import { Dashboard, EntityActions } from '@/app/shared/models/dashboard.model';
+import { Router } from '@angular/router';
+import { capitalize, normalizeId } from '@/app/shared/utils/capitalize';
+import { ModalShellComponent } from '@/app/smart-home/components/modal/modal-shell/modal-shell.component';
+import { ModalHeaderComponent } from '@/app/smart-home/components/modal/components/modal-header/modal-header.component';
+import { ModalFooterComponent } from '@/app/smart-home/components/modal/components/modal-footer/modal-footer.component';
+
+@Component({
+  selector: 'app-modal-create-dashboards',
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    FormErrorComponent,
+    ModalShellComponent,
+    ModalHeaderComponent,
+    ModalFooterComponent,
+  ],
+  templateUrl: './modal-create-dashboards.component.html',
+  styleUrl: './modal-create-dashboards.component.scss',
+})
+export class ModalCreateDashboardsComponent implements OnInit {
+  router = inject(Router);
+
+  closed = output<void>();
+  checkId = input<string[]>([]);
+  entityActions = input.required<EntityActions>();
+
+  submitted = output<{ id: string; title: string; icon: string }>();
+
+  private lastIds: string[] = [];
+
+  form = new FormGroup({
+    id: new FormControl<string | null>(null),
+    title: new FormControl<string | null>(null, [
+      Validators.required,
+      Validators.maxLength(50),
+    ]),
+    icon: new FormControl<string | null>(null, Validators.required),
+  });
+
+  constructor() {
+    effect(() => {
+      const ids = this.checkId();
+      if (!this.arraysEqual(ids, this.lastIds)) {
+        this.lastIds = [...ids];
+        this.updateIdValidators(ids);
+      }
+    });
+  }
+
+  ngOnInit(): void {
+    this.idControl?.updateValueAndValidity({ emitEvent: false });
+    this.titleControl?.updateValueAndValidity({ emitEvent: false });
+    this.iconControl?.updateValueAndValidity({ emitEvent: false });
+  }
+
+  onSubmit(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    const { id, title, icon } = this.form.value;
+    if (!id || !title || !icon) return;
+
+    const normId: string = normalizeId(id);
+
+    const payload: Dashboard = {
+      id: normId,
+      title: capitalize(title),
+      icon,
+    };
+    this.submitted.emit(payload);
+  }
+
+  closeModal() {
+    this.closed.emit();
+  }
+
+  get idControl(): FormControl<string | null> | null {
+    const control: AbstractControl | null = this.form.get('id');
+    return control instanceof FormControl ? control : null;
+  }
+
+  get titleControl(): FormControl<string | null> | null {
+    const control: AbstractControl | null = this.form.get('title');
+    return control instanceof FormControl ? control : null;
+  }
+
+  get iconControl(): FormControl<string | null> | null {
+    const control: AbstractControl | null = this.form.get('icon');
+    return control instanceof FormControl ? control : null;
+  }
+
+  get canSubmit(): boolean {
+    return this.form.valid;
+  }
+
+  private getIdValidators(ids: string[]) {
+    return [
+      Validators.required,
+      Validators.maxLength(30),
+      uniqueIdValidator(ids),
+    ];
+  }
+
+  private updateIdValidators(ids: string[]) {
+    const control: AbstractControl | null = this.form.get('id');
+
+    if (control instanceof FormControl) {
+      control.setValidators(this.getIdValidators(ids));
+      control.updateValueAndValidity({ emitEvent: false });
+    }
+  }
+
+  private arraysEqual(a: string[], b: string[]): boolean {
+    return a.length === b.length && a.every((v, index) => v === b[index]);
+  }
+}

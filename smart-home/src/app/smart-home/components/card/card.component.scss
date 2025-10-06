@@ -16,15 +16,37 @@
 
 .card-header {
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  gap: 40px;
   @include m.margin-bottom20;
 }
 
-.card-state.switch {
-  @include m.switch;
+.tab-toggle {
+  text-align: right;
+  .material-symbols-outlined.toggle-action-icon {
+    font-size: 38px;
+    color: var(--active-swich-back);
+  }
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  .tab-button.edit-title.card {
+    .material-symbols-outlined {
+      font-size: 18px;
+    }
+  }
 }
 
 .singleDevice {
+  .card-reorder {
+    .material-symbols-outlined {
+      font-size: 18px;
+    }
+  }
 }
 
 .horizontalLayout {
@@ -34,6 +56,12 @@
     gap: 20px;
     justify-items: start;
     justify-content: start;
+    @include m.margin-bottom10;
+  }
+  .card-reorder {
+    .material-symbols-outlined {
+      font-size: 18px;
+    }
   }
 }
 
@@ -43,5 +71,35 @@
     grid-template-columns: 1fr; // только 1 колонка
     gap: 20px;
     justify-items: start;
+    @include m.margin-bottom10;
   }
+  .card-reorder {
+    .material-symbols-outlined {
+      font-size: 18px;
+    }
+  }
+}
+
+.tab-button {
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  font-weight: var(--font-weight-title);
+  color: var(--background-color404-hover);
+  &:hover {
+    color: var(--active-icon);
+  }
+  &.active {
+    border-bottom: 2px solid red;
+  }
+  &:focus-visible {
+    outline: 2px solid var(--active-text);
+    outline-offset: 2px;
+  }
+}
+
+.tab-button.arrow-forward.disable,
+.tab-button.arrow-back.disable {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
 }

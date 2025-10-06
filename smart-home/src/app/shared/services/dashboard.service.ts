@@ -1,9 +1,9 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Dashboard } from '@/app/shared/models/dashboard.model';
 import { Observable } from 'rxjs';
-import { BASE_API_URL } from '@/app/shared/constants';
-import { DataModel, Tab } from '@/app/shared/models/data.model';
+import { BASE_API_URL } from '@/app/shared/utils/constants';
+import { DataModel, DeviceState, Item } from '@/app/shared/models/data.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,15 +11,33 @@ import { DataModel, Tab } from '@/app/shared/models/data.model';
 export class DashboardService {
   private http = inject(HttpClient);
 
-  readonly dashboardsSignal = signal<Dashboard[]>([]);
-  readonly dashboardByIdSignal = signal<DataModel | null>(null);
-  readonly tabsSignal = signal<Tab[]>([]);
-
   getDashboards(): Observable<Dashboard[]> {
     return this.http.get<Dashboard[]>(`${BASE_API_URL}dashboards`);
   }
 
   getDashboardById(id: string): Observable<DataModel> {
     return this.http.get<DataModel>(`${BASE_API_URL}dashboards/${id}`);
+  }
+
+  createDashboard(payload: Dashboard): Observable<Dashboard> {
+    return this.http.post<Dashboard>(`${BASE_API_URL}dashboards`, payload);
+  }
+
+  deleteDashboard(id: string): Observable<void> {
+    return this.http.delete<void>(`${BASE_API_URL}dashboards/${id}`);
+  }
+
+  saveDashboardById(id: string, payload: DataModel): Observable<DataModel> {
+    return this.http.put<DataModel>(`${BASE_API_URL}dashboards/${id}`, payload);
+  }
+
+  getDevices() {
+    return this.http.get<Item[]>(`${BASE_API_URL}devices`);
+  }
+
+  toggleDeviceState(deviceId: string, newState: boolean) {
+    return this.http.patch<DeviceState>(`${BASE_API_URL}devices/${deviceId}`, {
+      state: newState,
+    });
   }
 }

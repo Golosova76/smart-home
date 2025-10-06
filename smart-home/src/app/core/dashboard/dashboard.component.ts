@@ -4,145 +4,191 @@ import {
   DestroyRef,
   effect,
   inject,
-  Signal,
+  signal,
 } from '@angular/core';
 
 import { TabSwitcherComponent } from '@/app/smart-home/components/tab-switcher/tab-switcher.component';
-import { DashboardService } from '@/app/shared/services/dashboard.service';
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-  RouterOutlet,
-} from '@angular/router';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { Dashboard } from '@/app/shared/models/dashboard.model';
+import { RouterOutlet } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { map, switchMap } from 'rxjs';
+import { ModalConfirmDeleteComponent } from '@/app/smart-home/components/modal/modal-confirm-delete/modal-confirm-delete.component';
+import { DashboardHandlerService } from '@/app/shared/services/dashboard-handler.service';
+import { RouteIdValidService } from '@/app/shared/services/route-id-valid.service';
+import { Store } from '@ngrx/store';
+
+import * as dashboardsSelectors from '@/app/store/selectors/selected-dashboard.selectors';
+import * as dashboardActions from '@/app/store/actions/dashboard.actions';
+import { AppState } from '@/app/store/state/app.state';
 import { Tab } from '@/app/shared/models/data.model';
-import { filter, map, startWith } from 'rxjs';
+import { ModalCreateTabsComponent } from '@/app/smart-home/components/modal/modal-create-tabs/modal-create-tabs.component';
 
 @Component({
-  imports: [TabSwitcherComponent, RouterOutlet],
+  imports: [
+    TabSwitcherComponent,
+    RouterOutlet,
+    ModalConfirmDeleteComponent,
+    ModalCreateTabsComponent,
+  ],
   selector: 'app-dashboard',
   standalone: true,
   styleUrl: './dashboard.component.scss',
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent {
-  route = inject(ActivatedRoute);
-  router = inject(Router);
-  dashboardService = inject(DashboardService);
-  destroyRef = inject(DestroyRef);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly handlerService = inject(DashboardHandlerService);
+  private readonly routeIds = inject(RouteIdValidService);
+  private store = inject<Store<AppState>>(Store);
 
-  //получение параметров URL - сигналы
-  readonly dashboardIdRouteSignal: Signal<string | null> = toSignal(
-    this.route.paramMap.pipe(
-      map((parameters) => parameters.get('dashboardId') ?? null),
-    ),
-    { initialValue: null },
-  );
-
-  readonly tabIdRouteSignal: Signal<string | null> = toSignal(
-    this.router.events.pipe(
-      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-      startWith(null),
-      map(() => this.route.firstChild?.snapshot.paramMap.get('tabId') ?? null),
-    ),
-    { initialValue: null },
-  );
-
-  //массив dashboards где dashboardId
-  readonly dashboardsSignal = this.dashboardService.dashboardsSignal;
-  // один dashboard с tabs
-  readonly dashboardByIdSignal = this.dashboardService.dashboardByIdSignal;
   // массив tab где tabId
-  readonly tabsSignal = this.dashboardService.tabsSignal;
+  readonly tabsSignal = this.store.selectSignal<Tab[]>(dashboardsSelectors.selectTabs);
+  readonly editTabId = this.store.selectSignal<string | null>(
+    dashboardsSelectors.selectEditTabId,
+  );
+  readonly tabTitleDraft = this.store.selectSignal<string>(
+    dashboardsSelectors.selectTabTitleDraft,
+  );
 
-  // получаем TabId кот соот роуту
-  readonly selectedTabId = computed(() => {
-    return this.getValidTabId(this.tabsSignal(), this.tabIdRouteSignal());
+  readonly dashboardIdRouteSignal = this.routeIds.dashboardIdValid;
+
+  readonly selectedTabId = this.routeIds.selectedTabId;
+
+  readonly isAddTabOpenModal = signal<boolean>(false);
+
+  readonly isDeleteOpenModal = signal<boolean>(false);
+  readonly isDeleteTabOpenModal = signal<boolean>(false);
+  readonly tabToDeleteId = signal<string | null>(null);
+
+  readonly isEditMode = this.store.selectSignal<boolean>(
+    dashboardsSelectors.selectIsEditModeEnabled,
+  );
+
+  readonly tabToDeleteName = computed(() => {
+    const tabId = this.tabToDeleteId();
+    if (!tabId) return '';
+
+    const tab = this.tabsSignal().find((tab) => tab.id === tabId);
+    return tab?.title || '';
   });
 
   onTabSelected(tabId: string) {
-    this.router
-      .navigate(['/dashboard', this.dashboardIdRouteSignal(), tabId])
-      .catch(() => {});
+    this.routeIds.selectTab(tabId);
   }
 
   constructor() {
     effect(() => {
-      const dashboardId = this.dashboardIdRouteSignal();
+      const dashboardId = this.routeIds.dashboardIdValid();
       if (dashboardId) {
-        this.initTabs(dashboardId);
+        this.store.dispatch(dashboardActions.selectDashboard({ dashboardId }));
       }
     });
   }
 
-  private initTabs(dashboardId: string) {
-    if (!dashboardId) return;
+  openDeleteModal() {
+    if (this.isEditMode()) {
+      return;
+    }
+    this.isDeleteOpenModal.set(true);
+  }
 
-    this.dashboardService
-      .getDashboardById(dashboardId)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+  openAddTabModal() {
+    if (!this.isEditMode()) {
+      return;
+    }
+    this.isAddTabOpenModal.set(true);
+  }
+
+  onAddTabSubmit(title: string): void {
+    this.store.dispatch(dashboardActions.TabActionsTitleMove.addTab({ title }));
+    this.closeDelete();
+  }
+
+  closeDelete() {
+    this.isDeleteOpenModal.set(false);
+    this.isAddTabOpenModal.set(false);
+    this.isDeleteTabOpenModal.set(false);
+    this.tabToDeleteId.set(null);
+  }
+
+  onRemoveTab(): void {
+    const id = this.tabToDeleteId();
+    if (!id) return;
+    this.store.dispatch(dashboardActions.TabActionsTitleMove.removeTab({ tabId: id }));
+    this.closeDelete();
+    this.tabToDeleteId.set(null);
+  }
+
+  onDelete() {
+    const dashboardId = this.routeIds.dashboardIdRouteSignal();
+    if (!dashboardId) {
+      this.closeDelete();
+      return;
+    }
+
+    this.handlerService
+      .removeDashboard(dashboardId)
+      .pipe(
+        switchMap((nextIdAfterRemove) =>
+          this.handlerService.loadDashboards().pipe(
+            map(() => {
+              const firstId =
+                this.handlerService.dashboardsSignal()[0]?.id ?? null;
+              return nextIdAfterRemove ?? firstId ?? null;
+            }),
+          ),
+        ),
+        takeUntilDestroyed(this.destroyRef),
+      )
       .subscribe({
-        next: (dataModel) => {
-          this.dashboardByIdSignal.set(dataModel);
-          this.tabsSignal.set(dataModel.tabs);
-          this.handleRouteParams(
-            this.dashboardIdRouteSignal(),
-            this.tabIdRouteSignal(),
-          );
-        },
-        error: (error) => {
-          console.error('Ошибка загрузки Dashboard:', error);
+        next: (nextId) => {
+          this.closeDelete();
+          if (nextId) {
+            this.routeIds.selectDashboard(nextId);
+          }
         },
       });
   }
 
-  handleRouteParams(
-    dashboardIdRoute: string | null,
-    tabIdRoute: string | null,
-  ) {
-    const dashboardsSignal = this.dashboardsSignal();
+  onEditClick() {
+    this.store.dispatch(dashboardActions.enterEditMode());
+  }
 
-    const dashboardIdValid = this.getValidDashboardId(
-      dashboardsSignal,
-      dashboardIdRoute,
+  onSave() {
+    this.store.dispatch(dashboardActions.saveDashboard());
+    this.store.dispatch(dashboardActions.exitEditMode());
+  }
+
+  onDiscard() {
+    this.store.dispatch(dashboardActions.discardChanges());
+    this.store.dispatch(dashboardActions.exitEditMode());
+  }
+
+  onStartTitleEdit(event: { tabId: string; currentTitle: string }) {
+    this.store.dispatch(dashboardActions.TabActionsTitleMove.startTitleEdit(event));
+  }
+
+  onEndTitleEdit() {
+    this.store.dispatch(dashboardActions.TabActionsTitleMove.endTitleEdit());
+  }
+
+  onCommitTitleEdit(event: { tabId: string; newTitle: string }) {
+    this.store.dispatch(dashboardActions.TabActionsTitleMove.commitTitleEdit(event));
+  }
+
+  onReorderTab(event: { tabId: string; direction: 'left' | 'right' }) {
+    this.store.dispatch(
+      dashboardActions.TabActionsTitleMove.reorderTab({
+        tabId: event.tabId,
+        direction: event.direction,
+      }),
     );
+  }
 
-    if (!dashboardIdValid) return;
-
-    const tabIdValid = this.getValidTabId(this.tabsSignal(), tabIdRoute);
-
-    if (!tabIdValid) return;
-
-    if (dashboardIdValid !== dashboardIdRoute || tabIdValid !== tabIdRoute) {
-      this.router
-        .navigate(['/dashboard', dashboardIdValid, tabIdValid])
-        .catch(() => {});
+  openRemoveTabModal(tabId: string) {
+    if (!this.isEditMode()) {
       return;
     }
+    this.tabToDeleteId.set(tabId);
+    this.isDeleteTabOpenModal.set(true);
   }
-
-  private getValidDashboardId(
-    dashboards: Dashboard[],
-    dashboardIdRoute: string | null,
-  ) {
-    const httpDashboardId = dashboards.some(
-      (dashboard) => dashboard.id === dashboardIdRoute,
-    );
-    if (!dashboardIdRoute || !httpDashboardId) {
-      return dashboards.length > 0 ? dashboards[0].id : null;
-    }
-    return dashboardIdRoute;
-  }
-
-  private getValidTabId(tabs: Tab[], tabIdRoute: string | null) {
-    const httpTabId = tabs.some((tab) => tab.id === tabIdRoute);
-    if (!tabIdRoute || !httpTabId) {
-      return tabs.length > 0 ? tabs[0].id : null;
-    }
-    return tabIdRoute;
-  }
-
-  //конец класса
 }
