@@ -2,8 +2,8 @@ import {
   ApplicationConfig,
   isDevMode,
   provideBrowserGlobalErrorListeners,
-  provideZoneChangeDetection,
-} from '@angular/core';
+  provideZonelessChangeDetection
+} from "@angular/core";
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -20,16 +20,17 @@ import { selectedDashboardFeature } from '@/app/store/reducers/dashboard.reducer
 import { SelectedDashboardEffects } from '@/app/store/effects/selected-dashboard.effects';
 import { availableItemsFeature } from '@/app/store/reducers/devices.reducer';
 
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideZonelessChangeDetection(),
     provideRouter(routes),
     provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
     provideStore(),
     provideState(selectedDashboardFeature),
     provideState(availableItemsFeature),
     provideEffects(SelectedDashboardEffects),
-    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode(), trace: true }),
   ],
 };

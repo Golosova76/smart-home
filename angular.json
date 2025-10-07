@@ -8,7 +8,8 @@
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss",
-          "type": "component"
+          "type": "component",
+          "changeDetection": "OnPush"
         },
         "@schematics/angular:directive": { "type": "directive" },
         "@schematics/angular:service": { "type": "service" },
@@ -28,9 +29,6 @@
             "outputPath": "dist/smart-home",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
