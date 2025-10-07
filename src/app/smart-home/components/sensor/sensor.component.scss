@@ -1,6 +1,14 @@
 :host {
   display: block;
   width: 100%;
+  .tab-button.delete-item {
+    .dash-action-icon {
+      color: var(--device-sensor-off);
+      &:hover {
+        color: var(--active-icon);
+      }
+    }
+  }
 }
 
 .sensor-wrapper.horizontal {
@@ -11,7 +19,7 @@
   gap: 10px;
   width: 100%;
   .sensor-icon {
-    color: var(--active-icon);
+    color: var(--device-sensor-off);
     width: 24px;
     height: 24px;
   }
@@ -24,7 +32,7 @@
   width: 100%;
   gap: 20px;
   .sensor-icon {
-    color: var(--active-icon);
+    color: var(--device-sensor-off);
     width: 24px;
     height: 24px;
   }
@@ -44,7 +52,7 @@
     width: 100%;
     gap: 15px;
     .sensor-icon {
-      color: var(--active-icon);
+      color: var(--device-sensor-off);
       width: 24px;
       height: 24px;
     }

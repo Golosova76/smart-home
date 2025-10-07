@@ -15,6 +15,14 @@
   --active-text: #40c4ff;
   --active-swich-back: #7fffd4;
 
+  --background-color: #5A5D68;
+  --text-icon-active: #FACC15;
+  --text-icon-active-hover: #FFEB3B;
+  --text-card-border: #94A3B8;
+  --device-sensor-on: #38BDF8;
+  --device-sensor-off: #475569;
+  --text-card: #475569;
+
   --font-family: "Roboto";
   --font-size-error: 12px;
   --font-size-base: 14px;
@@ -25,20 +33,43 @@
   --font-weight-title: 500;
   --line-height: 1.4;
 
-  --box-shadow-active: rgba(0, 255, 0, 0.7);
-  --box-border-active: #00ff00;
+  //--box-shadow-active: rgba(0, 255, 0, 0.7);
+  //--box-border-active: #00ff00;
   --active-icon: red;
   --background-color404: #f7fafc;
   --color404: #3f51b5;
   --background-color404-hover: #283593;
   --modal-background-color: #0006;
+
+
+  //new color
+  --background-color-app: #F4F5F7;
+  --background-color-sidebar: var(--background-color);
+  --background-color-navbar: var(--background-color);
+  --background-color-card: var(--light-solid);
+  --background-color-menu-item-active-sidebar: #4B5563;
+  --background-color-tab-add: var(--background-color);
+  --background-color-tab-modal: #40C4FF;
+  --background-color-tab-modal-hover: #0EA5E9;
+
+  --border-bottom-active: #EAB308;
+
+  --card-shadow-active: rgba(148, 163, 184, 0.35);
+  --card-border-active: var(--text-card-border);
+
+  --color-text-icon-active: var(--text-icon-active);
+  --color-text-icon-hover: var(--text-icon-active);
+  --color-text-icon-active-hover: var(--text-icon-active-hover);
+  --color-text-card: var(--text-card);
+  --color-text-tab-modal: var(--light-solid);
+
 }
 
 body {
   font-family: var(--font-family), serif;
   font-size: var(--font-size-base);
   flex-wrap: var(--font-weight-base);
-  background-color: var(--back-primary);
+  background-color: var(--background-color-app);
   color: var(--text-primary);
   line-height: var(--line-height);
 }
@@ -49,7 +80,7 @@ body {
 }
 
 .h2,
-h3 {
+.h3 {
   font-weight: var(--font-weight-title);
   font-size: var(--font-size-title);
 }

@@ -4,13 +4,13 @@
   @include m.flex-column;
   justify-content: flex-end;
   padding: 10px;
-  background-color: var(--active-swich-back);
+  background-color: var(--text-card-border);
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   button {
     max-width: 100px;
     border: none;
-    background-color: var(--active-text);
+    background-color: var(--background-color-tab-modal);
     padding: 10px;
     cursor: pointer;
     border-radius: 5px;
@@ -18,29 +18,15 @@
     font-weight: var(--font-weight-title);
     color: var(--light-solid);
     &:hover {
-      color: var(--color404);
+      background-color: var(--background-color-tab-modal-hover);
+      color: var(--background-color404-hover);
     }
   }
 }
 
-.modal-close {
-  &:hover {
-    .close-icon {
-      color: var(--active-icon);
-    }
-  }
-}
 
 .modal-footer-submit.disable {
   opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
-}
-
-.modal-footer .modal-footer-delete {
-  color: var(--active-icon);
-  &:hover {
-    color: var(--active-icon);
-    outline: 1px solid var(--active-icon);
-  }
 }

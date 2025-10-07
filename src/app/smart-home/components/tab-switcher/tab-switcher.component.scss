@@ -7,7 +7,7 @@
   padding: 10px 10px 10px 20px;
   @include m.flex-center-between;
   gap: 20px;
-  background-color: var(--active-primary);
+  background-color: var(--background-color-navbar);
 }
 
 .tabs-actions {
@@ -20,7 +20,7 @@
 
 .dash-action-button {
   &:hover {
-    color: var(--active-text);
+    color: var(--color-text-icon-hover);
   }
 }
 
@@ -29,10 +29,10 @@
   transition: all 0.2s ease;
   font-weight: var(--font-weight-title);
   &:hover {
-    color: var(--active-text);
+    color: var(--color-text-icon-hover);
   }
   &.active {
-    border-bottom: 2px solid red;
+    border-bottom: 2px solid var(--border-bottom-active);
   }
   &:focus-visible {
     outline: 2px solid var(--active-text);

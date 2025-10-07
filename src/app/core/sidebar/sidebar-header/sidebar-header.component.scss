@@ -1,11 +1,16 @@
 @use "styles/mixins" as m;
 
+:host {
+  background-color: var(--background-color-navbar);
+}
+
 .header-wrapper {
   height: 56px;
   border-bottom: 1px solid var(--light-border);
   border-right: 1px solid var(--light-border);
   padding: 10px;
   @include m.flex-column;
+  background-color: var(--background-color-navbar);
 }
 
 .menu-open-icon {
@@ -14,7 +19,7 @@
   color: var(--light-solid);
   cursor: pointer;
   &:hover {
-    color: var(--active-text);
+    color: var(--color-text-icon-hover);
   }
   &:focus-visible {
     outline: 2px solid var(--light-border);

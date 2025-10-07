@@ -6,7 +6,12 @@
   justify-content: space-between;
   @include m.margin-bottom20;
   padding: 10px;
-  background-color: var(--active-swich-back);
+  background-color: var(--text-card-border);
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
+  .close-icon {
+    &:hover {
+      color: var(--active-icon);
+    }
+  }
 }

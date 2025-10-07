@@ -13,10 +13,13 @@
 }
 
 .menu-item.active {
-  background-color: var(--active-primary);
-  color: var(--active-text);
+  background-color: var(--background-color-menu-item-active-sidebar);
+  color: var(--color-text-icon-active);
   .sidebar-icon {
-    color: var(--active-text);
+    color: var(--color-text-icon-active);
+  }
+  &:hover {
+    color: var(--color-text-icon-active-hover);
   }
 }
 
@@ -27,7 +30,7 @@
   cursor: pointer;
   font-weight: var(--font-weight-title);
   &:hover {
-    color: var(--active-text);
+    color: var(--color-text-icon-hover);
   }
 }
 

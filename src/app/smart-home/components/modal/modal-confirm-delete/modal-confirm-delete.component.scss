@@ -4,4 +4,5 @@
   min-height: 150px;
   @include m.flex-center-center;
   font-size: var(--font-size-h1);
+  color: var(--text-card);
 }

@@ -22,7 +22,7 @@
 
 .modal-content {
   @include m.flex-center-center-column;
-  color: var(--color404);
+  color: var(--light-solid);
   pointer-events: auto;
 }
 
@@ -32,23 +32,31 @@
   justify-content: space-between;
   @include m.margin-bottom20;
   padding: 10px;
-  background-color: var(--active-swich-back);
+  background-color: var(--text-card-border);
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
+  .close-icon {
+    &:hover {
+      color: var(--active-icon);
+    }
+  }
 }
 
 .modal-body {
   padding: 15px;
+  color: var(--text-card);
 }
 .modal-title {
   padding-right: 15px;
   padding-left: 15px;
   font-size: 16px;
   font-weight: bold;
+  color: var(--text-card);
 }
 
 .form {
   @include m.flex-center-center-column;
+  color: var(--text-card);
 }
 
 .form-field {
@@ -61,6 +69,7 @@
   align-items: center;
   gap: 10px;
   @include m.margin-bottom10;
+  color: var(--text-card);
 }
 
 .form-control-title {
@@ -75,7 +84,7 @@
   @include m.flex-column;
   justify-content: flex-end;
   padding: 10px;
-  background-color: var(--active-swich-back);
+  background-color: var(--text-card-border);
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   button {

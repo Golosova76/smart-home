@@ -3,6 +3,14 @@
 :host {
   display: block;
   width: 100%;
+  .tab-button.delete-item {
+    .dash-action-icon {
+      color: var(--device-sensor-off);
+      &:hover {
+        color: var(--active-icon);
+      }
+    }
+  }
 }
 
 .device-wrapper.horizontal {
@@ -13,10 +21,17 @@
   gap: 10px;
   width: 100%;
   .device-icon {
-    color: var(--active-icon);
+    color: var(--device-sensor-off);
     width: 24px;
     height: 24px;
   }
+  .device-toggle {
+    color: var(--device-sensor-off);
+    .on {
+      color: var(--device-sensor-on);
+    }
+  }
+
 }
 
 .device-wrapper.vertical {
@@ -26,15 +41,21 @@
   width: 100%;
   gap: 15px;
   .device-icon {
-    color: var(--active-icon);
+    color: var(--device-sensor-off);
     width: 24px;
     height: 24px;
     &.active-device {
-      color: var(--active-swich-back);
+      color: var(--device-sensor-on);
     }
   }
   .device-state {
     justify-self: center;
+  }
+  .device-toggle {
+    color: var(--device-sensor-off);
+    .on {
+        color: var(--device-sensor-on);
+    }
   }
 }
 
@@ -47,19 +68,26 @@
     align-items: center;
     gap: 45px;
     .device-icon.icon-on {
-      color: var(--active-swich-back);
+      color: var(--device-sensor-on);
       width: 24px;
       height: 24px;
     }
     .device-icon.icon-off {
-      color: var(--active-icon);
+      color: var(--device-sensor-off);
       width: 24px;
       height: 24px;
     }
+
   }
   .device-actions {
     display: flex;
     align-items: center;
     gap: 15px;
+    .device-toggle {
+      color: var(--device-sensor-off);
+      .on {
+        color: var(--device-sensor-on);
+      }
+    }
   }
 }

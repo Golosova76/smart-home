@@ -7,6 +7,7 @@
 
 .form {
   @include m.flex-center-center-column;
+  color: var(--text-card);
 }
 
 .form-field {

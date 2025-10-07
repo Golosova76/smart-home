@@ -22,7 +22,7 @@
 
 .modal-content {
   @include m.flex-center-center-column;
-  color: var(--color404);
+  color: var(--light-solid);
   pointer-events: auto;
 }
 

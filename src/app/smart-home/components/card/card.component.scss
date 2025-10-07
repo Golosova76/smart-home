@@ -2,14 +2,17 @@
 
 .card-wrapper {
   padding: 10px;
-  background-color: var(--active-text);
+  background-color: var(--background-color-card);
+  color: var(--color-text-card);
   border-radius: 5px;
   break-inside: avoid;
   margin-bottom: 20px;
   min-width: 0;
+  border: 2px solid transparent;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   &.active-card {
-    box-shadow: 0 0 15px var(--box-shadow-active);
-    border: 2px solid var(--box-border-active);
+    box-shadow: 0 0 15px var(--card-shadow-active);
+    border: 2px solid var(--card-border-active);
     transition: all 0.3s ease;
   }
 }
@@ -24,9 +27,15 @@
 
 .tab-toggle {
   text-align: right;
-  .material-symbols-outlined.toggle-action-icon {
+  color: var(--device-sensor-off);
+  font-size: 38px;
+  .off {
     font-size: 38px;
-    color: var(--active-swich-back);
+    color: var(--device-sensor-off);
+  }
+  .on {
+    font-size: 38px;
+    color: var(--device-sensor-on);
   }
 }
 
@@ -42,6 +51,9 @@
 }
 
 .singleDevice {
+  .card-content {
+    @include m.margin-bottom20;
+  }
   .card-reorder {
     .material-symbols-outlined {
       font-size: 18px;
@@ -56,11 +68,15 @@
     gap: 20px;
     justify-items: start;
     justify-content: start;
-    @include m.margin-bottom10;
+    @include m.margin-bottom20;
   }
   .card-reorder {
     .material-symbols-outlined {
       font-size: 18px;
+      color: var(--device-sensor-off);
+      &:hover {
+        color: var(--active-icon);
+      }
     }
   }
 }
@@ -71,11 +87,15 @@
     grid-template-columns: 1fr; // только 1 колонка
     gap: 20px;
     justify-items: start;
-    @include m.margin-bottom10;
+    @include m.margin-bottom20;
   }
   .card-reorder {
     .material-symbols-outlined {
       font-size: 18px;
+      color: var(--device-sensor-off);
+      &:hover {
+        color: var(--active-icon);
+      }
     }
   }
 }
@@ -84,17 +104,6 @@
   border-bottom: 2px solid transparent;
   transition: all 0.2s ease;
   font-weight: var(--font-weight-title);
-  color: var(--background-color404-hover);
-  &:hover {
-    color: var(--active-icon);
-  }
-  &.active {
-    border-bottom: 2px solid red;
-  }
-  &:focus-visible {
-    outline: 2px solid var(--active-text);
-    outline-offset: 2px;
-  }
 }
 
 .tab-button.arrow-forward.disable,
@@ -103,3 +112,13 @@
   cursor: not-allowed;
   pointer-events: none;
 }
+
+.tab-button.delete-item {
+  .dash-action-icon {
+    color: var(--device-sensor-off);
+    &:hover {
+      color: var(--active-icon);
+    }
+  }
+}
+

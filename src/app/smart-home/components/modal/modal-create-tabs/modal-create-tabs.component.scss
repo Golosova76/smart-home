@@ -6,6 +6,7 @@
 
 .form {
   @include m.flex-center-center-column;
+  color: var(--text-card);
 }
 
 .form-field {
@@ -18,6 +19,7 @@
   align-items: center;
   gap: 10px;
   @include m.margin-bottom10;
+  color: var(--text-card);
 }
 
 .form-control-title {
