@@ -33,7 +33,12 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/assets",
-              "src/favicon.ico"
+              "src/favicon.ico",
+              {
+                "glob": "netlify.toml",
+                "input": "./",
+                "output": "./"
+              }
             ],
             "styles": [
               "src/styles.scss"
