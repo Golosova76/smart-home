@@ -1,5 +1,7 @@
 exports.handler = async (event) => {
   try {
+    const rid = Math.random().toString(36).slice(2, 8); // короткий id запроса
+    console.log(`[proxy][${rid}] ${event.httpMethod} ${event.path}`);
     const base = process.env.API_BASE_URL;
     if (!base) {
       return { statusCode: 500, body: 'API_BASE_URL is not configured.' };
@@ -7,12 +9,10 @@ exports.handler = async (event) => {
 
     // снимаем префикс функции
     const afterFn = event.path.replace(/^\/.netlify\/functions\/proxy/, '');
-    // ЕСЛИ на Render нет /api — раскомментируй следующую строку:
-    // const upstreamPath = afterFn.replace(/^\/api(\/|$)/, '/');
-    // Иначе оставь как есть:
     const upstreamPath = afterFn;
 
     const url = base + upstreamPath + (event.rawQuery ? `?${event.rawQuery}` : '');
+    console.log(`[proxy→][${rid}] ${url}`);
 
     // Заголовки к Render: добавляем accept-encoding: identity
     const upstreamHeaders = filterHeaders(event.headers, [
@@ -31,11 +31,12 @@ exports.handler = async (event) => {
     };
 
     const resp = await fetch(url, init);
+    console.log(`[proxy←][${rid}] ${resp.status} ${url}`);
 
-    // Берём текст (JSON) — без base64
+    // Берём текст (JSON)
     const text = await resp.text();
 
-    // Копируем заголовки, но чистим «сжатие»
+    // Копируем заголовки
     const headers = {};
     resp.headers.forEach((v, k) => (headers[k.toLowerCase()] = v));
 
@@ -59,6 +60,7 @@ exports.handler = async (event) => {
       body: text,
     };
   } catch (e) {
+    console.error(`[proxy!!] ${e?.message || e}`);
     return {
       statusCode: 500,
       body: JSON.stringify({ message: 'Proxy failed', error: String(e?.message || e) }),
