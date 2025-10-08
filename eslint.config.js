@@ -15,7 +15,7 @@ export default [
     },
   },
   {
-    ignores: [".angular", "dist", "node_modules", "eslint.config.js"],
+    ignores: [".angular", "dist", "node_modules", "eslint.config.js", "netlify/functions/proxy.js"],
   },
 
   eslint.configs.recommended,
