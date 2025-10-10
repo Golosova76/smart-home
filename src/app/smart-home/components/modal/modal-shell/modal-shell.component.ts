@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
-  selector: 'app-modal-shell',
+  selector: "app-modal-shell",
   imports: [],
-  templateUrl: './modal-shell.component.html',
-  styleUrl: './modal-shell.component.scss',
+  templateUrl: "./modal-shell.component.html",
+  styleUrl: "./modal-shell.component.scss",
 })
 export class ModalShellComponent {}

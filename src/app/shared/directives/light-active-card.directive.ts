@@ -1,14 +1,14 @@
-import { Directive, effect, HostBinding, input } from '@angular/core';
-import { Device } from '@/app/shared/models/data.model';
+import { Directive, effect, HostBinding, input } from "@angular/core";
+import type { Device } from "@/app/shared/models/data.model";
 
 @Directive({
-  selector: '[appLightActiveCard]',
+  selector: "[appLightActiveCard]",
   standalone: true,
 })
 export class LightActiveCardDirective {
-  @HostBinding('class.active-card') isActive = false;
+  @HostBinding("class.active-card") isActive = false;
 
-  lightActiveCard = input<Device[]>([], { alias: 'appLightActiveCard' });
+  lightActiveCard = input<Device[]>([], { alias: "appLightActiveCard" });
 
   private setActiveEffect = effect(() => {
     const devices = this.lightActiveCard() ?? [];

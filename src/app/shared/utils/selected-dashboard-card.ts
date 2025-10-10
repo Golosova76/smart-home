@@ -1,10 +1,11 @@
-import {
+import type {
   Card,
-  DataModel, DeviceItem,
-  ITEM_TYPES,
+  DataModel,
+  DeviceItem,
   LayoutType,
-} from '@/app/shared/models/data.model';
-import { normalizeToKebabCase } from '@/app/shared/utils/selected-dashboard';
+} from "@/app/shared/models/data.model";
+import { ITEM_TYPES } from "@/app/shared/models/data.model";
+import { normalizeToKebabCase } from "@/app/shared/utils/selected-dashboard";
 
 function validateCardTitle(
   title: string,
@@ -12,9 +13,9 @@ function validateCardTitle(
   excludeId?: string,
 ): string | null {
   const trimmed = title.trim();
-  if (!trimmed) return 'The name cannot be empty';
+  if (!trimmed) return "The name cannot be empty";
   if (trimmed.length > 50)
-    return 'The name is too long (maximum 50 characters)';
+    return "The name is too long (maximum 50 characters)";
 
   const id = normalizeToKebabCase(trimmed);
   const exists = existingCards.some(
@@ -32,7 +33,7 @@ export function mutateAddCard(
   const { tabId, layout, title } = parameters;
 
   const tab = draft.tabs?.find((tab) => tab.id === tabId);
-  if (!tab) return 'The tab was not found';
+  if (!tab) return "The tab was not found";
 
   const cards = tab.cards ?? (tab.cards = []);
 
@@ -58,11 +59,11 @@ export function mutateCommitCardTitleEdit(
   parameters: { tabId: string; cardId: string; newTitle: string },
 ): string | null {
   const tab = draft.tabs?.find((tab) => tab.id === parameters.tabId);
-  if (!tab) return 'The tab was not found';
+  if (!tab) return "The tab was not found";
 
   const cards = tab.cards ?? [];
   const index = cards.findIndex((card) => card.id === parameters.cardId);
-  if (index === -1) return 'The card was not found';
+  if (index === -1) return "The card was not found";
 
   const validationError = validateCardTitle(
     parameters.newTitle,
@@ -88,14 +89,14 @@ export function mutateRemoveCard(
   parameters: { tabId: string; cardId: string },
 ): string | null {
   const tab = draft.tabs?.find((tab) => tab.id === parameters.tabId);
-  if (!tab) return 'The tab was not found';
+  if (!tab) return "The tab was not found";
 
   const index = (tab.cards ?? []).findIndex(
     (card) => card.id === parameters.cardId,
   );
-  if (index === -1) return 'The card was not found';
+  if (index === -1) return "The card was not found";
 
-  tab.cards!.splice(index, 1);
+  tab.cards.splice(index, 1);
   return null;
 }
 
@@ -104,11 +105,11 @@ export function mutateReorderCard(
   parameters: { tabId: string; cardId: string; newIndex: number },
 ): string | null {
   const tab = draft.tabs?.find((tab) => tab.id === parameters.tabId);
-  if (!tab) return 'The tab was not found';
+  if (!tab) return "The tab was not found";
 
   const cards = tab.cards ?? [];
   const from = cards.findIndex((card) => card.id === parameters.cardId);
-  if (from === -1) return 'The card was not found';
+  if (from === -1) return "The card was not found";
 
   const to = Math.max(0, Math.min(parameters.newIndex, cards.length - 1));
   if (from === to) return null;

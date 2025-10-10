@@ -1,3 +1,3 @@
-export const TOKEN_KEY = 'authToken';
+export const TOKEN_KEY = "authToken";
 
-export const BASE_API_URL = '/api/';
+export const BASE_API_URL = "/api/";

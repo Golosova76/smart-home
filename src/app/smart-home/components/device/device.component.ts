@@ -1,27 +1,24 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input } from "@angular/core";
 
-import {
-  Device,
-  LAYOUT_TYPES,
-  LayoutType,
-} from '@/app/shared/models/data.model';
-import { NgClass, NgTemplateOutlet } from '@angular/common';
-import { LightActiveDeviceDirective } from '@/app/shared/directives/light-active-device.directive';
-import { Store } from '@ngrx/store';
-import { AppState } from '@/app/store/state/app.state';
-import { RouteIdValidService } from '@/app/shared/services/route-id-valid.service';
+import type { Device, LayoutType } from "@/app/shared/models/data.model";
+import { LAYOUT_TYPES } from "@/app/shared/models/data.model";
+import { NgClass, NgTemplateOutlet } from "@angular/common";
+import { LightActiveDeviceDirective } from "@/app/shared/directives/light-active-device.directive";
+import { Store } from "@ngrx/store";
+import type { AppState } from "@/app/store/state/app.state";
+import { RouteIdValidService } from "@/app/shared/services/route-id-valid.service";
 import {
   DevicesActions,
   TabActionsTitleMove,
-} from '@/app/store/actions/dashboard.actions';
-import * as dashboardsSelectors from '@/app/store/selectors/selected-dashboard.selectors';
+} from "@/app/store/actions/dashboard.actions";
+import * as dashboardsSelectors from "@/app/store/selectors/selected-dashboard.selectors";
 
 @Component({
-  selector: 'app-device',
+  selector: "app-device",
   standalone: true,
   imports: [NgClass, LightActiveDeviceDirective, NgTemplateOutlet],
-  templateUrl: './device.component.html',
-  styleUrl: './device.component.scss',
+  templateUrl: "./device.component.html",
+  styleUrl: "./device.component.scss",
 })
 export class DeviceComponent {
   private store = inject<Store<AppState>>(Store);
@@ -39,7 +36,7 @@ export class DeviceComponent {
   readonly isOn = computed(() => !!this.device()?.state);
 
   readonly toggleIcon = computed(() =>
-    this.isOn() ? 'toggle_on' : 'toggle_off',
+    this.isOn() ? "toggle_on" : "toggle_off",
   );
   readonly toggleClasses = computed(() => ({
     on: this.isOn(),

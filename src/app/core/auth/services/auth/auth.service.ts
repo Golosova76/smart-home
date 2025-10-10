@@ -1,17 +1,18 @@
-import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { TokenService } from '@/app/core/auth/services/token/token.service';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
-import {
+import { inject, Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { TokenService } from "@/app/core/auth/services/token/token.service";
+import type { Observable } from "rxjs";
+import { BehaviorSubject, tap } from "rxjs";
+import type {
   LoginCredentials,
   TokenResponse,
-} from '@/app/shared/models/login.model';
-import { BASE_API_URL } from '@/app/shared/utils/constants';
-import { Router } from '@angular/router';
-import { ProfileService } from '@/app/shared/services/profile.service';
+} from "@/app/shared/models/login.model";
+import { BASE_API_URL } from "@/app/shared/utils/constants";
+import { Router } from "@angular/router";
+import { ProfileService } from "@/app/shared/services/profile.service";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class AuthService {
   private http = inject(HttpClient);
@@ -40,7 +41,7 @@ export class AuthService {
     this.tokenService.clearToken();
     this.isAuthSubject.next(false);
     this.profileService.clearProfile();
-    this.router.navigate(['/login']).catch(() => {});
+    this.router.navigate(["/login"]).catch(() => {});
   }
 
   isAuthenticated(): boolean {

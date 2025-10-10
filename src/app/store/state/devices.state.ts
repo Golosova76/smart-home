@@ -1,4 +1,4 @@
-import { Item } from '@/app/shared/models/data.model';
+import type { Item } from "@/app/shared/models/data.model";
 
 export interface AvailableItemsState {
   items: Item[];

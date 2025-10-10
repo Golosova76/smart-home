@@ -1,25 +1,24 @@
+import type { ApplicationConfig } from "@angular/core";
 import {
-  ApplicationConfig,
   isDevMode,
   provideBrowserGlobalErrorListeners,
-  provideZonelessChangeDetection
+  provideZonelessChangeDetection,
 } from "@angular/core";
-import { provideRouter } from '@angular/router';
+import { provideRouter } from "@angular/router";
 
-import { routes } from './app.routes';
+import { routes } from "./app.routes";
 import {
   provideHttpClient,
   withFetch,
   withInterceptors,
-} from '@angular/common/http';
-import { authInterceptor } from '@/app/core/auth/auth.interceptor';
-import { provideState, provideStore } from '@ngrx/store';
-import { provideEffects } from '@ngrx/effects';
-import { provideStoreDevtools } from '@ngrx/store-devtools';
-import { selectedDashboardFeature } from '@/app/store/reducers/dashboard.reducer';
-import { SelectedDashboardEffects } from '@/app/store/effects/selected-dashboard.effects';
-import { availableItemsFeature } from '@/app/store/reducers/devices.reducer';
-
+} from "@angular/common/http";
+import { authInterceptor } from "@/app/core/auth/auth.interceptor";
+import { provideState, provideStore } from "@ngrx/store";
+import { provideEffects } from "@ngrx/effects";
+import { provideStoreDevtools } from "@ngrx/store-devtools";
+import { selectedDashboardFeature } from "@/app/store/reducers/dashboard.reducer";
+import { SelectedDashboardEffects } from "@/app/store/effects/selected-dashboard.effects";
+import { availableItemsFeature } from "@/app/store/reducers/devices.reducer";
 
 export const appConfig: ApplicationConfig = {
   providers: [

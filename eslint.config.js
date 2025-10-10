@@ -3,6 +3,7 @@ import js from "@eslint/js"; //нужно
 
 import prettier from 'eslint-plugin-prettier'; //нужно
 import configPrettier from 'eslint-config-prettier'; //нужно
+import ngrx from '@ngrx/eslint-plugin/v9'; //нужно
 
 import { FlatCompat } from '@eslint/eslintrc';
 const compat = new FlatCompat({
@@ -13,8 +14,7 @@ const compat = new FlatCompat({
 import unusedImports from 'eslint-plugin-unused-imports';
 import noRelative from 'eslint-plugin-no-relative-import-paths';
 
-// Если ссылаться на правила unicorn вручную — тогда раскомментировать
-//import unicorn from 'eslint-plugin-unicorn';
+import unicorn from 'eslint-plugin-unicorn';
 
 import angularEslintTemplate from '@angular-eslint/eslint-plugin-template';
 import angularTemplateParser from '@angular-eslint/template-parser';
@@ -22,6 +22,10 @@ import angularTemplateParser from '@angular-eslint/template-parser';
 export default [
   js.configs.recommended,
   ...tseslint.configs.recommended,
+  ...ngrx.configs.all.map(c => ({ ...c, files: ['**/*.ts'] })),
+
+  // Плагины с flat-конфигами: без spread!
+  unicorn.configs['flat/recommended'],
 
   //general rules
   {
@@ -50,10 +54,9 @@ export default [
   // (соответствуют пакетам и версиям из package.json)
   ...compat.extends(
     'plugin:@angular-eslint/recommended',
-    'plugin:@ngrx/recommended',
     'plugin:import/recommended',
     'plugin:import/typescript',
-    'plugin:unicorn/recommended',
+    'prettier'
   ),
 
   // TypeScript (Angular) files

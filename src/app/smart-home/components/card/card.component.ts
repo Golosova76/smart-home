@@ -1,31 +1,32 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, computed, inject, input, signal } from "@angular/core";
 
-import {
+import type {
   Device,
-  DeviceItem, Item,
-  ITEM_TYPES,
+  DeviceItem,
+  Item,
   Sensor,
   SensorItem,
-} from '@/app/shared/models/data.model';
-import { NgClass } from '@angular/common';
-import { SensorComponent } from '@/app/smart-home/components/sensor/sensor.component';
-import { DeviceComponent } from '@/app/smart-home/components/device/device.component';
+} from "@/app/shared/models/data.model";
+import { ITEM_TYPES } from "@/app/shared/models/data.model";
+import { NgClass } from "@angular/common";
+import { SensorComponent } from "@/app/smart-home/components/sensor/sensor.component";
+import { DeviceComponent } from "@/app/smart-home/components/device/device.component";
 
-import { LightActiveCardDirective } from '@/app/shared/directives/light-active-card.directive';
-import { Store } from '@ngrx/store';
-import { AppState } from '@/app/store/state/app.state';
-import { RouteIdValidService } from '@/app/shared/services/route-id-valid.service';
-import * as dashboardsSelectors from '@/app/store/selectors/selected-dashboard.selectors';
-import * as devicesSelectors from '@/app/store/selectors/devices.selectors';
-import { ModalEditCardComponent } from '@/app/smart-home/components/modal/modal-edit-card/modal-edit-card.component';
+import { LightActiveCardDirective } from "@/app/shared/directives/light-active-card.directive";
+import { Store } from "@ngrx/store";
+import type { AppState } from "@/app/store/state/app.state";
+import { RouteIdValidService } from "@/app/shared/services/route-id-valid.service";
+import * as dashboardsSelectors from "@/app/store/selectors/selected-dashboard.selectors";
+import * as devicesSelectors from "@/app/store/selectors/devices.selectors";
+import { ModalEditCardComponent } from "@/app/smart-home/components/modal/modal-edit-card/modal-edit-card.component";
 import {
   DevicesActions,
   TabActionsTitleMove,
-} from '@/app/store/actions/dashboard.actions';
-import {AvailableItemsActions} from '@/app/store/actions/devices.actions';
+} from "@/app/store/actions/dashboard.actions";
+import { AvailableItemsActions } from "@/app/store/actions/devices.actions";
 
 @Component({
-  selector: 'app-card',
+  selector: "app-card",
   standalone: true,
   imports: [
     NgClass,
@@ -34,8 +35,8 @@ import {AvailableItemsActions} from '@/app/store/actions/devices.actions';
     LightActiveCardDirective,
     ModalEditCardComponent,
   ],
-  templateUrl: './card.component.html',
-  styleUrl: './card.component.scss',
+  templateUrl: "./card.component.html",
+  styleUrl: "./card.component.scss",
 })
 export class CardComponent {
   private store = inject<Store<AppState>>(Store);
@@ -59,7 +60,7 @@ export class CardComponent {
   );
 
   readonly groupToggleIcon = computed(() =>
-    this.groupIsOn() ? 'toggle_on' : 'toggle_off',
+    this.groupIsOn() ? "toggle_on" : "toggle_off",
   );
 
   readonly groupToggleClasses = computed(() => ({
@@ -115,9 +116,13 @@ export class CardComponent {
     this.isEditCardOpenModal.set(false);
   }
 
-  onCardEdit(
-    { deviceId, sensorId }: { deviceId: string | null; sensorId: string | null },
-  ): void {
+  onCardEdit({
+    deviceId,
+    sensorId,
+  }: {
+    deviceId: string | null;
+    sensorId: string | null;
+  }): void {
     const tabId = this.selectedTabId();
     const cardId = this.cardId();
     if (!tabId || !cardId) return;
@@ -125,18 +130,26 @@ export class CardComponent {
     const itemsToAdd: Item[] = [];
 
     if (sensorId) {
-      const sensor = this.store.selectSignal(devicesSelectors.selectSensorById(sensorId))();
+      const sensor = this.store.selectSignal(
+        devicesSelectors.selectSensorById(sensorId),
+      )();
       if (sensor) itemsToAdd.push(sensor); // sensor уже с type: 'sensor'
     }
 
     if (deviceId) {
-      const device = this.store.selectSignal(devicesSelectors.selectDeviceById(deviceId))();
+      const device = this.store.selectSignal(
+        devicesSelectors.selectDeviceById(deviceId),
+      )();
       if (device) itemsToAdd.push(device); // device уже с type: 'device'
     }
 
     if (itemsToAdd.length > 0) {
       this.store.dispatch(
-        AvailableItemsActions.updateCardItems({ tabId, cardId, items: itemsToAdd }),
+        AvailableItemsActions.updateCardItems({
+          tabId,
+          cardId,
+          items: itemsToAdd,
+        }),
       );
     }
 

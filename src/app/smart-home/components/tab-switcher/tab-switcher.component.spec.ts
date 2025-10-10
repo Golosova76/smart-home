@@ -1,8 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from "@angular/core/testing";
+import { TestBed } from "@angular/core/testing";
 
-import { TabSwitcherComponent } from './tab-switcher.component';
+import { TabSwitcherComponent } from "./tab-switcher.component";
 
-describe('TabSwitcherComponent', () => {
+describe("TabSwitcherComponent", () => {
   let component: TabSwitcherComponent;
   let fixture: ComponentFixture<TabSwitcherComponent>;
 
@@ -16,7 +17,7 @@ describe('TabSwitcherComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

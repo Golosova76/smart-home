@@ -1,8 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from "@angular/core/testing";
+import { TestBed } from "@angular/core/testing";
 
-import { ModalCreateDashboardsComponent } from './modal-create-dashboards.component';
+import { ModalCreateDashboardsComponent } from "./modal-create-dashboards.component";
 
-describe('ModalCreateDashboardsComponent', () => {
+describe("ModalCreateDashboardsComponent", () => {
   let component: ModalCreateDashboardsComponent;
   let fixture: ComponentFixture<ModalCreateDashboardsComponent>;
 
@@ -16,7 +17,7 @@ describe('ModalCreateDashboardsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

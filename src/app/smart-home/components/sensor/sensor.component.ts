@@ -1,24 +1,21 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input } from "@angular/core";
 
-import {
-  LAYOUT_TYPES,
-  LayoutType,
-  Sensor,
-} from '@/app/shared/models/data.model';
-import { SensorValuePipe } from '@/app/shared/pipes/sensor-value.pipe';
-import { NgTemplateOutlet } from '@angular/common';
-import * as dashboardsSelectors from '@/app/store/selectors/selected-dashboard.selectors';
-import { Store } from '@ngrx/store';
-import { AppState } from '@/app/store/state/app.state';
-import { RouteIdValidService } from '@/app/shared/services/route-id-valid.service';
-import { TabActionsTitleMove } from '@/app/store/actions/dashboard.actions';
+import type { LayoutType, Sensor } from "@/app/shared/models/data.model";
+import { LAYOUT_TYPES } from "@/app/shared/models/data.model";
+import { SensorValuePipe } from "@/app/shared/pipes/sensor-value.pipe";
+import { NgTemplateOutlet } from "@angular/common";
+import * as dashboardsSelectors from "@/app/store/selectors/selected-dashboard.selectors";
+import { Store } from "@ngrx/store";
+import type { AppState } from "@/app/store/state/app.state";
+import { RouteIdValidService } from "@/app/shared/services/route-id-valid.service";
+import { TabActionsTitleMove } from "@/app/store/actions/dashboard.actions";
 
 @Component({
-  selector: 'app-sensor',
+  selector: "app-sensor",
   standalone: true,
   imports: [SensorValuePipe, NgTemplateOutlet],
-  templateUrl: './sensor.component.html',
-  styleUrl: './sensor.component.scss',
+  templateUrl: "./sensor.component.html",
+  styleUrl: "./sensor.component.scss",
 })
 export class SensorComponent {
   private store = inject<Store<AppState>>(Store);

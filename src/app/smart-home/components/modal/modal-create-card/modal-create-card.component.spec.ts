@@ -1,8 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from "@angular/core/testing";
+import { TestBed } from "@angular/core/testing";
 
-import { ModalCreateCardComponent } from './modal-create-card.component';
+import { ModalCreateCardComponent } from "./modal-create-card.component";
 
-describe('ModalCreateCardComponent', () => {
+describe("ModalCreateCardComponent", () => {
   let component: ModalCreateCardComponent;
   let fixture: ComponentFixture<ModalCreateCardComponent>;
 
@@ -16,7 +17,7 @@ describe('ModalCreateCardComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

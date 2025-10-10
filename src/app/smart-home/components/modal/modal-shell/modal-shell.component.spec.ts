@@ -1,8 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from "@angular/core/testing";
+import { TestBed } from "@angular/core/testing";
 
-import { ModalShellComponent } from './modal-shell.component';
+import { ModalShellComponent } from "./modal-shell.component";
 
-describe('ModalShellComponent', () => {
+describe("ModalShellComponent", () => {
   let component: ModalShellComponent;
   let fixture: ComponentFixture<ModalShellComponent>;
 
@@ -16,7 +17,7 @@ describe('ModalShellComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

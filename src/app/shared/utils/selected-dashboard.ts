@@ -1,11 +1,11 @@
-import { DataModel, Tab } from '@/app/shared/models/data.model';
+import type { DataModel, Tab } from "@/app/shared/models/data.model";
 
 export function normalizeToKebabCase(input: string): string {
   return input
     .trim()
     .toLowerCase()
-    .replaceAll(/[^\p{L}\p{N}]+/gu, '-')
-    .replaceAll(/^-+|-+$/g, '');
+    .replaceAll(/[^\p{L}\p{N}]+/gu, "-")
+    .replaceAll(/^-+|-+$/g, "");
 }
 
 function validateTabTitle(
@@ -14,9 +14,9 @@ function validateTabTitle(
   excludeId?: string,
 ): string | null {
   const trimmed = title.trim();
-  if (!trimmed) return 'The name cannot be empty';
+  if (!trimmed) return "The name cannot be empty";
   if (trimmed.length > 50)
-    return 'The name is too long (maximum 50 characters)';
+    return "The name is too long (maximum 50 characters)";
 
   const id = normalizeToKebabCase(trimmed);
   const exists = existingTabs.some(
@@ -33,7 +33,7 @@ export function produceWorkingCopy(
 ): { next: DataModel | null; error: string | null } {
   if (!workingCopy) return { next: workingCopy, error: null };
 
-  const draft = structuredClone(workingCopy) as DataModel;
+  const draft = structuredClone(workingCopy);
   const error = mutator(draft);
   if (error) {
     return { next: workingCopy, error };
@@ -47,7 +47,7 @@ export function mutateCommitTitleEdit(
 ): string | null {
   const tabs = draft.tabs ?? [];
   const index = tabs.findIndex((tab) => tab.id === parameters.tabId);
-  if (index === -1) return 'The tab was not found';
+  if (index === -1) return "The tab was not found";
 
   const validationError = validateTabTitle(
     parameters.newTitle,
@@ -70,13 +70,13 @@ export function mutateCommitTitleEdit(
 
 export function mutateReorderTab(
   draft: DataModel,
-  parameters: { tabId: string; direction: 'left' | 'right' },
+  parameters: { tabId: string; direction: "left" | "right" },
 ): string | null {
   const tabs = draft.tabs ?? [];
   const index = tabs.findIndex((tab) => tab.id === parameters.tabId);
-  if (index === -1) return 'The tab was not found';
+  if (index === -1) return "The tab was not found";
 
-  const index_ = parameters.direction === 'left' ? index - 1 : index + 1;
+  const index_ = parameters.direction === "left" ? index - 1 : index + 1;
   if (index_ < 0 || index_ >= tabs.length) return null; // край — просто ничего не делаем
 
   [tabs[index], tabs[index_]] = [tabs[index_], tabs[index]];
@@ -105,7 +105,7 @@ export function mutateRemoveTab(
 ): string | null {
   const tabs = draft.tabs ?? [];
   const index = tabs.findIndex((tab) => tab.id === parameters.tabId);
-  if (index === -1) return 'The tab was not found';
+  if (index === -1) return "The tab was not found";
 
   tabs.splice(index, 1);
   return null;

@@ -1,12 +1,10 @@
-import { createFeature, createReducer, on } from '@ngrx/store';
-import {
-  AvailableItemsState,
-  initialState,
-} from '@/app/store/state/devices.state';
+import { createFeature, createReducer, on } from "@ngrx/store";
+import type { AvailableItemsState } from "@/app/store/state/devices.state";
+import { initialState } from "@/app/store/state/devices.state";
 
-import { AvailableItemsActions as D } from '@/app/store/actions/devices.actions';
+import { AvailableItemsActions as D } from "@/app/store/actions/devices.actions";
 
-export const AVAILABLE_ITEMS_FEATURE_KEY = 'availableItems';
+export const AVAILABLE_ITEMS_FEATURE_KEY = "availableItems";
 
 const reducer = createReducer(
   initialState,
@@ -42,6 +40,6 @@ const reducer = createReducer(
 );
 
 export const availableItemsFeature = createFeature({
-  name: 'availableItems',
+  name: "availableItems",
   reducer,
 });

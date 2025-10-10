@@ -1,3 +1,3 @@
-describe('SelectedDashboard Selectors', () => {
-  it('should select the feature state', () => {});
+describe("SelectedDashboard Selectors", () => {
+  it("should select the feature state", () => {});
 });

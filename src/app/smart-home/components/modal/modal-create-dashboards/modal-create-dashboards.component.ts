@@ -1,30 +1,27 @@
+import type { OnInit } from "@angular/core";
+import { Component, effect, inject, input, output } from "@angular/core";
+import type { AbstractControl } from "@angular/forms";
 import {
-  Component,
-  effect,
-  inject,
-  input,
-  OnInit,
-  output,
-} from '@angular/core';
-import {
-  AbstractControl,
   FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
   Validators,
-} from '@angular/forms';
-import { uniqueIdValidator } from '@/app/shared/utils/unique-id.validator';
-import { FormErrorComponent } from '@/app/shared/components/form-error/form-error.component';
-import { Dashboard, EntityActions } from '@/app/shared/models/dashboard.model';
-import { Router } from '@angular/router';
-import { capitalize, normalizeId } from '@/app/shared/utils/capitalize';
-import { ModalShellComponent } from '@/app/smart-home/components/modal/modal-shell/modal-shell.component';
-import { ModalHeaderComponent } from '@/app/smart-home/components/modal/components/modal-header/modal-header.component';
-import { ModalFooterComponent } from '@/app/smart-home/components/modal/components/modal-footer/modal-footer.component';
+} from "@angular/forms";
+import { uniqueIdValidator } from "@/app/shared/utils/unique-id.validator";
+import { FormErrorComponent } from "@/app/shared/components/form-error/form-error.component";
+import type {
+  Dashboard,
+  EntityActions,
+} from "@/app/shared/models/dashboard.model";
+import { Router } from "@angular/router";
+import { capitalize, normalizeId } from "@/app/shared/utils/capitalize";
+import { ModalShellComponent } from "@/app/smart-home/components/modal/modal-shell/modal-shell.component";
+import { ModalHeaderComponent } from "@/app/smart-home/components/modal/components/modal-header/modal-header.component";
+import { ModalFooterComponent } from "@/app/smart-home/components/modal/components/modal-footer/modal-footer.component";
 
 @Component({
-  selector: 'app-modal-create-dashboards',
+  selector: "app-modal-create-dashboards",
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -33,8 +30,8 @@ import { ModalFooterComponent } from '@/app/smart-home/components/modal/componen
     ModalHeaderComponent,
     ModalFooterComponent,
   ],
-  templateUrl: './modal-create-dashboards.component.html',
-  styleUrl: './modal-create-dashboards.component.scss',
+  templateUrl: "./modal-create-dashboards.component.html",
+  styleUrl: "./modal-create-dashboards.component.scss",
 })
 export class ModalCreateDashboardsComponent implements OnInit {
   router = inject(Router);
@@ -96,17 +93,17 @@ export class ModalCreateDashboardsComponent implements OnInit {
   }
 
   get idControl(): FormControl<string | null> | null {
-    const control: AbstractControl | null = this.form.get('id');
+    const control: AbstractControl | null = this.form.get("id");
     return control instanceof FormControl ? control : null;
   }
 
   get titleControl(): FormControl<string | null> | null {
-    const control: AbstractControl | null = this.form.get('title');
+    const control: AbstractControl | null = this.form.get("title");
     return control instanceof FormControl ? control : null;
   }
 
   get iconControl(): FormControl<string | null> | null {
-    const control: AbstractControl | null = this.form.get('icon');
+    const control: AbstractControl | null = this.form.get("icon");
     return control instanceof FormControl ? control : null;
   }
 
@@ -123,7 +120,7 @@ export class ModalCreateDashboardsComponent implements OnInit {
   }
 
   private updateIdValidators(ids: string[]) {
-    const control: AbstractControl | null = this.form.get('id');
+    const control: AbstractControl | null = this.form.get("id");
 
     if (control instanceof FormControl) {
       control.setValidators(this.getIdValidators(ids));

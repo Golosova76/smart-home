@@ -1,14 +1,14 @@
-import { Component, input, output } from '@angular/core';
-import {
+import { Component, input, output } from "@angular/core";
+import type {
   EntityActions,
   FooterVariant,
-} from '@/app/shared/models/dashboard.model';
+} from "@/app/shared/models/dashboard.model";
 
 @Component({
-  selector: 'app-modal-footer',
+  selector: "app-modal-footer",
   imports: [],
-  templateUrl: './modal-footer.component.html',
-  styleUrl: './modal-footer.component.scss',
+  templateUrl: "./modal-footer.component.html",
+  styleUrl: "./modal-footer.component.scss",
 })
 export class ModalFooterComponent {
   entityActions = input<EntityActions>();
@@ -18,7 +18,7 @@ export class ModalFooterComponent {
   delete = output<void>();
   submit = output<void>();
 
-  variant = input<FooterVariant>('form');
+  variant = input<FooterVariant>("form");
 
   get buttonAction(): string {
     return `${this.entityActions()}`;

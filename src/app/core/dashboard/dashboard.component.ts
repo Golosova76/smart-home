@@ -5,22 +5,22 @@ import {
   effect,
   inject,
   signal,
-} from '@angular/core';
+} from "@angular/core";
 
-import { TabSwitcherComponent } from '@/app/smart-home/components/tab-switcher/tab-switcher.component';
-import { RouterOutlet } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { map, switchMap } from 'rxjs';
-import { ModalConfirmDeleteComponent } from '@/app/smart-home/components/modal/modal-confirm-delete/modal-confirm-delete.component';
-import { DashboardHandlerService } from '@/app/shared/services/dashboard-handler.service';
-import { RouteIdValidService } from '@/app/shared/services/route-id-valid.service';
-import { Store } from '@ngrx/store';
+import { TabSwitcherComponent } from "@/app/smart-home/components/tab-switcher/tab-switcher.component";
+import { RouterOutlet } from "@angular/router";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { map, switchMap } from "rxjs";
+import { ModalConfirmDeleteComponent } from "@/app/smart-home/components/modal/modal-confirm-delete/modal-confirm-delete.component";
+import { DashboardHandlerService } from "@/app/shared/services/dashboard-handler.service";
+import { RouteIdValidService } from "@/app/shared/services/route-id-valid.service";
+import { Store } from "@ngrx/store";
 
-import * as dashboardsSelectors from '@/app/store/selectors/selected-dashboard.selectors';
-import * as dashboardActions from '@/app/store/actions/dashboard.actions';
-import { AppState } from '@/app/store/state/app.state';
-import { Tab } from '@/app/shared/models/data.model';
-import { ModalCreateTabsComponent } from '@/app/smart-home/components/modal/modal-create-tabs/modal-create-tabs.component';
+import * as dashboardsSelectors from "@/app/store/selectors/selected-dashboard.selectors";
+import * as dashboardActions from "@/app/store/actions/dashboard.actions";
+import type { AppState } from "@/app/store/state/app.state";
+import type { Tab } from "@/app/shared/models/data.model";
+import { ModalCreateTabsComponent } from "@/app/smart-home/components/modal/modal-create-tabs/modal-create-tabs.component";
 
 @Component({
   imports: [
@@ -29,10 +29,10 @@ import { ModalCreateTabsComponent } from '@/app/smart-home/components/modal/moda
     ModalConfirmDeleteComponent,
     ModalCreateTabsComponent,
   ],
-  selector: 'app-dashboard',
+  selector: "app-dashboard",
   standalone: true,
-  styleUrl: './dashboard.component.scss',
-  templateUrl: './dashboard.component.html',
+  styleUrl: "./dashboard.component.scss",
+  templateUrl: "./dashboard.component.html",
 })
 export class DashboardComponent {
   private readonly destroyRef = inject(DestroyRef);
@@ -41,7 +41,9 @@ export class DashboardComponent {
   private store = inject<Store<AppState>>(Store);
 
   // массив tab где tabId
-  readonly tabsSignal = this.store.selectSignal<Tab[]>(dashboardsSelectors.selectTabs);
+  readonly tabsSignal = this.store.selectSignal<Tab[]>(
+    dashboardsSelectors.selectTabs,
+  );
   readonly editTabId = this.store.selectSignal<string | null>(
     dashboardsSelectors.selectEditTabId,
   );
@@ -65,10 +67,10 @@ export class DashboardComponent {
 
   readonly tabToDeleteName = computed(() => {
     const tabId = this.tabToDeleteId();
-    if (!tabId) return '';
+    if (!tabId) return "";
 
     const tab = this.tabsSignal().find((tab) => tab.id === tabId);
-    return tab?.title || '';
+    return tab?.title || "";
   });
 
   onTabSelected(tabId: string) {
@@ -113,7 +115,9 @@ export class DashboardComponent {
   onRemoveTab(): void {
     const id = this.tabToDeleteId();
     if (!id) return;
-    this.store.dispatch(dashboardActions.TabActionsTitleMove.removeTab({ tabId: id }));
+    this.store.dispatch(
+      dashboardActions.TabActionsTitleMove.removeTab({ tabId: id }),
+    );
     this.closeDelete();
     this.tabToDeleteId.set(null);
   }
@@ -164,7 +168,9 @@ export class DashboardComponent {
   }
 
   onStartTitleEdit(event: { tabId: string; currentTitle: string }) {
-    this.store.dispatch(dashboardActions.TabActionsTitleMove.startTitleEdit(event));
+    this.store.dispatch(
+      dashboardActions.TabActionsTitleMove.startTitleEdit(event),
+    );
   }
 
   onEndTitleEdit() {
@@ -172,10 +178,12 @@ export class DashboardComponent {
   }
 
   onCommitTitleEdit(event: { tabId: string; newTitle: string }) {
-    this.store.dispatch(dashboardActions.TabActionsTitleMove.commitTitleEdit(event));
+    this.store.dispatch(
+      dashboardActions.TabActionsTitleMove.commitTitleEdit(event),
+    );
   }
 
-  onReorderTab(event: { tabId: string; direction: 'left' | 'right' }) {
+  onReorderTab(event: { tabId: string; direction: "left" | "right" }) {
     this.store.dispatch(
       dashboardActions.TabActionsTitleMove.reorderTab({
         tabId: event.tabId,

@@ -1,8 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from "@angular/core/testing";
+import { TestBed } from "@angular/core/testing";
 
-import { SensorComponent } from './sensor.component';
+import { SensorComponent } from "./sensor.component";
 
-describe('SensorComponent', () => {
+describe("SensorComponent", () => {
   let component: SensorComponent;
   let fixture: ComponentFixture<SensorComponent>;
 
@@ -16,7 +17,7 @@ describe('SensorComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

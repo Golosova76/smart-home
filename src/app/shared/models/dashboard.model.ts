@@ -4,8 +4,8 @@ export interface Dashboard {
   icon: string;
 }
 
-export type EntityDelete = 'dashboard' | 'tab' | 'card';
+export type EntityDelete = "dashboard" | "tab" | "card";
 
-export type EntityActions = 'Add' | 'Delete';
+export type EntityActions = "Add" | "Delete";
 
-export type FooterVariant = 'form' | 'delete';
+export type FooterVariant = "form" | "delete";

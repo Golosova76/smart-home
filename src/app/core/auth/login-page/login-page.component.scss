@@ -37,6 +37,7 @@
   @include m.margin-bottom10;
   span {
     color: var(--active-icon);
+    padding: 5px;
   }
 }
 

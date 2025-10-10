@@ -5,23 +5,23 @@ import {
   inject,
   input,
   signal,
-} from '@angular/core';
-import { ProfileService } from '@/app/shared/services/profile.service';
-import { AuthService } from '@/app/core/auth/services/auth/auth.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ModalCreateDashboardsComponent } from '@/app/smart-home/components/modal/modal-create-dashboards/modal-create-dashboards.component';
+} from "@angular/core";
+import { ProfileService } from "@/app/shared/services/profile.service";
+import { AuthService } from "@/app/core/auth/services/auth/auth.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { ModalCreateDashboardsComponent } from "@/app/smart-home/components/modal/modal-create-dashboards/modal-create-dashboards.component";
 
-import { Dashboard } from '@/app/shared/models/dashboard.model';
-import { map, switchMap, tap } from 'rxjs';
-import { Router } from '@angular/router';
-import { DashboardHandlerService } from '@/app/shared/services/dashboard-handler.service';
+import type { Dashboard } from "@/app/shared/models/dashboard.model";
+import { map, switchMap, tap } from "rxjs";
+import { Router } from "@angular/router";
+import { DashboardHandlerService } from "@/app/shared/services/dashboard-handler.service";
 
 @Component({
-  selector: 'app-sidebar-footer',
+  selector: "app-sidebar-footer",
   standalone: true,
   imports: [ModalCreateDashboardsComponent],
-  templateUrl: './sidebar-footer.component.html',
-  styleUrl: './sidebar-footer.component.scss',
+  templateUrl: "./sidebar-footer.component.html",
+  styleUrl: "./sidebar-footer.component.scss",
 })
 export class SidebarFooterComponent {
   profileService = inject(ProfileService);
@@ -70,7 +70,7 @@ export class SidebarFooterComponent {
           this.handlerService.loadDashboards().pipe(map(() => created)),
         ),
         tap((created) => {
-          this.router.navigate(['/dashboard', created.id]).catch(() => {});
+          this.router.navigate(["/dashboard", created.id]).catch(() => {});
           this.isCreateOpenModal.set(false);
         }),
       )

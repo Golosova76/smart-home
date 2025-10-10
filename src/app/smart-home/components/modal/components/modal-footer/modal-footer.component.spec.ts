@@ -1,8 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from "@angular/core/testing";
+import { TestBed } from "@angular/core/testing";
 
-import { ModalFooterComponent } from './modal-footer.component';
+import { ModalFooterComponent } from "./modal-footer.component";
 
-describe('ModalFooterComponent', () => {
+describe("ModalFooterComponent", () => {
   let component: ModalFooterComponent;
   let fixture: ComponentFixture<ModalFooterComponent>;
 
@@ -16,7 +17,7 @@ describe('ModalFooterComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

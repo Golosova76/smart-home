@@ -1,21 +1,21 @@
-import { Component, output } from '@angular/core';
-import { ModalShellComponent } from '@/app/smart-home/components/modal/modal-shell/modal-shell.component';
-import { ModalHeaderComponent } from '@/app/smart-home/components/modal/components/modal-header/modal-header.component';
-import { ModalFooterComponent } from '@/app/smart-home/components/modal/components/modal-footer/modal-footer.component';
+import { Component, output } from "@angular/core";
+import { ModalShellComponent } from "@/app/smart-home/components/modal/modal-shell/modal-shell.component";
+import { ModalHeaderComponent } from "@/app/smart-home/components/modal/components/modal-header/modal-header.component";
+import { ModalFooterComponent } from "@/app/smart-home/components/modal/components/modal-footer/modal-footer.component";
+import type { AbstractControl } from "@angular/forms";
 import {
-  AbstractControl,
   FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
   Validators,
-} from '@angular/forms';
-import { LayoutType } from '@/app/shared/models/data.model';
-import { FormErrorComponent } from '@/app/shared/components/form-error/form-error.component';
-import { capitalize } from '@/app/shared/utils/capitalize';
+} from "@angular/forms";
+import type { LayoutType } from "@/app/shared/models/data.model";
+import { FormErrorComponent } from "@/app/shared/components/form-error/form-error.component";
+import { capitalize } from "@/app/shared/utils/capitalize";
 
 @Component({
-  selector: 'app-modal-create-card',
+  selector: "app-modal-create-card",
   imports: [
     ModalShellComponent,
     ModalHeaderComponent,
@@ -24,8 +24,8 @@ import { capitalize } from '@/app/shared/utils/capitalize';
     FormsModule,
     ReactiveFormsModule,
   ],
-  templateUrl: './modal-create-card.component.html',
-  styleUrl: './modal-create-card.component.scss',
+  templateUrl: "./modal-create-card.component.html",
+  styleUrl: "./modal-create-card.component.scss",
 })
 export class ModalCreateCardComponent {
   readonly closed = output<void>();
@@ -61,7 +61,7 @@ export class ModalCreateCardComponent {
   }
 
   get titleControl(): FormControl<string | null> | null {
-    const control: AbstractControl | null = this.form.get('title');
+    const control: AbstractControl | null = this.form.get("title");
     return control instanceof FormControl ? control : null;
   }
 }

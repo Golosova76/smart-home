@@ -1,16 +1,17 @@
-import { computed, inject, Injectable, Signal } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { DashboardHandlerService } from '@/app/shared/services/dashboard-handler.service';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { filter, map, startWith } from 'rxjs';
-import { Dashboard } from '@/app/shared/models/dashboard.model';
-import { Tab } from '@/app/shared/models/data.model';
-import { Store } from '@ngrx/store';
-import { selectTabs } from '@/app/store/selectors/selected-dashboard.selectors';
-import { AppState } from '@/app/store/state/app.state';
+import type { Signal } from "@angular/core";
+import { computed, inject, Injectable } from "@angular/core";
+import { NavigationEnd, Router } from "@angular/router";
+import { DashboardHandlerService } from "@/app/shared/services/dashboard-handler.service";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { filter, map, startWith } from "rxjs";
+import type { Dashboard } from "@/app/shared/models/dashboard.model";
+import type { Tab } from "@/app/shared/models/data.model";
+import { Store } from "@ngrx/store";
+import { selectTabs } from "@/app/store/selectors/selected-dashboard.selectors";
+import type { AppState } from "@/app/store/state/app.state";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class RouteIdValidService {
   private readonly router = inject(Router);
@@ -38,7 +39,7 @@ export class RouteIdValidService {
     this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd),
       startWith(null),
-      map(() => this.readParamFromTree('dashboardId')),
+      map(() => this.readParamFromTree("dashboardId")),
     ),
     { initialValue: null },
   );
@@ -47,7 +48,7 @@ export class RouteIdValidService {
     this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd),
       startWith(null),
-      map(() => this.readParamFromTree('tabId')),
+      map(() => this.readParamFromTree("tabId")),
     ),
     { initialValue: null },
   );
@@ -74,7 +75,7 @@ export class RouteIdValidService {
 
     if (this.dashboardIdRouteSignal() === dashboardIdValid) return;
 
-    this.router.navigate(['/dashboard', dashboardIdValid]).catch(() => {});
+    this.router.navigate(["/dashboard", dashboardIdValid]).catch(() => {});
   }
 
   selectTab(tabId: string) {
@@ -92,7 +93,7 @@ export class RouteIdValidService {
       return;
     }
     this.router
-      .navigate(['/dashboard', dashboardIdValid, tabIdValid])
+      .navigate(["/dashboard", dashboardIdValid, tabIdValid])
       .catch(() => {});
   }
 

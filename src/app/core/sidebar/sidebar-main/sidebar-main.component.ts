@@ -1,22 +1,16 @@
-import {
-  Component,
-  computed,
-  DestroyRef,
-  inject,
-  input,
-  OnInit,
-} from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { DashboardHandlerService } from '@/app/shared/services/dashboard-handler.service';
-import { RouteIdValidService } from '@/app/shared/services/route-id-valid.service';
+import type { OnInit } from "@angular/core";
+import { Component, computed, DestroyRef, inject, input } from "@angular/core";
+import { Router, RouterLink, RouterLinkActive } from "@angular/router";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { DashboardHandlerService } from "@/app/shared/services/dashboard-handler.service";
+import { RouteIdValidService } from "@/app/shared/services/route-id-valid.service";
 
 @Component({
-  selector: 'app-sidebar-main',
+  selector: "app-sidebar-main",
   standalone: true,
   imports: [RouterLinkActive, RouterLink],
-  templateUrl: './sidebar-main.component.html',
-  styleUrl: './sidebar-main.component.scss',
+  templateUrl: "./sidebar-main.component.html",
+  styleUrl: "./sidebar-main.component.scss",
 })
 export class SidebarMainComponent implements OnInit {
   handlerService = inject(DashboardHandlerService);
@@ -30,8 +24,8 @@ export class SidebarMainComponent implements OnInit {
 
   readonly emptyDashboardText = computed(() => {
     return this.sidebarCollapsed()
-      ? 'No dash'
-      : 'You don’t have any dashboards yet. They’ll appear here as soon as you create them.';
+      ? "No dash"
+      : "You don’t have any dashboards yet. They’ll appear here as soon as you create them.";
   });
 
   ngOnInit() {

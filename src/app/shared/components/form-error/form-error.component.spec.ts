@@ -1,8 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from "@angular/core/testing";
+import { TestBed } from "@angular/core/testing";
 
-import { FormErrorComponent } from './form-error.component';
+import { FormErrorComponent } from "./form-error.component";
 
-describe('FormErrorComponent', () => {
+describe("FormErrorComponent", () => {
   let component: FormErrorComponent;
   let fixture: ComponentFixture<FormErrorComponent>;
 
@@ -16,7 +17,7 @@ describe('FormErrorComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { TOKEN_KEY } from '@/app/shared/utils/constants';
+import { Injectable } from "@angular/core";
+import { TOKEN_KEY } from "@/app/shared/utils/constants";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class TokenService {
   //сохраняет токен в localStorage

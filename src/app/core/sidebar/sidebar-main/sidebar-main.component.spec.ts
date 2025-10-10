@@ -1,8 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from "@angular/core/testing";
+import { TestBed } from "@angular/core/testing";
 
-import { SidebarMainComponent } from './sidebar-main.component';
+import { SidebarMainComponent } from "./sidebar-main.component";
 
-describe('SidebarMainComponent', () => {
+describe("SidebarMainComponent", () => {
   let component: SidebarMainComponent;
   let fixture: ComponentFixture<SidebarMainComponent>;
 
@@ -16,7 +17,7 @@ describe('SidebarMainComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

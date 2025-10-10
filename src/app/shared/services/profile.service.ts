@@ -1,11 +1,11 @@
-import { inject, Injectable, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { UserProfile } from '@/app/shared/models/profile.model';
-import { BASE_API_URL } from '@/app/shared/utils/constants';
-import { Observable } from 'rxjs';
+import { inject, Injectable, signal } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import type { UserProfile } from "@/app/shared/models/profile.model";
+import { BASE_API_URL } from "@/app/shared/utils/constants";
+import type { Observable } from "rxjs";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class ProfileService {
   private readonly http = inject(HttpClient);

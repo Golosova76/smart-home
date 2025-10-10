@@ -1,8 +1,8 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { RouteIdValidService } from './route-id-valid.service';
+import { RouteIdValidService } from "./route-id-valid.service";
 
-describe('RouteIdValidService', () => {
+describe("RouteIdValidService", () => {
   let service: RouteIdValidService;
 
   beforeEach(() => {
@@ -10,7 +10,7 @@ describe('RouteIdValidService', () => {
     service = TestBed.inject(RouteIdValidService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

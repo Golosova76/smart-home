@@ -1,29 +1,30 @@
-import { createFeature, createReducer, on } from '@ngrx/store';
-import {
-  initialState,
-  SelectedDashboardState,
-} from '@/app/store/state/dashboard.state';
-import * as A from '@/app/store/actions/dashboard.actions';
-import { DataModel } from '@/app/shared/models/data.model';
+import { createFeature, createReducer, on } from "@ngrx/store";
+import type { SelectedDashboardState } from "@/app/store/state/dashboard.state";
+import { initialState } from "@/app/store/state/dashboard.state";
+import * as A from "@/app/store/actions/dashboard.actions";
 
-import * as Mut from '@/app/shared/utils/selected-dashboard';
+import * as Mut from "@/app/shared/utils/selected-dashboard";
 
-import * as MutCard from '@/app/shared/utils/selected-dashboard-card';
+import * as MutCard from "@/app/shared/utils/selected-dashboard-card";
 import {
   DevicesActions,
   TabActionsTitleMove,
-} from '@/app/store/actions/dashboard.actions';
-import { setDeviceStateById } from '@/app/shared/utils/selected-dashboard-card';
-import {AvailableItemsActions} from '@/app/store/actions/devices.actions';
+} from "@/app/store/actions/dashboard.actions";
+import { setDeviceStateById } from "@/app/shared/utils/selected-dashboard-card";
+import { AvailableItemsActions } from "@/app/store/actions/devices.actions";
+import type { DataModel } from "@/app/shared/models/data.model";
 
-export const SELECTED_DASHBOARD_FEATURE_KEY = 'selectedDashboard';
+export const SELECTED_DASHBOARD_FEATURE_KEY = "selectedDashboard";
 
 export const reducer = createReducer<SelectedDashboardState>(
   initialState,
 
   on(
     A.selectDashboard,
-    (state, { dashboardId }): SelectedDashboardState => ({
+    (
+      state: SelectedDashboardState,
+      { dashboardId },
+    ): SelectedDashboardState => ({
       ...state,
       dashboardId,
       loading: true,
@@ -52,9 +53,9 @@ export const reducer = createReducer<SelectedDashboardState>(
     }),
   ),
 
-  on(A.enterEditMode, (state) => {
+  on(A.enterEditMode, (state): SelectedDashboardState => {
     const deepCopy = state.workingCopy
-      ? (structuredClone(state.workingCopy) as DataModel)
+      ? structuredClone(state.workingCopy)
       : null;
 
     return {
@@ -67,138 +68,178 @@ export const reducer = createReducer<SelectedDashboardState>(
 
   on(
     A.exitEditMode,
-    (state): SelectedDashboardState => ({
+    (state: SelectedDashboardState): SelectedDashboardState => ({
       ...state,
       editMode: false,
       deepCopy: null,
     }),
   ),
 
-  on(A.saveDashboard, (state) => ({
-    ...state,
-    loading: true,
-    error: null,
-  })),
-
-  on(A.saveSelectedDashboardSuccess, (state, { data }) => ({
-    ...state,
-    loading: false,
-    editMode: false,
-    deepCopy: null,
-    workingCopy: data,
-    error: null,
-  })),
-
-  on(A.saveSelectedDashboardFailure, (state, { error }) => ({
-    ...state,
-    loading: false,
-    error,
-  })),
-
-  on(A.discardChanges, (state) => ({
-    ...state,
-    editMode: false,
-    deepCopy: null,
-    loading: false,
-    workingCopy: state.deepCopy
-      ? (structuredClone(state.deepCopy) as DataModel)
-      : state.workingCopy,
-    error: null,
-  })),
-
   on(
-    A.TabActionsTitleMove.startTitleEdit,
-    (state, { tabId, currentTitle }) => ({
+    A.saveDashboard,
+    (state): SelectedDashboardState => ({
       ...state,
-      editTabId: tabId,
-      tabTitleDraft: currentTitle ?? '',
+      loading: true,
       error: null,
     }),
   ),
 
-  on(A.TabActionsTitleMove.commitTitleEdit, (state, { tabId, newTitle }) => {
-    const { next, error } = Mut.produceWorkingCopy(state.workingCopy, (draft) =>
-      Mut.mutateCommitTitleEdit(draft, { tabId, newTitle }),
-    );
-
-    if (error) {
-      return {
-        ...state,
-        workingCopy: state.workingCopy,
-        error,
-      };
-    }
-
-    return {
+  on(
+    A.saveSelectedDashboardSuccess,
+    (state, { data }): SelectedDashboardState => ({
       ...state,
-      workingCopy: next,
+      loading: false,
+      editMode: false,
+      deepCopy: null,
+      workingCopy: data,
       error: null,
-      editTabId: null,
-      tabTitleDraft: '',
-    };
-  }),
+    }),
+  ),
 
-  on(A.TabActionsTitleMove.endTitleEdit, (state) => ({
-    ...state,
-    editTabId: null,
-    tabTitleDraft: '',
-    error: null,
-  })),
-
-  on(A.TabActionsTitleMove.reorderTab, (state, { tabId, direction }) => {
-    const { next, error } = Mut.produceWorkingCopy(state.workingCopy, (draft) =>
-      Mut.mutateReorderTab(draft, { tabId, direction }),
-    );
-    return {
+  on(
+    A.saveSelectedDashboardFailure,
+    (state, { error }): SelectedDashboardState => ({
       ...state,
-      workingCopy: next,
+      loading: false,
       error,
-    };
-  }),
+    }),
+  ),
 
-  on(A.TabActionsTitleMove.addTab, (state, { title }) => {
-    const { next, error } = Mut.produceWorkingCopy(state.workingCopy, (draft) =>
-      Mut.mutateAddTab(draft, { title }),
-    );
-    return {
+  on(
+    A.discardChanges,
+    (state): SelectedDashboardState => ({
       ...state,
-      workingCopy: next,
-      error,
-    };
-  }),
+      editMode: false,
+      deepCopy: null,
+      loading: false,
+      workingCopy: state.deepCopy
+        ? structuredClone(state.deepCopy)
+        : state.workingCopy,
+      error: null,
+    }),
+  ),
 
-  on(A.TabActionsTitleMove.removeTab, (state, { tabId }) => {
-    const { next, error } = Mut.produceWorkingCopy(state.workingCopy, (draft) =>
-      Mut.mutateRemoveTab(draft, { tabId }),
-    );
+  on(
+    A.TabActionsTitleMove.startTitleEdit,
+    (state, { tabId, currentTitle }): SelectedDashboardState => ({
+      ...state,
+      editTabId: tabId,
+      tabTitleDraft: currentTitle ?? "",
+      error: null,
+    }),
+  ),
 
-    if (!error && state.editTabId === tabId) {
+  on(
+    A.TabActionsTitleMove.commitTitleEdit,
+    (state, { tabId, newTitle }): SelectedDashboardState => {
+      const { next, error } = Mut.produceWorkingCopy(
+        state.workingCopy,
+        (draft: DataModel): string | null =>
+          Mut.mutateCommitTitleEdit(draft, { tabId, newTitle }),
+      );
+
+      if (error !== null && error !== undefined && error !== "") {
+        return {
+          ...state,
+          workingCopy: state.workingCopy,
+          error,
+        };
+      }
+
       return {
         ...state,
         workingCopy: next,
         error: null,
         editTabId: null,
-        tabTitleDraft: '',
+        tabTitleDraft: "",
       };
-    }
-    return {
+    },
+  ),
+
+  on(
+    A.TabActionsTitleMove.endTitleEdit,
+    (state): SelectedDashboardState => ({
       ...state,
-      workingCopy: next,
-      error,
-    };
-  }),
+      editTabId: null,
+      tabTitleDraft: "",
+      error: null,
+    }),
+  ),
 
-  on(A.TabActionsTitleMove.addCard, (state, { tabId, layout, title }) => {
-    const { next, error } = Mut.produceWorkingCopy(state.workingCopy, (draft) =>
-      MutCard.mutateAddCard(draft, { tabId, layout, title }),
-    );
-    return { ...state, workingCopy: next, error };
-  }),
+  on(
+    A.TabActionsTitleMove.reorderTab,
+    (state, { tabId, direction }): SelectedDashboardState => {
+      const { next, error } = Mut.produceWorkingCopy(
+        state.workingCopy,
+        (draft) => Mut.mutateReorderTab(draft, { tabId, direction }),
+      );
+      return {
+        ...state,
+        workingCopy: next,
+        error,
+      };
+    },
+  ),
 
+  on(
+    A.TabActionsTitleMove.addTab,
+    (state, { title }): SelectedDashboardState => {
+      const { next, error } = Mut.produceWorkingCopy(
+        state.workingCopy,
+        (draft) => Mut.mutateAddTab(draft, { title }),
+      );
+      return {
+        ...state,
+        workingCopy: next,
+        error,
+      };
+    },
+  ),
+
+  on(
+    A.TabActionsTitleMove.removeTab,
+    (state, { tabId }): SelectedDashboardState => {
+      const { next, error } = Mut.produceWorkingCopy(
+        state.workingCopy,
+        (draft: DataModel): string | null =>
+          Mut.mutateRemoveTab(draft, { tabId }),
+      );
+
+      if (
+        (error === null || error === undefined || error === "") &&
+        state.editTabId === tabId
+      ) {
+        return {
+          ...state,
+          workingCopy: next,
+          error: null,
+          editTabId: null,
+          tabTitleDraft: "",
+        };
+      }
+
+      return {
+        ...state,
+        workingCopy: next,
+        error,
+      };
+    },
+  ),
+
+  on(
+    A.TabActionsTitleMove.addCard,
+    (state, { tabId, layout, title }): SelectedDashboardState => {
+      const { next, error } = Mut.produceWorkingCopy(
+        state.workingCopy,
+        (draft) => MutCard.mutateAddCard(draft, { tabId, layout, title }),
+      );
+      return { ...state, workingCopy: next, error };
+    },
+  ),
 
   on(
     A.TabActionsTitleMove.reorderCard,
-    (state, { tabId, cardId, newIndex }) => {
+    (state, { tabId, cardId, newIndex }): SelectedDashboardState => {
       const { next, error } = Mut.produceWorkingCopy(
         state.workingCopy,
         (draft) =>
@@ -208,12 +249,16 @@ export const reducer = createReducer<SelectedDashboardState>(
     },
   ),
 
-  on(A.TabActionsTitleMove.removeCard, (state, { tabId, cardId }) => {
-    const { next, error } = Mut.produceWorkingCopy(state.workingCopy, (draft) =>
-      MutCard.mutateRemoveCard(draft, { tabId, cardId }),
-    );
-    return { ...state, workingCopy: next, error };
-  }),
+  on(
+    A.TabActionsTitleMove.removeCard,
+    (state, { tabId, cardId }): SelectedDashboardState => {
+      const { next, error } = Mut.produceWorkingCopy(
+        state.workingCopy,
+        (draft) => MutCard.mutateRemoveCard(draft, { tabId, cardId }),
+      );
+      return { ...state, workingCopy: next, error };
+    },
+  ),
 
   on(
     TabActionsTitleMove.addItemToCard,
@@ -221,8 +266,8 @@ export const reducer = createReducer<SelectedDashboardState>(
       if (!state.workingCopy) return state;
 
       const next = structuredClone(state.workingCopy);
-      const tab  = next.tabs.find(t => t.id === tabId);
-      const card = tab?.cards.find(c => c.id === cardId);
+      const tab = next.tabs.find((t) => t.id === tabId);
+      const card = tab?.cards.find((c) => c.id === cardId);
       if (!card) return state;
 
       // Дубли разрешены — просто добавляем в конец
@@ -238,8 +283,8 @@ export const reducer = createReducer<SelectedDashboardState>(
       if (!state.workingCopy) return state;
 
       const next = structuredClone(state.workingCopy);
-      const tab  = next.tabs.find(t => t.id === tabId);
-      const card = tab?.cards.find(c => c.id === cardId);
+      const tab = next.tabs.find((t) => t.id === tabId);
+      const card = tab?.cards.find((c) => c.id === cardId);
       if (!card) return state;
 
       // Дубли разрешены — аппенд пачки
@@ -251,7 +296,7 @@ export const reducer = createReducer<SelectedDashboardState>(
 
   on(
     A.TabActionsTitleMove.removeItemFromCard,
-    (state, { tabId, cardId, itemId }) => {
+    (state, { tabId, cardId, itemId }): SelectedDashboardState => {
       if (!state.workingCopy) return state;
 
       const next = structuredClone(state.workingCopy);
@@ -274,7 +319,7 @@ export const reducer = createReducer<SelectedDashboardState>(
 
   on(
     DevicesActions.toggleDeviceStateSuccess,
-    (state, { deviceId, state: confirmed }) => {
+    (state, { deviceId, state: confirmed }): SelectedDashboardState => {
       if (!state.workingCopy) return state;
       return {
         ...state,

@@ -1,11 +1,12 @@
-import { inject, Injectable, signal } from '@angular/core';
-import { Dashboard } from '@/app/shared/models/dashboard.model';
-import { DataModel, Tab } from '@/app/shared/models/data.model';
-import { catchError, map, Observable, tap, throwError } from 'rxjs';
-import { DashboardService } from '@/app/shared/services/dashboard.service';
+import { inject, Injectable, signal } from "@angular/core";
+import type { Dashboard } from "@/app/shared/models/dashboard.model";
+import type { DataModel, Tab } from "@/app/shared/models/data.model";
+import type { Observable } from "rxjs";
+import { catchError, map, tap, throwError } from "rxjs";
+import { DashboardService } from "@/app/shared/services/dashboard.service";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class DashboardHandlerService {
   private readonly api = inject(DashboardService);
@@ -26,7 +27,7 @@ export class DashboardHandlerService {
     if (!dashboardId) {
       this.dashboardByIdSignal.set(null);
       this.tabsSignal.set([]);
-      return throwError(() => new Error('dashboardId is empty'));
+      return throwError(() => new Error("dashboardId is empty"));
     }
 
     return this.api.getDashboardById(dashboardId).pipe(
@@ -51,7 +52,7 @@ export class DashboardHandlerService {
 
   removeDashboard(dashboardId: string) {
     if (!dashboardId) {
-      return throwError(() => new Error('dashboardId is empty'));
+      return throwError(() => new Error("dashboardId is empty"));
     }
 
     return this.api.deleteDashboard(dashboardId).pipe(

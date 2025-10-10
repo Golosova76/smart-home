@@ -1,11 +1,11 @@
-import { Component, inject } from '@angular/core';
-import { DashboardHandlerService } from '@/app/shared/services/dashboard-handler.service';
+import { Component, inject } from "@angular/core";
+import { DashboardHandlerService } from "@/app/shared/services/dashboard-handler.service";
 
 @Component({
-  selector: 'app-stub',
+  selector: "app-stub",
   imports: [],
-  templateUrl: './stub.component.html',
-  styleUrl: './stub.component.scss',
+  templateUrl: "./stub.component.html",
+  styleUrl: "./stub.component.scss",
 })
 export class StubComponent {
   handlerService = inject(DashboardHandlerService);

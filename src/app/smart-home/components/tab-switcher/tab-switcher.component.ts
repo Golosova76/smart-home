@@ -1,13 +1,13 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output } from "@angular/core";
 
-import { Tab } from '@/app/shared/models/data.model';
+import type { Tab } from "@/app/shared/models/data.model";
 
 @Component({
-  selector: 'app-tab-switcher',
+  selector: "app-tab-switcher",
   standalone: true,
   imports: [],
-  templateUrl: './tab-switcher.component.html',
-  styleUrl: './tab-switcher.component.scss',
+  templateUrl: "./tab-switcher.component.html",
+  styleUrl: "./tab-switcher.component.scss",
 })
 export class TabSwitcherComponent {
   // dashboard
@@ -23,7 +23,7 @@ export class TabSwitcherComponent {
 
   readonly reorderTab = output<{
     tabId: string;
-    direction: 'left' | 'right';
+    direction: "left" | "right";
   }>();
 
   readonly startTitleEdit = output<{ tabId: string; currentTitle: string }>();
@@ -34,7 +34,7 @@ export class TabSwitcherComponent {
   readonly editMode = input<boolean>(false);
 
   readonly editTabId = input<string | null>(null);
-  readonly tabTitleDraft = input<string>('');
+  readonly tabTitleDraft = input<string>("");
   readonly tabs = input<Tab[]>([]);
 
   onTabClick(tabId: string) {
@@ -65,7 +65,7 @@ export class TabSwitcherComponent {
     this.discardClick.emit();
   }
 
-  onReorder(tabId: string, direction: 'left' | 'right') {
+  onReorder(tabId: string, direction: "left" | "right") {
     this.reorderTab.emit({ tabId, direction });
   }
 
@@ -74,7 +74,7 @@ export class TabSwitcherComponent {
   }
 
   onCommitEdit(tabId: string, inputElement: HTMLInputElement) {
-    const newTitle = inputElement.value ?? '';
+    const newTitle = inputElement.value ?? "";
     this.commitTitleEdit.emit({ tabId, newTitle });
   }
 

@@ -1,4 +1,4 @@
-import { DataModel } from '@/app/shared/models/data.model';
+import type { DataModel } from "@/app/shared/models/data.model";
 
 export interface SelectedDashboardState {
   dashboardId: string | null;
@@ -24,8 +24,8 @@ export const initialState: SelectedDashboardState = {
   error: null,
 
   editTabId: null,
-  tabTitleDraft: '',
+  tabTitleDraft: "",
 
   editCard: null,
-  cardTitleDraft: '',
+  cardTitleDraft: "",
 };

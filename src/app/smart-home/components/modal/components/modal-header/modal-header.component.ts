@@ -1,14 +1,14 @@
-import { Component, input, output } from '@angular/core';
-import {
+import { Component, input, output } from "@angular/core";
+import type {
   EntityActions,
   EntityDelete,
-} from '@/app/shared/models/dashboard.model';
+} from "@/app/shared/models/dashboard.model";
 
 @Component({
-  selector: 'app-modal-header',
+  selector: "app-modal-header",
   imports: [],
-  templateUrl: './modal-header.component.html',
-  styleUrl: './modal-header.component.scss',
+  templateUrl: "./modal-header.component.html",
+  styleUrl: "./modal-header.component.scss",
 })
 export class ModalHeaderComponent {
   entityDelete = input<EntityDelete>();

@@ -1,8 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from "@angular/core/testing";
+import { TestBed } from "@angular/core/testing";
 
-import { ModalCreateTabsComponent } from './modal-create-tabs.component';
+import { ModalCreateTabsComponent } from "./modal-create-tabs.component";
 
-describe('ModalCreateTabsComponent', () => {
+describe("ModalCreateTabsComponent", () => {
   let component: ModalCreateTabsComponent;
   let fixture: ComponentFixture<ModalCreateTabsComponent>;
 
@@ -16,7 +17,7 @@ describe('ModalCreateTabsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

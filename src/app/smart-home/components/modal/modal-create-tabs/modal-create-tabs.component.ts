@@ -1,19 +1,19 @@
-import { Component, output } from '@angular/core';
-import { ModalHeaderComponent } from '@/app/smart-home/components/modal/components/modal-header/modal-header.component';
-import { ModalFooterComponent } from '@/app/smart-home/components/modal/components/modal-footer/modal-footer.component';
-import { FormErrorComponent } from '@/app/shared/components/form-error/form-error.component';
+import { Component, output } from "@angular/core";
+import { ModalHeaderComponent } from "@/app/smart-home/components/modal/components/modal-header/modal-header.component";
+import { ModalFooterComponent } from "@/app/smart-home/components/modal/components/modal-footer/modal-footer.component";
+import { FormErrorComponent } from "@/app/shared/components/form-error/form-error.component";
+import type { AbstractControl } from "@angular/forms";
 import {
-  AbstractControl,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
-} from '@angular/forms';
-import { ModalShellComponent } from '@/app/smart-home/components/modal/modal-shell/modal-shell.component';
-import { capitalize } from '@/app/shared/utils/capitalize';
+} from "@angular/forms";
+import { ModalShellComponent } from "@/app/smart-home/components/modal/modal-shell/modal-shell.component";
+import { capitalize } from "@/app/shared/utils/capitalize";
 
 @Component({
-  selector: 'app-modal-create-tabs',
+  selector: "app-modal-create-tabs",
   imports: [
     ModalHeaderComponent,
     ModalFooterComponent,
@@ -21,8 +21,8 @@ import { capitalize } from '@/app/shared/utils/capitalize';
     ReactiveFormsModule,
     ModalShellComponent,
   ],
-  templateUrl: './modal-create-tabs.component.html',
-  styleUrl: './modal-create-tabs.component.scss',
+  templateUrl: "./modal-create-tabs.component.html",
+  styleUrl: "./modal-create-tabs.component.scss",
 })
 export class ModalCreateTabsComponent {
   readonly closed = output<void>();
@@ -60,7 +60,7 @@ export class ModalCreateTabsComponent {
   }
 
   get titleControl(): FormControl<string | null> | null {
-    const control: AbstractControl | null = this.form.get('title');
+    const control: AbstractControl | null = this.form.get("title");
     return control instanceof FormControl ? control : null;
   }
 }

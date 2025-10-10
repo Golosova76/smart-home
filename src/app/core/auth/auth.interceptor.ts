@@ -1,8 +1,11 @@
-import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { TokenService } from '@/app/core/auth/services/token/token.service';
-import { Router } from '@angular/router';
-import { catchError, throwError } from 'rxjs';
+import type {
+  HttpErrorResponse,
+  HttpInterceptorFn,
+} from "@angular/common/http";
+import { inject } from "@angular/core";
+import { TokenService } from "@/app/core/auth/services/token/token.service";
+import { Router } from "@angular/router";
+import { catchError, throwError } from "rxjs";
 
 export const authInterceptor: HttpInterceptorFn = (request, next) => {
   const tokenService = inject(TokenService);
@@ -25,7 +28,7 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401) {
         tokenService.clearToken();
-        router.navigate(['/login']).catch(() => {});
+        router.navigate(["/login"]).catch(() => {});
       }
       return throwError(() => error);
     }),
