@@ -3,16 +3,7 @@ import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { DashboardService } from "@/app/shared/services/dashboard.service";
 import * as A from "@/app/store/actions/dashboard.actions";
-import {
-  catchError,
-  filter,
-  map,
-  mergeMap,
-  of,
-  switchMap,
-  tap,
-  withLatestFrom,
-} from "rxjs";
+import { catchError, filter, map, mergeMap, of, switchMap, tap } from "rxjs";
 import { Store } from "@ngrx/store";
 import {
   selectDashboardId,
@@ -28,11 +19,11 @@ import { DevicesActions } from "@/app/store/actions/dashboard.actions";
 @Injectable()
 export class SelectedDashboardEffects {
   private readonly actions$ = inject<Actions>(Actions);
-  private readonly api = inject(DashboardService);
-  private store = inject<Store<AppState>>(Store);
-  private readonly routeIds = inject(RouteIdValidService);
+  private readonly api: DashboardService = inject(DashboardService);
+  private store: Store<AppState> = inject<Store<AppState>>(Store);
+  private readonly routeIds: RouteIdValidService = inject(RouteIdValidService);
 
-  readonly loadSelectedDashboard$ = createEffect(() => {
+  private loadSelectedDashboard$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(A.selectDashboard),
       switchMap(({ dashboardId }) =>
@@ -48,7 +39,7 @@ export class SelectedDashboardEffects {
     );
   });
 
-  readonly ensureValidTab$ = createEffect(
+  private ensureValidTab$ = createEffect(
     () => {
       return this.actions$.pipe(
         ofType(A.loadSelectedDashboardSuccess),
@@ -58,9 +49,13 @@ export class SelectedDashboardEffects {
           const currentRouteTab = this.routeIds.tabIdRouteSignal();
           const validTab = this.routeIds.getValidTabId(tabs, currentRouteTab);
 
-          if (validTab && validTab === currentRouteTab) return;
+          const hasValid = typeof validTab === "string" && validTab.length > 0;
+          const hasCurrent =
+            typeof currentRouteTab === "string" && currentRouteTab.length > 0;
 
-          if (validTab) {
+          if (hasValid && hasCurrent && validTab === currentRouteTab) return;
+
+          if (hasValid) {
             this.routeIds.selectTab(validTab);
           }
         }),
@@ -69,18 +64,23 @@ export class SelectedDashboardEffects {
     { dispatch: false },
   );
 
-  readonly saveSelectedDashboard$ = createEffect(() => {
+  private saveSelectedDashboard$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(A.saveDashboard),
-      withLatestFrom(
+      concatLatestFrom(() => [
         this.store.select(selectDashboardId),
         this.store.select(selectWorkingCopy),
-      ),
+      ]),
       switchMap(([, dashboardId, data]) => {
-        if (!dashboardId || !data)
+        // явные проверки для strict-boolean-expressions
+        const hasId = typeof dashboardId === "string" && dashboardId.length > 0;
+        const hasData = data != null;
+
+        if (!hasId || !hasData) {
           return of(
             A.saveSelectedDashboardFailure({ error: "Nothing to save" }),
           );
+        }
 
         return this.api.saveDashboardById(dashboardId, data).pipe(
           map((data) => A.saveSelectedDashboardSuccess({ data })),
@@ -94,7 +94,7 @@ export class SelectedDashboardEffects {
     );
   });
 
-  readonly loadDevices$ = createEffect(() => {
+  private loadDevices$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(AvailableItemsActions.load),
       concatLatestFrom(() =>
@@ -118,7 +118,7 @@ export class SelectedDashboardEffects {
     );
   });
 
-  readonly toggleDevice$ = createEffect(() => {
+  private toggleDevice$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(DevicesActions.toggleDeviceState),
       mergeMap((action: { deviceId: string; newState: boolean }) => {

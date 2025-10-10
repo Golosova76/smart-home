@@ -21,7 +21,7 @@ import * as dashboardsSelectors from "@/app/store/selectors/selected-dashboard.s
   styleUrl: "./device.component.scss",
 })
 export class DeviceComponent {
-  private store = inject<Store<AppState>>(Store);
+  private readonly store: Store<AppState> = inject<Store<AppState>>(Store);
   private readonly routeIds = inject(RouteIdValidService);
   readonly LAYOUT = LAYOUT_TYPES;
 
@@ -43,7 +43,7 @@ export class DeviceComponent {
     off: !this.isOn(),
   }));
 
-  onItemDelete(): void {
+  public onItemDelete(): void {
     const tabId = this.selectedTabId();
     const cardId = this.cardId();
     const itemId = this.device()?.id;
@@ -55,7 +55,7 @@ export class DeviceComponent {
     );
   }
 
-  onToggleClick() {
+  public onToggleClick(): void {
     const device = this.device();
     if (!device) return;
 

@@ -1,3 +1,4 @@
+import type { OutputEmitterRef } from "@angular/core";
 import { Component, output } from "@angular/core";
 import { ModalHeaderComponent } from "@/app/smart-home/components/modal/components/modal-header/modal-header.component";
 import { ModalFooterComponent } from "@/app/smart-home/components/modal/components/modal-footer/modal-footer.component";
@@ -11,6 +12,7 @@ import {
 } from "@angular/forms";
 import { ModalShellComponent } from "@/app/smart-home/components/modal/modal-shell/modal-shell.component";
 import { capitalize } from "@/app/shared/utils/capitalize";
+import { MAX_LENGTH } from "@/app/shared/utils/constants";
 
 @Component({
   selector: "app-modal-create-tabs",
@@ -25,42 +27,41 @@ import { capitalize } from "@/app/shared/utils/capitalize";
   styleUrl: "./modal-create-tabs.component.scss",
 })
 export class ModalCreateTabsComponent {
-  readonly closed = output<void>();
-  readonly submitted = output<string>();
-
-  form = new FormGroup({
+  public form = new FormGroup({
     title: new FormControl<string | null>(null, [
       Validators.required,
-      Validators.maxLength(50),
+      Validators.maxLength(MAX_LENGTH),
     ]),
   });
 
-  closeModal() {
-    this.closed.emit();
-  }
+  protected readonly closed: OutputEmitterRef<void> = output<void>();
+  protected readonly submitted: OutputEmitterRef<string> = output<string>();
 
-  get canSubmit(): boolean {
+  public get canSubmit(): boolean {
     return this.form.valid;
   }
 
-  onSubmit() {
+  public get titleControl(): FormControl<string | null> | null {
+    const control: AbstractControl | null = this.form.get("title");
+    return control instanceof FormControl ? control : null;
+  }
+
+  public closeModal(): void {
+    this.closed.emit();
+  }
+
+  public onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
+    const raw: string | null = this.form.controls.title?.value ?? null;
+    if (raw === null) return;
 
-    const { title } = this.form.value;
-    if (!title) return;
-
-    const trimmedTitle = title.trim();
+    const trimmedTitle = raw.trim();
     if (!trimmedTitle) return;
     const capitalizedTitle = capitalize(trimmedTitle);
 
     this.submitted.emit(capitalizedTitle);
-  }
-
-  get titleControl(): FormControl<string | null> | null {
-    const control: AbstractControl | null = this.form.get("title");
-    return control instanceof FormControl ? control : null;
   }
 }

@@ -1,6 +1,6 @@
-import type { OnInit } from "@angular/core";
+import type { InputSignal, OnInit, OutputEmitterRef } from "@angular/core";
 import { Component, effect, inject, input, output } from "@angular/core";
-import type { AbstractControl } from "@angular/forms";
+import type { AbstractControl, ValidatorFn } from "@angular/forms";
 import {
   FormControl,
   FormGroup,
@@ -19,6 +19,7 @@ import { capitalize, normalizeId } from "@/app/shared/utils/capitalize";
 import { ModalShellComponent } from "@/app/smart-home/components/modal/modal-shell/modal-shell.component";
 import { ModalHeaderComponent } from "@/app/smart-home/components/modal/components/modal-header/modal-header.component";
 import { ModalFooterComponent } from "@/app/smart-home/components/modal/components/modal-footer/modal-footer.component";
+import { MAX_LENGTH, MAX_LENGTH_ID } from "@/app/shared/utils/constants";
 
 @Component({
   selector: "app-modal-create-dashboards",
@@ -34,28 +35,32 @@ import { ModalFooterComponent } from "@/app/smart-home/components/modal/componen
   styleUrl: "./modal-create-dashboards.component.scss",
 })
 export class ModalCreateDashboardsComponent implements OnInit {
-  router = inject(Router);
-
-  closed = output<void>();
-  checkId = input<string[]>([]);
-  entityActions = input.required<EntityActions>();
-
-  submitted = output<{ id: string; title: string; icon: string }>();
-
-  private lastIds: string[] = [];
-
-  form = new FormGroup({
+  public form = new FormGroup({
     id: new FormControl<string | null>(null),
     title: new FormControl<string | null>(null, [
       Validators.required,
-      Validators.maxLength(50),
+      Validators.maxLength(MAX_LENGTH),
     ]),
     icon: new FormControl<string | null>(null, Validators.required),
   });
+  protected readonly router: Router = inject(Router);
+
+  protected readonly closed: OutputEmitterRef<void> = output<void>();
+  protected readonly checkId: InputSignal<string[]> = input<string[]>([]);
+  protected readonly entityActions: InputSignal<EntityActions> =
+    input.required<EntityActions>();
+
+  protected readonly submitted = output<{
+    id: string;
+    title: string;
+    icon: string;
+  }>();
+
+  private lastIds: string[] = [];
 
   constructor() {
-    effect(() => {
-      const ids = this.checkId();
+    effect((): void => {
+      const ids: string[] = this.checkId();
       if (!this.arraysEqual(ids, this.lastIds)) {
         this.lastIds = [...ids];
         this.updateIdValidators(ids);
@@ -63,20 +68,41 @@ export class ModalCreateDashboardsComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  public get idControl(): FormControl<string | null> | null {
+    const control: AbstractControl | null = this.form.get("id");
+    return control instanceof FormControl ? control : null;
+  }
+
+  public get titleControl(): FormControl<string | null> | null {
+    const control: AbstractControl | null = this.form.get("title");
+    return control instanceof FormControl ? control : null;
+  }
+
+  public get iconControl(): FormControl<string | null> | null {
+    const control: AbstractControl | null = this.form.get("icon");
+    return control instanceof FormControl ? control : null;
+  }
+
+  public get canSubmit(): boolean {
+    return this.form.valid;
+  }
+
+  public ngOnInit(): void {
     this.idControl?.updateValueAndValidity({ emitEvent: false });
     this.titleControl?.updateValueAndValidity({ emitEvent: false });
     this.iconControl?.updateValueAndValidity({ emitEvent: false });
   }
 
-  onSubmit(): void {
+  public onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
     const { id, title, icon } = this.form.value;
-    if (!id || !title || !icon) return;
+    if (typeof id !== "string" || id.trim().length === 0) return;
+    if (typeof title !== "string" || title.trim().length === 0) return;
+    if (typeof icon !== "string" || icon.trim().length === 0) return;
 
     const normId: string = normalizeId(id);
 
@@ -88,38 +114,19 @@ export class ModalCreateDashboardsComponent implements OnInit {
     this.submitted.emit(payload);
   }
 
-  closeModal() {
+  public closeModal(): void {
     this.closed.emit();
   }
 
-  get idControl(): FormControl<string | null> | null {
-    const control: AbstractControl | null = this.form.get("id");
-    return control instanceof FormControl ? control : null;
-  }
-
-  get titleControl(): FormControl<string | null> | null {
-    const control: AbstractControl | null = this.form.get("title");
-    return control instanceof FormControl ? control : null;
-  }
-
-  get iconControl(): FormControl<string | null> | null {
-    const control: AbstractControl | null = this.form.get("icon");
-    return control instanceof FormControl ? control : null;
-  }
-
-  get canSubmit(): boolean {
-    return this.form.valid;
-  }
-
-  private getIdValidators(ids: string[]) {
+  private getIdValidators(ids: string[]): ValidatorFn[] {
     return [
       Validators.required,
-      Validators.maxLength(30),
+      Validators.maxLength(MAX_LENGTH_ID),
       uniqueIdValidator(ids),
     ];
   }
 
-  private updateIdValidators(ids: string[]) {
+  private updateIdValidators(ids: string[]): void {
     const control: AbstractControl | null = this.form.get("id");
 
     if (control instanceof FormControl) {

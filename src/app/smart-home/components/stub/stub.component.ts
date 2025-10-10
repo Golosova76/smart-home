@@ -8,7 +8,7 @@ import { DashboardHandlerService } from "@/app/shared/services/dashboard-handler
   styleUrl: "./stub.component.scss",
 })
 export class StubComponent {
-  handlerService = inject(DashboardHandlerService);
+  protected readonly handlerService = inject(DashboardHandlerService);
 
-  readonly dashboardsSignal = this.handlerService.dashboardsSignal;
+  protected readonly dashboardsSignal = this.handlerService.dashboardsSignal;
 }

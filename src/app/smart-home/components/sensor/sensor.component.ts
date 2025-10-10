@@ -1,3 +1,4 @@
+import type { InputSignal, Signal } from "@angular/core";
 import { Component, inject, input } from "@angular/core";
 
 import type { LayoutType, Sensor } from "@/app/shared/models/data.model";
@@ -18,25 +19,34 @@ import { TabActionsTitleMove } from "@/app/store/actions/dashboard.actions";
   styleUrl: "./sensor.component.scss",
 })
 export class SensorComponent {
-  private store = inject<Store<AppState>>(Store);
-  private readonly routeIds = inject(RouteIdValidService);
-  readonly LAYOUT = LAYOUT_TYPES;
+  protected readonly store: Store<AppState> = inject<Store<AppState>>(Store);
+  protected readonly routeIds: RouteIdValidService =
+    inject(RouteIdValidService);
+  protected readonly LAYOUT = LAYOUT_TYPES;
 
-  layout = input<LayoutType>();
-  sensor = input<Sensor>();
+  protected readonly layout: InputSignal<LayoutType | undefined> =
+    input<LayoutType>();
+  protected readonly sensor: InputSignal<Sensor | undefined> = input<Sensor>();
 
-  readonly selectedTabId = this.routeIds.selectedTabId;
-  cardId = input<string | null>(null);
-  readonly isEditMode = this.store.selectSignal<boolean>(
-    dashboardsSelectors.selectIsEditModeEnabled,
+  protected readonly selectedTabId: Signal<string | null> =
+    this.routeIds.selectedTabId;
+  protected readonly cardId: InputSignal<string | null> = input<string | null>(
+    null,
   );
+  protected readonly isEditMode: Signal<boolean> =
+    this.store.selectSignal<boolean>(
+      dashboardsSelectors.selectIsEditModeEnabled,
+    );
 
-  onItemDelete(): void {
-    const tabId = this.selectedTabId();
-    const cardId = this.cardId();
-    const itemId = this.sensor()?.id;
+  public onItemDelete(): void {
+    const tabId: string | null = this.selectedTabId();
+    if (typeof tabId !== "string" || tabId.length === 0) return;
 
-    if (!tabId || !cardId || !itemId) return;
+    const cardId: string | null = this.cardId();
+    if (typeof cardId !== "string" || cardId.length === 0) return;
+
+    const itemId: string | undefined = this.sensor()?.id;
+    if (typeof itemId !== "string" || itemId.length === 0) return;
 
     this.store.dispatch(
       TabActionsTitleMove.removeItemFromCard({ tabId, cardId, itemId }),

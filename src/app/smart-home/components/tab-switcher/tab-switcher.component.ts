@@ -1,3 +1,4 @@
+import type { InputSignal, OutputEmitterRef } from "@angular/core";
 import { Component, input, output } from "@angular/core";
 
 import type { Tab } from "@/app/shared/models/data.model";
@@ -11,78 +12,95 @@ import type { Tab } from "@/app/shared/models/data.model";
 })
 export class TabSwitcherComponent {
   // dashboard
-  readonly deleteClick = output<void>();
-  readonly editClick = output<void>();
-  readonly saveClick = output<void>();
-  readonly discardClick = output<void>();
-  readonly addTabClick = output<void>();
-  readonly removeTabClick = output<string>();
+  protected readonly deleteClick: OutputEmitterRef<void> = output<void>();
+  protected readonly editClick: OutputEmitterRef<void> = output<void>();
+  protected readonly saveClick: OutputEmitterRef<void> = output<void>();
+  protected readonly discardClick: OutputEmitterRef<void> = output<void>();
+  protected readonly addTabClick: OutputEmitterRef<void> = output<void>();
+  protected readonly removeTabClick: OutputEmitterRef<string> =
+    output<string>();
 
   //tab
-  readonly selectTab = output<string>();
+  protected readonly selectTab: OutputEmitterRef<string> = output<string>();
 
-  readonly reorderTab = output<{
+  protected readonly reorderTab = output<{
     tabId: string;
     direction: "left" | "right";
   }>();
 
-  readonly startTitleEdit = output<{ tabId: string; currentTitle: string }>();
-  readonly commitTitleEdit = output<{ tabId: string; newTitle: string }>();
-  readonly endTitleEdit = output<void>();
+  protected readonly startTitleEdit: OutputEmitterRef<{
+    tabId: string;
+    currentTitle: string;
+  }> = output<{
+    tabId: string;
+    currentTitle: string;
+  }>();
+  protected readonly commitTitleEdit: OutputEmitterRef<{
+    tabId: string;
+    newTitle: string;
+  }> = output<{
+    tabId: string;
+    newTitle: string;
+  }>();
+  protected readonly endTitleEdit: OutputEmitterRef<void> = output<void>();
 
-  readonly activeTabId = input<string | null>(null);
-  readonly editMode = input<boolean>(false);
+  protected readonly activeTabId: InputSignal<string | null> = input<
+    string | null
+  >(null);
+  protected readonly editMode: InputSignal<boolean> = input<boolean>(false);
 
-  readonly editTabId = input<string | null>(null);
-  readonly tabTitleDraft = input<string>("");
-  readonly tabs = input<Tab[]>([]);
+  protected readonly editTabId: InputSignal<string | null> = input<
+    string | null
+  >(null);
+  protected readonly tabTitleDraft: InputSignal<string> = input<string>("");
+  protected readonly tabs: InputSignal<Tab[]> = input<Tab[]>([]);
 
-  onTabClick(tabId: string) {
+  public onTabClick(tabId: string): void {
     this.selectTab.emit(tabId);
   }
 
-  onDelete() {
+  public onDelete(): void {
     if (this.editMode()) return;
     this.deleteClick.emit();
   }
 
-  onAddTab() {
+  public onAddTab(): void {
     this.addTabClick.emit();
   }
 
-  onRemoveTab(tabId: string) {
+  public onRemoveTab(tabId: string): void {
     this.removeTabClick.emit(tabId);
   }
 
-  onEditClick() {
+  public onEditClick(): void {
     this.editClick.emit();
   }
 
-  onSave() {
+  public onSave(): void {
     this.saveClick.emit();
   }
-  onDiscard() {
+  public onDiscard(): void {
     this.discardClick.emit();
   }
 
-  onReorder(tabId: string, direction: "left" | "right") {
+  public onReorder(tabId: string, direction: "left" | "right"): void {
     this.reorderTab.emit({ tabId, direction });
   }
 
-  onStartEdit(tab: Tab) {
+  public onStartEdit(tab: Tab): void {
     this.startTitleEdit.emit({ tabId: tab.id, currentTitle: tab.title });
   }
 
-  onCommitEdit(tabId: string, inputElement: HTMLInputElement) {
+  public onCommitEdit(tabId: string, inputElement: HTMLInputElement): void {
     const newTitle = inputElement.value ?? "";
     this.commitTitleEdit.emit({ tabId, newTitle });
   }
 
-  onEndEdit() {
+  public onEndEdit(): void {
     this.endTitleEdit.emit();
   }
 
-  isEditing(tabId: string) {
+  public isEditing(tabId: string): boolean {
     return this.editTabId() === tabId;
   }
 }

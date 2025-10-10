@@ -1,3 +1,4 @@
+import type { InputSignal, OutputEmitterRef } from "@angular/core";
 import { Component, input, output } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ModalShellComponent } from "@/app/smart-home/components/modal/modal-shell/modal-shell.component";
@@ -20,13 +21,15 @@ import { UpperFirstPipe } from "@/app/shared/pipes/upper-first.pipe";
   styleUrl: "./modal-confirm-delete.component.scss",
 })
 export class ModalConfirmDeleteComponent {
-  entityDelete = input<EntityDelete>();
-  labelDelete = input<string>();
+  protected readonly entityDelete: InputSignal<EntityDelete | undefined> =
+    input<EntityDelete>();
+  protected readonly labelDelete: InputSignal<string | undefined> =
+    input<string>();
 
-  closed = output<void>();
-  deleted = output<void>();
+  protected readonly closed: OutputEmitterRef<void> = output<void>();
+  protected readonly deleted: OutputEmitterRef<void> = output<void>();
 
-  onDeleted() {
+  public onDeleted(): void {
     this.deleted.emit();
   }
 }

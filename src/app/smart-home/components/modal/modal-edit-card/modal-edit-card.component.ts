@@ -1,3 +1,4 @@
+import type { InputSignal, OutputEmitterRef, Signal } from "@angular/core";
 import { Component, inject, input, output } from "@angular/core";
 import {
   FormControl,
@@ -21,39 +22,38 @@ import type { AppState } from "@/app/store/state/app.state";
   styleUrl: "./modal-edit-card.component.scss",
 })
 export class ModalEditCardComponent {
-  private store = inject<Store<AppState>>(Store);
-
-  disabled = input<boolean>(false);
-
-  closed = output<void>();
-  deleted = output<void>();
-  submitted = output<{ deviceId: string | null; sensorId: string | null }>();
-
-  readonly currentTitle = input<string>("");
-  readonly layout = input<LayoutType>();
-
-  readonly devices = this.store.selectSignal<Device[]>(
-    devicesSelectors.selectDevices,
-  );
-  readonly sensors = this.store.selectSignal<Sensor[]>(
-    devicesSelectors.selectSensors,
-  );
-
-  readonly form = new FormGroup({
+  public form = new FormGroup({
     title: new FormControl<string>(""),
     deviceId: new FormControl<string | null>(null),
     sensorId: new FormControl<string | null>(null),
   });
 
-  closeModal() {
+  protected readonly store: Store<AppState> = inject<Store<AppState>>(Store);
+
+  protected readonly disabled: InputSignal<boolean> = input<boolean>(false);
+
+  protected readonly closed: OutputEmitterRef<void> = output<void>();
+  protected readonly submitted = output<{
+    deviceId: string | null;
+    sensorId: string | null;
+  }>();
+
+  protected readonly currentTitle: InputSignal<string> = input<string>("");
+  protected readonly layout: InputSignal<LayoutType | undefined> =
+    input<LayoutType>();
+
+  protected readonly devices: Signal<Device[]> = this.store.selectSignal<
+    Device[]
+  >(devicesSelectors.selectDevices);
+  protected readonly sensors: Signal<Sensor[]> = this.store.selectSignal<
+    Sensor[]
+  >(devicesSelectors.selectSensors);
+
+  public closeModal(): void {
     this.closed.emit();
   }
 
-  onDelete() {
-    this.deleted.emit();
-  }
-
-  onSubmit() {
+  public onSubmit(): void {
     const { deviceId, sensorId } = this.form.getRawValue();
 
     this.submitted.emit({ deviceId, sensorId });

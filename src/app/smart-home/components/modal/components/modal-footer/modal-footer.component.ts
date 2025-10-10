@@ -1,4 +1,10 @@
-import { Component, input, output } from "@angular/core";
+import {
+  Component,
+  input,
+  type InputSignal,
+  output,
+  type OutputEmitterRef,
+} from "@angular/core";
 import type {
   EntityActions,
   FooterVariant,
@@ -11,27 +17,29 @@ import type {
   styleUrl: "./modal-footer.component.scss",
 })
 export class ModalFooterComponent {
-  entityActions = input<EntityActions>();
-  disabled = input<boolean>(false);
+  public entityActions: InputSignal<EntityActions | undefined> =
+    input<EntityActions>();
+  public disabled: InputSignal<boolean> = input<boolean>(false);
 
-  closed = output<void>();
-  delete = output<void>();
-  submit = output<void>();
+  protected readonly closed: OutputEmitterRef<void> = output<void>();
+  protected readonly delete: OutputEmitterRef<void> = output<void>();
+  protected readonly submitFooter: OutputEmitterRef<void> = output<void>();
 
-  variant = input<FooterVariant>("form");
+  protected readonly variant: InputSignal<FooterVariant> =
+    input<FooterVariant>("form");
 
-  get buttonAction(): string {
+  public get buttonAction(): string {
     return `${this.entityActions()}`;
   }
 
-  closeModal() {
+  public closeModal(): void {
     this.closed.emit();
   }
-  onDelete() {
+  public onDelete(): void {
     this.delete.emit();
   }
 
-  onSubmit() {
-    this.submit.emit(); // Эмитим событие submit
+  public onSubmit(): void {
+    this.submitFooter.emit(); // Эмитим событие submit
   }
 }

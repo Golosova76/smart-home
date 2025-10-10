@@ -1,4 +1,10 @@
-import { Component, input, output } from "@angular/core";
+import {
+  Component,
+  input,
+  type InputSignal,
+  output,
+  type OutputEmitterRef,
+} from "@angular/core";
 import type {
   EntityActions,
   EntityDelete,
@@ -11,16 +17,18 @@ import type {
   styleUrl: "./modal-header.component.scss",
 })
 export class ModalHeaderComponent {
-  entityDelete = input<EntityDelete>();
-  entityActions = input<EntityActions>();
+  public entityDelete: InputSignal<EntityDelete | undefined> =
+    input<EntityDelete>();
+  public entityActions: InputSignal<EntityActions | undefined> =
+    input<EntityActions>();
 
-  closed = output<void>();
+  protected readonly closed: OutputEmitterRef<void> = output<void>();
 
-  get heading(): string {
+  public get heading(): string {
     return `${this.entityActions()} ${this.entityDelete()}`;
   }
 
-  closeModal() {
+  public closeModal(): void {
     this.closed.emit();
   }
 }
