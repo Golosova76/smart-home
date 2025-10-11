@@ -103,7 +103,20 @@ export default [
         "error",
         { accessibility: "explicit", overrides: { constructors: "off" } },
       ],
-      "@typescript-eslint/member-ordering": "error",
+      "@typescript-eslint/member-ordering": [
+        'error',
+        {
+          default: {
+            memberTypes: [
+              // порядок групп, не зависящий от модификаторов
+              'field',
+              'constructor',
+              'method',
+            ],
+            order: 'as-written', // сохраняет порядок, как в коде
+          },
+        },
+      ],
       "@typescript-eslint/consistent-type-definitions": "off",
       "@typescript-eslint/no-magic-numbers": [
         "warn",

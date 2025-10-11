@@ -19,18 +19,18 @@ import { TabActionsTitleMove } from "@/app/store/actions/dashboard.actions";
   styleUrl: "./sensor.component.scss",
 })
 export class SensorComponent {
-  protected readonly store: Store<AppState> = inject<Store<AppState>>(Store);
-  protected readonly routeIds: RouteIdValidService =
+  private readonly store: Store<AppState> = inject<Store<AppState>>(Store);
+  private readonly routeIds: RouteIdValidService =
     inject(RouteIdValidService);
-  protected readonly LAYOUT = LAYOUT_TYPES;
+ public readonly LAYOUT = LAYOUT_TYPES;
 
-  protected readonly layout: InputSignal<LayoutType | undefined> =
+  public readonly layout: InputSignal<LayoutType | undefined> =
     input<LayoutType>();
-  protected readonly sensor: InputSignal<Sensor | undefined> = input<Sensor>();
+  public readonly sensor: InputSignal<Sensor | undefined> = input<Sensor>();
 
   protected readonly selectedTabId: Signal<string | null> =
     this.routeIds.selectedTabId;
-  protected readonly cardId: InputSignal<string | null> = input<string | null>(
+  public readonly cardId: InputSignal<string | null> = input<string | null>(
     null,
   );
   protected readonly isEditMode: Signal<boolean> =

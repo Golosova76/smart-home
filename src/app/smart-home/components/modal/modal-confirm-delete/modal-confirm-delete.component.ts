@@ -21,13 +21,13 @@ import { UpperFirstPipe } from "@/app/shared/pipes/upper-first.pipe";
   styleUrl: "./modal-confirm-delete.component.scss",
 })
 export class ModalConfirmDeleteComponent {
-  protected readonly entityDelete: InputSignal<EntityDelete | undefined> =
+  public readonly entityDelete: InputSignal<EntityDelete | undefined> =
     input<EntityDelete>();
-  protected readonly labelDelete: InputSignal<string | undefined> =
+  public readonly labelDelete: InputSignal<string | undefined> =
     input<string>();
 
-  protected readonly closed: OutputEmitterRef<void> = output<void>();
-  protected readonly deleted: OutputEmitterRef<void> = output<void>();
+  public readonly closed: OutputEmitterRef<void> = output<void>();
+  public readonly deleted: OutputEmitterRef<void> = output<void>();
 
   public onDeleted(): void {
     this.deleted.emit();

@@ -1,6 +1,8 @@
+import type { Signal, InputSignal, WritableSignal } from "@angular/core";
 import { Component, computed, inject, input, signal } from "@angular/core";
 
 import type {
+  Card,
   Device,
   DeviceItem,
   Item,
@@ -24,6 +26,10 @@ import {
   TabActionsTitleMove,
 } from "@/app/store/actions/dashboard.actions";
 import { AvailableItemsActions } from "@/app/store/actions/devices.actions";
+import {
+  isNonEmptyString,
+  isNullOrEmpty,
+} from "@/app/shared/utils/is-null-or-empty";
 
 @Component({
   selector: "app-card",
@@ -39,104 +45,123 @@ import { AvailableItemsActions } from "@/app/store/actions/devices.actions";
   styleUrl: "./card.component.scss",
 })
 export class CardComponent {
-  private store = inject<Store<AppState>>(Store);
-  private readonly routeIds = inject(RouteIdValidService);
+  private readonly store: Store<AppState> = inject<Store<AppState>>(Store);
+  private readonly routeIds: RouteIdValidService = inject(RouteIdValidService);
 
-  cardId = input<string | null>(null);
-
-  readonly selectedTabId = this.routeIds.selectedTabId;
-
-  readonly isEditCardOpenModal = signal(false);
-
-  readonly isEmptyCard = computed(() => !this.card()?.items?.length);
-  readonly hasGroupToggle = computed(() => (this.devices()?.length ?? 0) > 1);
-  readonly disableLeft = computed(() => this.cardIndex() <= 0);
-  readonly disableRight = computed(
-    () => this.cardsCount() <= 1 || this.cardIndex() === this.cardsCount() - 1,
+  public readonly cardId: InputSignal<string | null> = input<string | null>(
+    null,
   );
 
-  readonly groupIsOn = computed<boolean>(() =>
-    this.devices().some((d) => d.state),
+  private readonly selectedTabId: Signal<string | null> =
+    this.routeIds.selectedTabId;
+
+  public isEditCardOpenModal: WritableSignal<boolean> = signal(false);
+
+  public readonly isEmptyCard: Signal<boolean> = computed((): boolean => {
+    const items: Item[] | undefined = this.card()?.items;
+    return !items || items.length === 0;
+  });
+
+  public readonly hasGroupToggle: Signal<boolean> = computed(
+    (): boolean => (this.devices()?.length ?? 0) > 1,
+  );
+  public readonly disableLeft: Signal<boolean> = computed(
+    (): boolean => this.cardIndex() <= 0,
+  );
+  public readonly disableRight: Signal<boolean> = computed(
+    (): boolean =>
+      this.cardsCount() <= 1 || this.cardIndex() === this.cardsCount() - 1,
   );
 
-  readonly groupToggleIcon = computed(() =>
+  public readonly groupIsOn: Signal<boolean> = computed<boolean>((): boolean =>
+    this.devices().some((device: Device): boolean => device.state),
+  );
+
+  public readonly groupToggleIcon = computed(() =>
     this.groupIsOn() ? "toggle_on" : "toggle_off",
   );
 
-  readonly groupToggleClasses = computed(() => ({
+  public readonly groupToggleClasses = computed(() => ({
     on: this.groupIsOn(),
     off: !this.groupIsOn(),
   }));
 
-  readonly isEditMode = this.store.selectSignal<boolean>(
-    dashboardsSelectors.selectIsEditModeEnabled,
-  );
+  public readonly isEditMode: Signal<boolean> =
+    this.store.selectSignal<boolean>(
+      dashboardsSelectors.selectIsEditModeEnabled,
+    );
 
-  readonly card = computed(() => {
-    const tabId = this.selectedTabId();
-    const cardId = this.cardId();
-    if (!tabId || !cardId) return null;
+  public readonly card: Signal<Card | null> = computed((): Card | null => {
+    const tabId: string | null = this.selectedTabId();
+    const cardId: string | null = this.cardId();
+    if (isNullOrEmpty(tabId) || isNullOrEmpty(cardId)) return null;
 
     const selectCardById = dashboardsSelectors.selectCardById(tabId, cardId);
     return this.store.selectSignal(selectCardById)();
   });
 
-  readonly sensors = computed<Sensor[]>(() =>
+  public readonly sensors: Signal<Sensor[]> = computed<Sensor[]>(() =>
     (this.card()?.items ?? [])
-      .filter((item): item is SensorItem => item.type === ITEM_TYPES.SENSOR)
-      .map(({ type, ...rest }) => rest),
+      .filter(
+        (item: Item): item is SensorItem => item.type === ITEM_TYPES.SENSOR,
+      )
+      .map(({ type, ...rest }: SensorItem) => rest),
   );
 
-  readonly devices = computed<Device[]>(() =>
+  public readonly devices: Signal<Device[]> = computed<Device[]>(() =>
     (this.card()?.items ?? [])
       .filter((item): item is DeviceItem => item.type === ITEM_TYPES.DEVICE)
-      .map(({ type, ...rest }) => rest),
+      .map(({ type, ...rest }: DeviceItem) => rest),
   );
 
-  readonly cardsInTab = computed(() => {
-    const tabId = this.selectedTabId();
-    if (!tabId) return [];
+  public readonly cardsInTab: Signal<Card[]> = computed((): Card[] => {
+    const tabId: string | null = this.selectedTabId();
+    if (isNullOrEmpty(tabId)) return [];
     const sel = dashboardsSelectors.selectCardsByTabId(tabId);
     return this.store.selectSignal(sel)() ?? [];
   });
 
-  readonly cardIndex = computed(() => {
-    const id = this.cardId();
-    const list = this.cardsInTab();
-    return id ? list.findIndex((c) => c.id === id) : -1;
+  public readonly cardIndex: Signal<number> = computed((): number => {
+    const id: string | null = this.cardId();
+    const list: Card[] = this.cardsInTab();
+    return isNullOrEmpty(id)
+      ? list.findIndex((card: Card): boolean => card.id === id)
+      : -1;
   });
 
-  readonly cardsCount = computed(() => this.cardsInTab().length);
+  public readonly cardsCount: Signal<number> = computed(
+    (): number => this.cardsInTab().length,
+  );
 
-  openEditCardModal(): void {
+  public openEditCardModal(): void {
     this.isEditCardOpenModal.set(true);
   }
 
-  closeDelete() {
+  public closeDelete(): void {
     this.isEditCardOpenModal.set(false);
   }
 
-  onCardEdit({
+  public onCardEdit({
     deviceId,
     sensorId,
   }: {
     deviceId: string | null;
     sensorId: string | null;
   }): void {
-    const tabId = this.selectedTabId();
-    const cardId = this.cardId();
-    if (!tabId || !cardId) return;
+    const tabId: string | null = this.selectedTabId();
+    const cardId: string | null = this.cardId();
+    if (isNullOrEmpty(tabId) || isNullOrEmpty(cardId)) return;
 
     const itemsToAdd: Item[] = [];
 
-    if (sensorId) {
+    if (isNonEmptyString(sensorId)) {
       const sensor = this.store.selectSignal(
         devicesSelectors.selectSensorById(sensorId),
       )();
       if (sensor) itemsToAdd.push(sensor); // sensor уже с type: 'sensor'
     }
 
-    if (deviceId) {
+    if (isNonEmptyString(deviceId)) {
       const device = this.store.selectSignal(
         devicesSelectors.selectDeviceById(deviceId),
       )();
@@ -156,24 +181,25 @@ export class CardComponent {
     this.closeDelete();
   }
 
-  onCardDelete(): void {
-    const tabId = this.selectedTabId();
-    const cardId = this.cardId();
-    if (!tabId || !cardId) return;
+  public onCardDelete(): void {
+    const tabId: string | null = this.selectedTabId();
+    const cardId: string | null = this.cardId();
+    if (isNullOrEmpty(tabId) || isNullOrEmpty(cardId)) return;
 
     this.store.dispatch(TabActionsTitleMove.removeCard({ tabId, cardId }));
   }
 
-  onReorderCard(targetIndex: number): void {
-    const tabId = this.selectedTabId();
-    const cardId = this.cardId();
-    const from = this.cardIndex();
-    const count = this.cardsCount();
+  public onReorderCard(targetIndex: number): void {
+    const tabId: string | null = this.selectedTabId();
+    const cardId: string | null = this.cardId();
+    const from: number = this.cardIndex();
+    const count: number = this.cardsCount();
 
-    if (!tabId || !cardId || from < 0 || count <= 1) return;
+    if (isNullOrEmpty(tabId) || isNullOrEmpty(cardId) || from < 0 || count <= 1)
+      return;
 
-    const max = count - 1;
-    const newIndex = Math.max(0, Math.min(targetIndex, max));
+    const max: number = count - 1;
+    const newIndex: number = Math.max(0, Math.min(targetIndex, max));
     if (newIndex === from) return;
 
     this.store.dispatch(
@@ -181,18 +207,18 @@ export class CardComponent {
     );
   }
 
-  moveLeft(): void {
+  public moveLeft(): void {
     if (this.disableLeft()) return;
     this.onReorderCard(this.cardIndex() - 1);
   }
 
-  moveRight(): void {
+  public moveRight(): void {
     if (this.disableRight()) return;
     this.onReorderCard(this.cardIndex() + 1);
   }
 
-  onGroupToggleClick() {
-    const next = !this.groupIsOn();
+  public onGroupToggleClick(): void {
+    const next: boolean = !this.groupIsOn();
     for (const d of this.devices()) {
       this.store.dispatch(
         DevicesActions.toggleDeviceState({

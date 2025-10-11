@@ -17,12 +17,12 @@ import type {
   styleUrl: "./modal-header.component.scss",
 })
 export class ModalHeaderComponent {
-  public entityDelete: InputSignal<EntityDelete | undefined> =
+  public readonly entityDelete: InputSignal<EntityDelete | undefined> =
     input<EntityDelete>();
-  public entityActions: InputSignal<EntityActions | undefined> =
+  public readonly entityActions: InputSignal<EntityActions | undefined> =
     input<EntityActions>();
 
-  protected readonly closed: OutputEmitterRef<void> = output<void>();
+  public readonly closed: OutputEmitterRef<void> = output<void>();
 
   public get heading(): string {
     return `${this.entityActions()} ${this.entityDelete()}`;

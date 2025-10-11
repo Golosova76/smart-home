@@ -43,20 +43,20 @@ export class ModalCreateDashboardsComponent implements OnInit {
     ]),
     icon: new FormControl<string | null>(null, Validators.required),
   });
-  protected readonly router: Router = inject(Router);
+  private readonly router: Router = inject(Router);
 
-  protected readonly closed: OutputEmitterRef<void> = output<void>();
-  protected readonly checkId: InputSignal<string[]> = input<string[]>([]);
-  protected readonly entityActions: InputSignal<EntityActions> =
+  public readonly closed: OutputEmitterRef<void> = output<void>();
+  public readonly checkId: InputSignal<string[]> = input<string[]>([]);
+  public readonly entityActions: InputSignal<EntityActions> =
     input.required<EntityActions>();
 
-  protected readonly submitted = output<{
+  public readonly submitted = output<{
     id: string;
     title: string;
     icon: string;
   }>();
 
-  private lastIds: string[] = [];
+  public lastIds: string[] = [];
 
   constructor() {
     effect((): void => {

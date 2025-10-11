@@ -1,4 +1,4 @@
-import type { OnInit } from "@angular/core";
+import type { InputSignal, OnInit } from "@angular/core";
 import { Component, inject, input } from "@angular/core";
 
 import type { Card } from "@/app/shared/models/data.model";
@@ -15,11 +15,11 @@ import type { AppState } from "@/app/store/state/app.state";
   styleUrl: "./card-list.component.scss",
 })
 export class CardListComponent implements OnInit {
-  private store = inject<Store<AppState>>(Store);
+  private readonly store: Store<AppState> = inject<Store<AppState>>(Store);
 
-  cards = input<Card[]>([]);
+  public readonly cards: InputSignal<Card[]> = input<Card[]>([]);
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.store.dispatch(devicesAction.load());
   }
 }

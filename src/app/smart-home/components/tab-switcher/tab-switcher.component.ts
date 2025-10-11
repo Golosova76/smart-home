@@ -12,48 +12,48 @@ import type { Tab } from "@/app/shared/models/data.model";
 })
 export class TabSwitcherComponent {
   // dashboard
-  protected readonly deleteClick: OutputEmitterRef<void> = output<void>();
-  protected readonly editClick: OutputEmitterRef<void> = output<void>();
-  protected readonly saveClick: OutputEmitterRef<void> = output<void>();
-  protected readonly discardClick: OutputEmitterRef<void> = output<void>();
-  protected readonly addTabClick: OutputEmitterRef<void> = output<void>();
-  protected readonly removeTabClick: OutputEmitterRef<string> =
-    output<string>();
+  public readonly deleteClick: OutputEmitterRef<void> = output<void>();
+  public readonly editClick: OutputEmitterRef<void> = output<void>();
+  public readonly saveClick: OutputEmitterRef<void> = output<void>();
+  public readonly discardClick: OutputEmitterRef<void> = output<void>();
+  public readonly addTabClick: OutputEmitterRef<void> = output<void>();
+  public readonly removeTabClick: OutputEmitterRef<string> = output<string>();
 
   //tab
-  protected readonly selectTab: OutputEmitterRef<string> = output<string>();
+  public readonly selectTab: OutputEmitterRef<string> = output<string>();
 
-  protected readonly reorderTab = output<{
+  public readonly reorderTab = output<{
     tabId: string;
     direction: "left" | "right";
   }>();
 
-  protected readonly startTitleEdit: OutputEmitterRef<{
+  public readonly startTitleEdit: OutputEmitterRef<{
     tabId: string;
     currentTitle: string;
   }> = output<{
     tabId: string;
     currentTitle: string;
   }>();
-  protected readonly commitTitleEdit: OutputEmitterRef<{
+  public readonly commitTitleEdit: OutputEmitterRef<{
     tabId: string;
     newTitle: string;
   }> = output<{
     tabId: string;
     newTitle: string;
   }>();
-  protected readonly endTitleEdit: OutputEmitterRef<void> = output<void>();
+  public readonly endTitleEdit: OutputEmitterRef<void> = output<void>();
 
-  protected readonly activeTabId: InputSignal<string | null> = input<
+  public readonly activeTabId: InputSignal<string | null> = input<
     string | null
   >(null);
-  protected readonly editMode: InputSignal<boolean> = input<boolean>(false);
 
-  protected readonly editTabId: InputSignal<string | null> = input<
-    string | null
-  >(null);
-  protected readonly tabTitleDraft: InputSignal<string> = input<string>("");
-  protected readonly tabs: InputSignal<Tab[]> = input<Tab[]>([]);
+  public readonly editMode: InputSignal<boolean> = input<boolean>(false);
+
+  public readonly editTabId: InputSignal<string | null> = input<string | null>(
+    null,
+  );
+  public readonly tabTitleDraft: InputSignal<string> = input<string>("");
+  public readonly tabs: InputSignal<Tab[]> = input<Tab[]>([]);
 
   public onTabClick(tabId: string): void {
     this.selectTab.emit(tabId);

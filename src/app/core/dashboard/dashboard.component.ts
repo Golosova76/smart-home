@@ -21,6 +21,10 @@ import * as dashboardActions from "@/app/store/actions/dashboard.actions";
 import type { AppState } from "@/app/store/state/app.state";
 import type { Tab } from "@/app/shared/models/data.model";
 import { ModalCreateTabsComponent } from "@/app/smart-home/components/modal/modal-create-tabs/modal-create-tabs.component";
+import {
+  isNonEmptyString,
+  isNullOrEmpty,
+} from "@/app/shared/utils/is-null-or-empty";
 
 @Component({
   imports: [
@@ -38,83 +42,83 @@ export class DashboardComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly handlerService = inject(DashboardHandlerService);
   private readonly routeIds = inject(RouteIdValidService);
-  private store = inject<Store<AppState>>(Store);
+  private readonly store = inject<Store<AppState>>(Store);
 
   // массив tab где tabId
-  readonly tabsSignal = this.store.selectSignal<Tab[]>(
+  public readonly tabsSignal = this.store.selectSignal<Tab[]>(
     dashboardsSelectors.selectTabs,
   );
-  readonly editTabId = this.store.selectSignal<string | null>(
+  public readonly editTabId = this.store.selectSignal<string | null>(
     dashboardsSelectors.selectEditTabId,
   );
-  readonly tabTitleDraft = this.store.selectSignal<string>(
+  public readonly tabTitleDraft = this.store.selectSignal<string>(
     dashboardsSelectors.selectTabTitleDraft,
   );
 
-  readonly dashboardIdRouteSignal = this.routeIds.dashboardIdValid;
+  public readonly dashboardIdRouteSignal = this.routeIds.dashboardIdValid;
 
-  readonly selectedTabId = this.routeIds.selectedTabId;
+  public readonly selectedTabId = this.routeIds.selectedTabId;
 
-  readonly isAddTabOpenModal = signal<boolean>(false);
+  public isAddTabOpenModal = signal<boolean>(false);
 
-  readonly isDeleteOpenModal = signal<boolean>(false);
-  readonly isDeleteTabOpenModal = signal<boolean>(false);
-  readonly tabToDeleteId = signal<string | null>(null);
+  public isDeleteOpenModal = signal<boolean>(false);
+  public isDeleteTabOpenModal = signal<boolean>(false);
+  public tabToDeleteId = signal<string | null>(null);
 
-  readonly isEditMode = this.store.selectSignal<boolean>(
+  public readonly isEditMode = this.store.selectSignal<boolean>(
     dashboardsSelectors.selectIsEditModeEnabled,
   );
 
-  readonly tabToDeleteName = computed(() => {
+  public readonly tabToDeleteName = computed(() => {
     const tabId = this.tabToDeleteId();
-    if (!tabId) return "";
+    if (isNullOrEmpty(tabId)) return "";
 
     const tab = this.tabsSignal().find((tab) => tab.id === tabId);
-    return tab?.title || "";
+    return tab?.title ?? "";
   });
-
-  onTabSelected(tabId: string) {
-    this.routeIds.selectTab(tabId);
-  }
 
   constructor() {
     effect(() => {
       const dashboardId = this.routeIds.dashboardIdValid();
-      if (dashboardId) {
+      if (isNonEmptyString(dashboardId)) {
         this.store.dispatch(dashboardActions.selectDashboard({ dashboardId }));
       }
     });
   }
 
-  openDeleteModal() {
+  public onTabSelected(tabId: string): void {
+    this.routeIds.selectTab(tabId);
+  }
+
+  public openDeleteModal(): void {
     if (this.isEditMode()) {
       return;
     }
     this.isDeleteOpenModal.set(true);
   }
 
-  openAddTabModal() {
+  public openAddTabModal(): void {
     if (!this.isEditMode()) {
       return;
     }
     this.isAddTabOpenModal.set(true);
   }
 
-  onAddTabSubmit(title: string): void {
+  public onAddTabSubmit(title: string): void {
     this.store.dispatch(dashboardActions.TabActionsTitleMove.addTab({ title }));
     this.closeDelete();
   }
 
-  closeDelete() {
+  public closeDelete(): void {
     this.isDeleteOpenModal.set(false);
     this.isAddTabOpenModal.set(false);
     this.isDeleteTabOpenModal.set(false);
     this.tabToDeleteId.set(null);
   }
 
-  onRemoveTab(): void {
-    const id = this.tabToDeleteId();
-    if (!id) return;
+  public onRemoveTab(): void {
+    const id: string | null = this.tabToDeleteId();
+    if (isNullOrEmpty(id)) return;
     this.store.dispatch(
       dashboardActions.TabActionsTitleMove.removeTab({ tabId: id }),
     );
@@ -122,9 +126,9 @@ export class DashboardComponent {
     this.tabToDeleteId.set(null);
   }
 
-  onDelete() {
+  public onDelete(): void {
     const dashboardId = this.routeIds.dashboardIdRouteSignal();
-    if (!dashboardId) {
+    if (isNullOrEmpty(dashboardId)) {
       this.closeDelete();
       return;
     }
@@ -153,37 +157,43 @@ export class DashboardComponent {
       });
   }
 
-  onEditClick() {
+  public onEditClick(): void {
     this.store.dispatch(dashboardActions.enterEditMode());
   }
 
-  onSave() {
+  public onSave(): void {
     this.store.dispatch(dashboardActions.saveDashboard());
     this.store.dispatch(dashboardActions.exitEditMode());
   }
 
-  onDiscard() {
+  public onDiscard(): void {
     this.store.dispatch(dashboardActions.discardChanges());
     this.store.dispatch(dashboardActions.exitEditMode());
   }
 
-  onStartTitleEdit(event: { tabId: string; currentTitle: string }) {
+  public onStartTitleEdit(event: {
+    tabId: string;
+    currentTitle: string;
+  }): void {
     this.store.dispatch(
       dashboardActions.TabActionsTitleMove.startTitleEdit(event),
     );
   }
 
-  onEndTitleEdit() {
+  public onEndTitleEdit(): void {
     this.store.dispatch(dashboardActions.TabActionsTitleMove.endTitleEdit());
   }
 
-  onCommitTitleEdit(event: { tabId: string; newTitle: string }) {
+  public onCommitTitleEdit(event: { tabId: string; newTitle: string }): void {
     this.store.dispatch(
       dashboardActions.TabActionsTitleMove.commitTitleEdit(event),
     );
   }
 
-  onReorderTab(event: { tabId: string; direction: "left" | "right" }) {
+  public onReorderTab(event: {
+    tabId: string;
+    direction: "left" | "right";
+  }): void {
     this.store.dispatch(
       dashboardActions.TabActionsTitleMove.reorderTab({
         tabId: event.tabId,
@@ -192,7 +202,7 @@ export class DashboardComponent {
     );
   }
 
-  openRemoveTabModal(tabId: string) {
+  public openRemoveTabModal(tabId: string): void {
     if (!this.isEditMode()) {
       return;
     }

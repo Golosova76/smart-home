@@ -21,11 +21,11 @@ export class ModalFooterComponent {
     input<EntityActions>();
   public disabled: InputSignal<boolean> = input<boolean>(false);
 
-  protected readonly closed: OutputEmitterRef<void> = output<void>();
-  protected readonly delete: OutputEmitterRef<void> = output<void>();
-  protected readonly submitFooter: OutputEmitterRef<void> = output<void>();
+  public readonly closed: OutputEmitterRef<void> = output<void>();
+  public readonly delete: OutputEmitterRef<void> = output<void>();
+  public readonly submitFooter: OutputEmitterRef<void> = output<void>();
 
-  protected readonly variant: InputSignal<FooterVariant> =
+  public readonly variant: InputSignal<FooterVariant> =
     input<FooterVariant>("form");
 
   public get buttonAction(): string {
