@@ -7,11 +7,13 @@
   padding: 10px 10px 10px 20px;
   @include m.flex-center-between;
   gap: 20px;
+  flex-wrap: wrap;
   background-color: var(--background-color-navbar);
 }
 
 .tabs-actions {
   @include m.flex-column20;
+  flex-wrap: wrap;
 }
 
 .dash-actions {
