@@ -1,3 +1,4 @@
+import type { WritableSignal } from "@angular/core";
 import { inject, Injectable, signal } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import type { UserProfile } from "@/app/shared/models/profile.model";
@@ -8,15 +9,16 @@ import type { Observable } from "rxjs";
   providedIn: "root",
 })
 export class ProfileService {
-  private readonly http = inject(HttpClient);
+  private readonly http: HttpClient = inject(HttpClient);
 
-  readonly profile = signal<UserProfile | null>(null);
+  public readonly profile: WritableSignal<UserProfile | null> =
+    signal<UserProfile | null>(null);
 
-  getProfile(): Observable<UserProfile> {
+  public getProfile(): Observable<UserProfile> {
     return this.http.get<UserProfile>(`${BASE_API_URL}user/profile`);
   }
 
-  clearProfile(): void {
+  public clearProfile(): void {
     this.profile.set(null);
   }
 }

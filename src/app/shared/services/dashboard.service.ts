@@ -13,33 +13,39 @@ import type {
   providedIn: "root",
 })
 export class DashboardService {
-  private http = inject(HttpClient);
+  private readonly http: HttpClient = inject(HttpClient);
 
-  getDashboards(): Observable<Dashboard[]> {
+  public getDashboards(): Observable<Dashboard[]> {
     return this.http.get<Dashboard[]>(`${BASE_API_URL}dashboards`);
   }
 
-  getDashboardById(id: string): Observable<DataModel> {
+  public getDashboardById(id: string): Observable<DataModel> {
     return this.http.get<DataModel>(`${BASE_API_URL}dashboards/${id}`);
   }
 
-  createDashboard(payload: Dashboard): Observable<Dashboard> {
+  public createDashboard(payload: Dashboard): Observable<Dashboard> {
     return this.http.post<Dashboard>(`${BASE_API_URL}dashboards`, payload);
   }
 
-  deleteDashboard(id: string): Observable<void> {
+  public deleteDashboard(id: string): Observable<void> {
     return this.http.delete<void>(`${BASE_API_URL}dashboards/${id}`);
   }
 
-  saveDashboardById(id: string, payload: DataModel): Observable<DataModel> {
+  public saveDashboardById(
+    id: string,
+    payload: DataModel,
+  ): Observable<DataModel> {
     return this.http.put<DataModel>(`${BASE_API_URL}dashboards/${id}`, payload);
   }
 
-  getDevices() {
+  public getDevices(): Observable<Item[]> {
     return this.http.get<Item[]>(`${BASE_API_URL}devices`);
   }
 
-  toggleDeviceState(deviceId: string, newState: boolean) {
+  public toggleDeviceState(
+    deviceId: string,
+    newState: boolean,
+  ): Observable<DeviceState> {
     return this.http.patch<DeviceState>(`${BASE_API_URL}devices/${deviceId}`, {
       state: newState,
     });

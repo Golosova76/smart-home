@@ -1,5 +1,6 @@
-import type { Signal } from "@angular/core";
+import type { Signal, WritableSignal } from "@angular/core";
 import { computed, inject, Injectable } from "@angular/core";
+import type { ActivatedRoute } from "@angular/router";
 import { NavigationEnd, Router } from "@angular/router";
 import { DashboardHandlerService } from "@/app/shared/services/dashboard-handler.service";
 import { toSignal } from "@angular/core/rxjs-interop";
@@ -9,82 +10,94 @@ import type { Tab } from "@/app/shared/models/data.model";
 import { Store } from "@ngrx/store";
 import { selectTabs } from "@/app/store/selectors/selected-dashboard.selectors";
 import type { AppState } from "@/app/store/state/app.state";
+import {
+  isNonEmptyString,
+  isNonNull,
+  isNullOrEmpty,
+} from "@/app/shared/utils/is-null-or-empty";
 
 @Injectable({
   providedIn: "root",
 })
 export class RouteIdValidService {
-  private readonly router = inject(Router);
-  private readonly handlerService = inject(DashboardHandlerService);
-  private store = inject<Store<AppState>>(Store);
+  private readonly router: Router = inject(Router);
+  private readonly handlerService: DashboardHandlerService = inject(
+    DashboardHandlerService,
+  );
+  private readonly store: Store<AppState> = inject<Store<AppState>>(Store);
 
-  readonly dashboardsSignal = this.handlerService.dashboardsSignal;
-  // readonly tabsSignal = this.handlerService.tabsSignal;
-  readonly tabsSignal: Signal<Tab[]> = this.store.selectSignal(selectTabs);
+  public readonly dashboardsSignal: WritableSignal<Dashboard[]> =
+    this.handlerService.dashboardsSignal;
+  public readonly tabsSignal: Signal<Tab[]> =
+    this.store.selectSignal(selectTabs);
+
+  //получение параметров URL - сигналы
+  public readonly dashboardIdRouteSignal: Signal<string | null> = toSignal(
+    this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      startWith(null),
+      map((): string | null => this.readParamFromTree("dashboardId")),
+    ),
+    { initialValue: null },
+  );
+
+  public readonly tabIdRouteSignal: Signal<string | null> = toSignal(
+    this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      startWith(null),
+      map((): string | null => this.readParamFromTree("tabId")),
+    ),
+    { initialValue: null },
+  );
+
+  public readonly dashboardIdValid: Signal<string | null> = computed(
+    (): string | null =>
+      this.getValidDashboardId(
+        this.dashboardsSignal(),
+        this.dashboardIdRouteSignal(),
+      ),
+  );
+
+  public readonly tabIdValid: Signal<string | null> = computed(
+    (): string | null =>
+      this.getValidTabId(this.tabsSignal(), this.tabIdRouteSignal()),
+  );
+  public readonly selectedTabId: Signal<string | null> = this.tabIdValid;
 
   private readParamFromTree(parameters: string): string | null {
-    let route = this.router.routerState.root;
+    let route: ActivatedRoute | null = this.router.routerState.root;
     let found: string | null = null;
 
-    while (route) {
-      const value = route.snapshot.paramMap.get(parameters);
-      if (value) found = value;
-      route = route.firstChild!;
+    while (isNonNull(route)) {
+      const value: string | null = route.snapshot.paramMap.get(parameters);
+      if (isNonEmptyString(value)) found = value;
+      route = route.firstChild ?? null;
     }
     return found;
   }
 
-  //получение параметров URL - сигналы
-  readonly dashboardIdRouteSignal: Signal<string | null> = toSignal(
-    this.router.events.pipe(
-      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-      startWith(null),
-      map(() => this.readParamFromTree("dashboardId")),
-    ),
-    { initialValue: null },
-  );
-
-  readonly tabIdRouteSignal: Signal<string | null> = toSignal(
-    this.router.events.pipe(
-      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-      startWith(null),
-      map(() => this.readParamFromTree("tabId")),
-    ),
-    { initialValue: null },
-  );
-
-  readonly dashboardIdValid = computed(() =>
-    this.getValidDashboardId(
-      this.dashboardsSignal(),
-      this.dashboardIdRouteSignal(),
-    ),
-  );
-
-  readonly tabIdValid = computed(() =>
-    this.getValidTabId(this.tabsSignal(), this.tabIdRouteSignal()),
-  );
-
-  readonly selectedTabId = this.tabIdValid;
-
-  selectDashboard(dashboardId: string | null): void {
-    const dashboardIdValid = this.getValidDashboardId(
+  public selectDashboard(dashboardId: string | null): void {
+    const dashboardIdValid: string | null = this.getValidDashboardId(
       this.dashboardsSignal(),
       dashboardId,
     );
-    if (!dashboardIdValid) return;
+    if (isNullOrEmpty(dashboardIdValid)) return;
 
     if (this.dashboardIdRouteSignal() === dashboardIdValid) return;
 
     this.router.navigate(["/dashboard", dashboardIdValid]).catch(() => {});
   }
 
-  selectTab(tabId: string) {
-    const dashboardIdValid = this.dashboardIdValid();
-    const tabIdValid = this.getValidTabId(this.tabsSignal(), tabId);
-    if (!dashboardIdValid || !tabIdValid) return;
+  public selectTab(tabId: string): void {
+    const dashboardIdValid: string | null = this.dashboardIdValid();
+    const tabIdValid: string | null = this.getValidTabId(
+      this.tabsSignal(),
+      tabId,
+    );
+    if (isNullOrEmpty(dashboardIdValid) || isNullOrEmpty(tabIdValid)) return;
 
-    const dashboardIdRouteSignal = this.dashboardIdRouteSignal();
-    const tabIdRouteSignal = this.tabIdRouteSignal();
+    const dashboardIdRouteSignal: string | null = this.dashboardIdRouteSignal();
+    const tabIdRouteSignal: string | null = this.tabIdRouteSignal();
 
     if (
       dashboardIdValid === dashboardIdRouteSignal &&
@@ -94,25 +107,27 @@ export class RouteIdValidService {
     }
     this.router
       .navigate(["/dashboard", dashboardIdValid, tabIdValid])
-      .catch(() => {});
+      .catch((): void => {});
   }
 
-  getValidDashboardId(
+  public getValidDashboardId(
     dashboards: Dashboard[],
     dashboardIdRoute: string | null,
-  ) {
-    const hasDashboardId = dashboards.some(
-      (dashboard) => dashboard.id === dashboardIdRoute,
+  ): string | null {
+    const hasDashboardId: boolean = dashboards.some(
+      (dashboard: Dashboard): boolean => dashboard.id === dashboardIdRoute,
     );
-    if (!dashboardIdRoute || !hasDashboardId) {
+    if (isNullOrEmpty(dashboardIdRoute) || !hasDashboardId) {
       return dashboards.length > 0 ? dashboards[0].id : null;
     }
     return dashboardIdRoute;
   }
 
-  getValidTabId(tabs: Tab[], tabIdRoute: string | null) {
-    const httpTabId = tabs.some((tab) => tab.id === tabIdRoute);
-    if (!tabIdRoute || !httpTabId) {
+  public getValidTabId(tabs: Tab[], tabIdRoute: string | null): string | null {
+    const httpTabId: boolean = tabs.some(
+      (tab: Tab): boolean => tab.id === tabIdRoute,
+    );
+    if (isNullOrEmpty(tabIdRoute) || !httpTabId) {
       return tabs.length > 0 ? tabs[0].id : null;
     }
     return tabIdRoute;

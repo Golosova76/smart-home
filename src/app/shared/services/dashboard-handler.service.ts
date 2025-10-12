@@ -1,37 +1,45 @@
+import type { WritableSignal } from "@angular/core";
 import { inject, Injectable, signal } from "@angular/core";
 import type { Dashboard } from "@/app/shared/models/dashboard.model";
 import type { DataModel, Tab } from "@/app/shared/models/data.model";
 import type { Observable } from "rxjs";
 import { catchError, map, tap, throwError } from "rxjs";
 import { DashboardService } from "@/app/shared/services/dashboard.service";
+import { isNonNull } from "@/app/shared/utils/is-null-or-empty";
 
 @Injectable({
   providedIn: "root",
 })
 export class DashboardHandlerService {
-  private readonly api = inject(DashboardService);
+  private readonly api: DashboardService = inject(DashboardService);
 
-  readonly dashboardsSignal = signal<Dashboard[]>([]);
-  readonly dashboardByIdSignal = signal<DataModel | null>(null);
-  readonly tabsSignal = signal<Tab[]>([]);
-  readonly lastLoadedDashboardIdSignal = signal<string | null>(null);
+  public readonly dashboardsSignal: WritableSignal<Dashboard[]> = signal<
+    Dashboard[]
+  >([]);
+  public readonly dashboardByIdSignal: WritableSignal<DataModel | null> =
+    signal<DataModel | null>(null);
+  public readonly tabsSignal: WritableSignal<Tab[]> = signal<Tab[]>([]);
+  public readonly lastLoadedDashboardIdSignal: WritableSignal<string | null> =
+    signal<string | null>(null);
 
-  loadDashboards(): Observable<Dashboard[]> {
+  public loadDashboards(): Observable<Dashboard[]> {
     return this.api.getDashboards().pipe(
-      tap((list) => this.dashboardsSignal.set(list)),
-      catchError((error: unknown) => throwError(() => error)),
+      tap((list: Dashboard[]): void => this.dashboardsSignal.set(list)),
+      catchError(
+        (error: unknown): Observable<never> => throwError((): unknown => error),
+      ),
     );
   }
 
-  loadDashboardById(dashboardId: string) {
+  public loadDashboardById(dashboardId: string): Observable<DataModel> {
     if (!dashboardId) {
       this.dashboardByIdSignal.set(null);
       this.tabsSignal.set([]);
-      return throwError(() => new Error("dashboardId is empty"));
+      return throwError((): Error => new Error("dashboardId is empty"));
     }
 
     return this.api.getDashboardById(dashboardId).pipe(
-      tap((DataModel) => {
+      tap((DataModel: DataModel): void => {
         this.lastLoadedDashboardIdSignal.set(dashboardId);
         this.dashboardByIdSignal.set(DataModel);
         this.tabsSignal.set(DataModel.tabs ?? []);
@@ -39,26 +47,31 @@ export class DashboardHandlerService {
     );
   }
 
-  addDashboard(payload: Dashboard) {
+  public addDashboard(payload: Dashboard): Observable<Dashboard> {
     return this.api.createDashboard(payload).pipe(
-      tap((created) => {
-        if (created) {
-          this.dashboardsSignal.update((list) => [...list, created]);
+      tap((created: Dashboard): void => {
+        if (isNonNull(created)) {
+          this.dashboardsSignal.update((list: Dashboard[]): Dashboard[] => [
+            ...list,
+            created,
+          ]);
         }
       }),
       catchError((error: unknown) => throwError(() => error)),
     );
   }
 
-  removeDashboard(dashboardId: string) {
+  public removeDashboard(dashboardId: string): Observable<string> {
     if (!dashboardId) {
-      return throwError(() => new Error("dashboardId is empty"));
+      return throwError((): Error => new Error("dashboardId is empty"));
     }
 
     return this.api.deleteDashboard(dashboardId).pipe(
-      tap(() => {
-        this.dashboardsSignal.update((list) =>
-          list.filter((dashboard) => dashboard.id !== dashboardId),
+      tap((): void => {
+        this.dashboardsSignal.update((list: Dashboard[]): Dashboard[] =>
+          list.filter(
+            (dashboard: Dashboard): boolean => dashboard.id !== dashboardId,
+          ),
         );
 
         if (this.lastLoadedDashboardIdSignal() === dashboardId) {
@@ -67,8 +80,10 @@ export class DashboardHandlerService {
           this.lastLoadedDashboardIdSignal.set(null);
         }
       }),
-      map(() => this.dashboardsSignal()[0].id ?? null),
-      catchError((error: unknown) => throwError(() => error)),
+      map((): string => this.dashboardsSignal()[0].id ?? null),
+      catchError(
+        (error: unknown): Observable<never> => throwError((): unknown => error),
+      ),
     );
   }
 }

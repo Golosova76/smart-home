@@ -8,14 +8,14 @@ import type { AbstractControl } from "@angular/forms";
   styleUrl: "./form-error.component.scss",
 })
 export class FormErrorComponent {
-  control = input<AbstractControl<unknown> | null>(null);
+  public readonly control = input<AbstractControl<unknown> | null>(null);
 
-  get isNoTouch(): boolean {
+  public get isNoTouch(): boolean {
     const control = this.control();
     return Boolean(control && (control.touched || control.dirty));
   }
 
-  get messages(): string[] {
+  public get messages(): string[] {
     const control = this.control();
     if (control === null) return [];
 
