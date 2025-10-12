@@ -1,15 +1,20 @@
+import type { InputSignal } from "@angular/core";
 import { Directive, effect, HostBinding, input } from "@angular/core";
 
 @Directive({
   selector: "[appLightActiveDevice]",
 })
 export class LightActiveDeviceDirective {
-  @HostBinding("class.active-device") isActive = false;
+  @HostBinding("class.active-device")
+  public isActive: boolean = false;
 
-  lightActiveDevice = input<boolean>(false, { alias: "appLightActiveDevice" });
+  public readonly lightActiveDevice: InputSignal<boolean> = input<boolean>(
+    false,
+    { alias: "appLightActiveDevice" },
+  );
 
   constructor() {
-    effect(() => {
+    effect((): void => {
       this.isActive = this.lightActiveDevice();
     });
   }

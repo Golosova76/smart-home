@@ -2,24 +2,29 @@ import type {
   Card,
   DataModel,
   DeviceItem,
+  Item,
   LayoutType,
+  Tab,
 } from "@/app/shared/models/data.model";
 import { ITEM_TYPES } from "@/app/shared/models/data.model";
 import { normalizeToKebabCase } from "@/app/shared/utils/selected-dashboard";
+import { MAX_LENGTH } from "@/app/shared/utils/constants";
+import { isNullOrEmpty } from "@/app/shared/utils/is-null-or-empty";
 
 function validateCardTitle(
   title: string,
   existingCards: Card[],
   excludeId?: string,
 ): string | null {
-  const trimmed = title.trim();
+  const trimmed: string = title.trim();
   if (!trimmed) return "The name cannot be empty";
-  if (trimmed.length > 50)
+  if (trimmed.length > MAX_LENGTH)
     return "The name is too long (maximum 50 characters)";
 
-  const id = normalizeToKebabCase(trimmed);
-  const exists = existingCards.some(
-    (card) => card.id === id && (!excludeId || card.id !== excludeId),
+  const id: string = normalizeToKebabCase(trimmed);
+  const exists: boolean = existingCards.some(
+    (card: Card): boolean =>
+      card.id === id && (isNullOrEmpty(excludeId) || card.id !== excludeId),
   );
   if (exists) return `The card with the name "${trimmed}" already exists`;
 
@@ -32,16 +37,18 @@ export function mutateAddCard(
 ): string | null {
   const { tabId, layout, title } = parameters;
 
-  const tab = draft.tabs?.find((tab) => tab.id === tabId);
+  const tab: Tab | undefined = draft.tabs?.find(
+    (tab: Tab): boolean => tab.id === tabId,
+  );
   if (!tab) return "The tab was not found";
 
-  const cards = tab.cards ?? (tab.cards = []);
+  const cards: Card[] = tab.cards ?? (tab.cards = []);
 
-  const validationError = validateCardTitle(title, cards);
-  if (validationError) return validationError;
+  const validationError: string | null = validateCardTitle(title, cards);
+  if (!isNullOrEmpty(validationError)) return validationError;
 
-  const clean = title.trim();
-  const id = normalizeToKebabCase(clean);
+  const clean: string = title.trim();
+  const id: string = normalizeToKebabCase(clean);
 
   const newCard: Card = {
     id,
@@ -58,22 +65,26 @@ export function mutateCommitCardTitleEdit(
   draft: DataModel,
   parameters: { tabId: string; cardId: string; newTitle: string },
 ): string | null {
-  const tab = draft.tabs?.find((tab) => tab.id === parameters.tabId);
+  const tab: Tab | undefined = draft.tabs?.find(
+    (tab: Tab): boolean => tab.id === parameters.tabId,
+  );
   if (!tab) return "The tab was not found";
 
-  const cards = tab.cards ?? [];
-  const index = cards.findIndex((card) => card.id === parameters.cardId);
+  const cards: Card[] = tab.cards ?? [];
+  const index: number = cards.findIndex(
+    (card: Card): boolean => card.id === parameters.cardId,
+  );
   if (index === -1) return "The card was not found";
 
-  const validationError = validateCardTitle(
+  const validationError: string | null = validateCardTitle(
     parameters.newTitle,
     cards,
     cards[index].id,
   );
-  if (validationError) return validationError;
+  if (!isNullOrEmpty(validationError)) return validationError;
 
-  const nextTitle = parameters.newTitle.trim();
-  const nextId = normalizeToKebabCase(nextTitle);
+  const nextTitle: string = parameters.newTitle.trim();
+  const nextId: string = normalizeToKebabCase(nextTitle);
 
   cards[index] = {
     ...cards[index],
@@ -88,11 +99,13 @@ export function mutateRemoveCard(
   draft: DataModel,
   parameters: { tabId: string; cardId: string },
 ): string | null {
-  const tab = draft.tabs?.find((tab) => tab.id === parameters.tabId);
+  const tab: Tab | undefined = draft.tabs?.find(
+    (tab: Tab): boolean => tab.id === parameters.tabId,
+  );
   if (!tab) return "The tab was not found";
 
-  const index = (tab.cards ?? []).findIndex(
-    (card) => card.id === parameters.cardId,
+  const index: number = (tab.cards ?? []).findIndex(
+    (card: Card): boolean => card.id === parameters.cardId,
   );
   if (index === -1) return "The card was not found";
 
@@ -104,14 +117,21 @@ export function mutateReorderCard(
   draft: DataModel,
   parameters: { tabId: string; cardId: string; newIndex: number },
 ): string | null {
-  const tab = draft.tabs?.find((tab) => tab.id === parameters.tabId);
+  const tab: Tab | undefined = draft.tabs?.find(
+    (tab: Tab): boolean => tab.id === parameters.tabId,
+  );
   if (!tab) return "The tab was not found";
 
-  const cards = tab.cards ?? [];
-  const from = cards.findIndex((card) => card.id === parameters.cardId);
+  const cards: Card[] = tab.cards ?? [];
+  const from: number = cards.findIndex(
+    (card: Card): boolean => card.id === parameters.cardId,
+  );
   if (from === -1) return "The card was not found";
 
-  const to = Math.max(0, Math.min(parameters.newIndex, cards.length - 1));
+  const to: number = Math.max(
+    0,
+    Math.min(parameters.newIndex, cards.length - 1),
+  );
   if (from === to) return null;
 
   const [moved] = cards.splice(from, 1);
@@ -124,12 +144,12 @@ export function setDeviceStateById(
   deviceId: string,
   nextState: boolean,
 ): DataModel {
-  const copy = structuredClone(workingCopy);
+  const copy: DataModel = structuredClone(workingCopy);
 
   for (const tab of copy.tabs ?? []) {
     for (const card of tab.cards ?? []) {
-      const item = (card.items ?? []).find(
-        (item): item is DeviceItem =>
+      const item: DeviceItem | undefined = (card.items ?? []).find(
+        (item: Item): item is DeviceItem =>
           item?.type === ITEM_TYPES.DEVICE && item?.id === deviceId,
       );
 

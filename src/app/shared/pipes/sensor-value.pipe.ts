@@ -25,7 +25,7 @@ export class SensorValuePipe implements PipeTransform {
     "μg/m³",
   ]);
 
-  transform(
+  public transform(
     value: null | undefined | { amount: number; unit: string },
   ): string {
     if (!value) return "";

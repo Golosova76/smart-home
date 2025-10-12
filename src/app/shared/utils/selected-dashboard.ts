@@ -1,4 +1,9 @@
 import type { DataModel, Tab } from "@/app/shared/models/data.model";
+import { MAX_LENGTH } from "@/app/shared/utils/constants";
+import {
+  isNonEmptyString,
+  isNullOrEmpty,
+} from "@/app/shared/utils/is-null-or-empty";
 
 export function normalizeToKebabCase(input: string): string {
   return input
@@ -13,14 +18,20 @@ function validateTabTitle(
   existingTabs: Tab[],
   excludeId?: string,
 ): string | null {
-  const trimmed = title.trim();
-  if (!trimmed) return "The name cannot be empty";
-  if (trimmed.length > 50)
-    return "The name is too long (maximum 50 characters)";
+  // сузили к строке и нормализовали
+  const trimmed: string = isNonEmptyString(title) ? title.trim() : "";
 
-  const id = normalizeToKebabCase(trimmed);
-  const exists = existingTabs.some(
-    (tab) => tab.id === id && (!excludeId || tab.id !== excludeId),
+  if (isNullOrEmpty(trimmed)) {
+    return "The name cannot be empty";
+  }
+  if (trimmed.length > MAX_LENGTH) {
+    return "The name is too long (maximum 50 characters)";
+  }
+
+  const id: string = normalizeToKebabCase(trimmed);
+  const exists: boolean = existingTabs.some(
+    (tab: Tab): boolean =>
+      tab.id === id && (isNullOrEmpty(excludeId) || tab.id !== excludeId),
   );
   if (exists) return `The tab with the name "${trimmed}" already exists`;
 
@@ -31,11 +42,13 @@ export function produceWorkingCopy(
   workingCopy: DataModel | null,
   mutator: (draft: DataModel) => string | null,
 ): { next: DataModel | null; error: string | null } {
-  if (!workingCopy) return { next: workingCopy, error: null };
+  if (workingCopy === null) {
+    return { next: workingCopy, error: null };
+  }
 
-  const draft = structuredClone(workingCopy);
-  const error = mutator(draft);
-  if (error) {
+  const draft: DataModel = structuredClone(workingCopy);
+  const error: string | null = mutator(draft);
+  if (!isNullOrEmpty(error)) {
     return { next: workingCopy, error };
   }
   return { next: draft, error: null };
@@ -45,19 +58,21 @@ export function mutateCommitTitleEdit(
   draft: DataModel,
   parameters: { tabId: string; newTitle: string },
 ): string | null {
-  const tabs = draft.tabs ?? [];
-  const index = tabs.findIndex((tab) => tab.id === parameters.tabId);
+  const tabs: Tab[] = draft.tabs ?? [];
+  const index: number = tabs.findIndex(
+    (tab: Tab): boolean => tab.id === parameters.tabId,
+  );
   if (index === -1) return "The tab was not found";
 
-  const validationError = validateTabTitle(
+  const validationError: string | null = validateTabTitle(
     parameters.newTitle,
     tabs,
     tabs[index].id,
   );
-  if (validationError) return validationError;
+  if (!isNullOrEmpty(validationError)) return validationError;
 
-  const nextTitle = parameters.newTitle.trim();
-  const nextId = normalizeToKebabCase(nextTitle);
+  const nextTitle: string = parameters.newTitle.trim();
+  const nextId: string = normalizeToKebabCase(nextTitle);
 
   tabs[index] = {
     ...tabs[index],
@@ -72,11 +87,14 @@ export function mutateReorderTab(
   draft: DataModel,
   parameters: { tabId: string; direction: "left" | "right" },
 ): string | null {
-  const tabs = draft.tabs ?? [];
-  const index = tabs.findIndex((tab) => tab.id === parameters.tabId);
+  const tabs: Tab[] = draft.tabs ?? [];
+  const index: number = tabs.findIndex(
+    (tab: Tab): boolean => tab.id === parameters.tabId,
+  );
   if (index === -1) return "The tab was not found";
 
-  const index_ = parameters.direction === "left" ? index - 1 : index + 1;
+  const index_: number =
+    parameters.direction === "left" ? index - 1 : index + 1;
   if (index_ < 0 || index_ >= tabs.length) return null; // край — просто ничего не делаем
 
   [tabs[index], tabs[index_]] = [tabs[index_], tabs[index]];
@@ -87,13 +105,16 @@ export function mutateAddTab(
   draft: DataModel,
   parameters: { title: string },
 ): string | null {
-  const tabs = draft.tabs ?? (draft.tabs = []);
+  const tabs: Tab[] = draft.tabs ?? (draft.tabs = []);
 
-  const validationError = validateTabTitle(parameters.title, tabs);
-  if (validationError) return validationError;
+  const validationError: string | null = validateTabTitle(
+    parameters.title,
+    tabs,
+  );
+  if (!isNullOrEmpty(validationError)) return validationError;
 
-  const title = parameters.title.trim();
-  const id = normalizeToKebabCase(title);
+  const title: string = parameters.title.trim();
+  const id: string = normalizeToKebabCase(title);
 
   tabs.push({ id, title, cards: [] });
   return null;
@@ -103,8 +124,10 @@ export function mutateRemoveTab(
   draft: DataModel,
   parameters: { tabId: string },
 ): string | null {
-  const tabs = draft.tabs ?? [];
-  const index = tabs.findIndex((tab) => tab.id === parameters.tabId);
+  const tabs: Tab[] = draft.tabs ?? [];
+  const index: number = tabs.findIndex(
+    (tab: Tab): boolean => tab.id === parameters.tabId,
+  );
   if (index === -1) return "The tab was not found";
 
   tabs.splice(index, 1);

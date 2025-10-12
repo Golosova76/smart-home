@@ -1,3 +1,4 @@
+import type { EffectRef, InputSignal } from "@angular/core";
 import { Directive, effect, HostBinding, input } from "@angular/core";
 import type { Device } from "@/app/shared/models/data.model";
 
@@ -6,12 +7,15 @@ import type { Device } from "@/app/shared/models/data.model";
   standalone: true,
 })
 export class LightActiveCardDirective {
-  @HostBinding("class.active-card") isActive = false;
+  @HostBinding("class.active-card")
+  public isActive: boolean = false;
 
-  lightActiveCard = input<Device[]>([], { alias: "appLightActiveCard" });
+  public readonly lightActiveCard: InputSignal<Device[]> = input<Device[]>([], {
+    alias: "appLightActiveCard",
+  });
 
-  private setActiveEffect = effect(() => {
-    const devices = this.lightActiveCard() ?? [];
-    this.isActive = devices.some((device) => device.state);
+  private setActiveEffect: EffectRef = effect((): void => {
+    const devices: Device[] = this.lightActiveCard() ?? [];
+    this.isActive = devices.some((device: Device): boolean => device.state);
   });
 }
