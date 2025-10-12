@@ -165,12 +165,10 @@ export class DashboardComponent {
 
   public onSave(): void {
     this.store.dispatch(dashboardActions.saveDashboard());
-    this.store.dispatch(dashboardActions.exitEditMode());
   }
 
   public onDiscard(): void {
     this.store.dispatch(dashboardActions.discardChanges());
-    this.store.dispatch(dashboardActions.exitEditMode());
   }
 
   public onStartTitleEdit(event: {
