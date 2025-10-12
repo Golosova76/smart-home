@@ -4,10 +4,10 @@
   column-gap: 30px;
 }
 
-@media (width <= 768px) {
+@media (width <= 480px) {
   .card-container {
-    padding: 10px;
-    columns: 300px;
-    column-gap: 30px;
+    column-count: 1;      /* фиксируем одну колонку */
+    column-width: auto;   /* чтобы не мешало */
+    column-gap: 16px;     /* уже межколоночный интервал */
   }
 }

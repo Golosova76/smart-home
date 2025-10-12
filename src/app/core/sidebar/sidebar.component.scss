@@ -32,4 +32,9 @@
   :host {
     width: 150px;
   }
+  :host:not(.collapsed) {
+    width: 150px;
+    //min-width: 150px;
+    flex-shrink: 0;
+  }
 }
