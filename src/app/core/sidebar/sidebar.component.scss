@@ -1,7 +1,7 @@
 @use "styles/mixins" as m;
 
 :host {
-  width: 250px;
+  width: 200px;
   background-color: var(--background-color-sidebar);
   display: flex;
   flex-direction: column;
