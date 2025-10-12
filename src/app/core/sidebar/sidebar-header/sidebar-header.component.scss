@@ -30,3 +30,9 @@
 .header-title {
   white-space: nowrap;
 }
+
+@media (width <= 768px) {
+  .header-wrapper {
+    padding: 5px;
+  }
+}

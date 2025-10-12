@@ -27,6 +27,7 @@
   --font-size-error: 12px;
   --font-size-base: 14px;
   --font-size-h1: 18px;
+  --font-size-h1-media: 14px;
   --font-size-title: 16px;
   --font-weight-base: 400;
   --font-weight-h1: 700;
@@ -83,4 +84,11 @@ body {
 .h3 {
   font-weight: var(--font-weight-title);
   font-size: var(--font-size-title);
+}
+
+@media (width <= 768px) {
+  .h1 {
+    font-size: var(--font-size-h1-media);
+    font-weight: var(--font-weight-title);
+  }
 }

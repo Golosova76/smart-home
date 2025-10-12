@@ -46,3 +46,12 @@
 .footer-text {
   white-space: nowrap;
 }
+
+@media (width <= 768px) {
+  .footer {
+    gap: 5px;
+    padding: 5px;
+
+  }
+}
+

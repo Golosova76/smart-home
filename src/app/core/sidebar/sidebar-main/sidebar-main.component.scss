@@ -53,3 +53,9 @@
   font-size: 12px;
   line-height: 1.2;
 }
+
+@media (width <= 768px) {
+  .menu-item {
+    font-size: var(--font-size-error);
+  }
+}

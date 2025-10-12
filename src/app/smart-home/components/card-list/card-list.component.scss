@@ -3,3 +3,11 @@
   columns: 300px;
   column-gap: 30px;
 }
+
+@media (width <= 768px) {
+  .card-container {
+    padding: 10px;
+    columns: 300px;
+    column-gap: 30px;
+  }
+}
