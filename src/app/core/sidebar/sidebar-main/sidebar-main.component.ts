@@ -1,9 +1,11 @@
-import type { OnInit } from "@angular/core";
+import type { InputSignal, OnInit, WritableSignal } from "@angular/core";
 import { Component, computed, DestroyRef, inject, input } from "@angular/core";
-import { Router, RouterLink, RouterLinkActive } from "@angular/router";
+import { RouterLink, RouterLinkActive } from "@angular/router";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { DashboardHandlerService } from "@/app/shared/services/dashboard-handler.service";
 import { RouteIdValidService } from "@/app/shared/services/route-id-valid.service";
+import type { Dashboard } from "@/app/shared/models/dashboard.model";
+import { isNullOrEmpty } from "@/app/shared/utils/is-null-or-empty";
 
 @Component({
   selector: "app-sidebar-main",
@@ -13,31 +15,39 @@ import { RouteIdValidService } from "@/app/shared/services/route-id-valid.servic
   styleUrl: "./sidebar-main.component.scss",
 })
 export class SidebarMainComponent implements OnInit {
-  handlerService = inject(DashboardHandlerService);
-  routeIds = inject(RouteIdValidService);
-  router = inject(Router);
-  destroyRef = inject(DestroyRef);
+  private readonly handlerService: DashboardHandlerService = inject(
+    DashboardHandlerService,
+  );
+  private readonly routeIds: RouteIdValidService = inject(RouteIdValidService);
+  private readonly destroyRef: DestroyRef = inject(DestroyRef);
 
-  sidebarCollapsed = input<boolean>(false);
+  public readonly sidebarCollapsed: InputSignal<boolean> =
+    input<boolean>(false);
 
-  readonly dashboardsSignal = this.handlerService.dashboardsSignal;
+  public dashboardsSignal: WritableSignal<Dashboard[]> =
+    this.handlerService.dashboardsSignal;
 
-  readonly emptyDashboardText = computed(() => {
+  public emptyDashboardText = computed(() => {
     return this.sidebarCollapsed()
       ? "No dash"
       : "You don’t have any dashboards yet. They’ll appear here as soon as you create them.";
   });
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.handlerService
       .loadDashboards()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: () => {
-          const currentRouteId = this.routeIds.dashboardIdRouteSignal();
-          const currentIdValid = this.routeIds.dashboardIdValid();
+        next: (): void => {
+          const currentRouteId: string | null =
+            this.routeIds.dashboardIdRouteSignal();
+          const currentIdValid: string | null =
+            this.routeIds.dashboardIdValid();
 
-          if (currentIdValid && currentRouteId !== currentIdValid) {
+          if (
+            !isNullOrEmpty(currentIdValid) &&
+            currentRouteId !== currentIdValid
+          ) {
             this.routeIds.selectDashboard(currentIdValid);
           }
         },

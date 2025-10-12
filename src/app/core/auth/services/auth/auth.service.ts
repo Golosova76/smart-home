@@ -15,36 +15,35 @@ import { ProfileService } from "@/app/shared/services/profile.service";
   providedIn: "root",
 })
 export class AuthService {
-  private http = inject(HttpClient);
-  private tokenService = inject(TokenService);
-  private router = inject(Router);
-  private profileService = inject(ProfileService);
+  private readonly http: HttpClient = inject(HttpClient);
+  private readonly tokenService: TokenService = inject(TokenService);
+  private readonly router: Router = inject(Router);
+  private readonly profileService: ProfileService = inject(ProfileService);
 
-  private isAuthSubject = new BehaviorSubject<boolean>(
-    this.tokenService.hasToken(),
-  );
+  private isAuthSubject: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(this.tokenService.hasToken());
 
-  isAuth$ = this.isAuthSubject.asObservable();
+  public isAuth$: Observable<boolean> = this.isAuthSubject.asObservable();
 
-  login(credentials: LoginCredentials): Observable<TokenResponse> {
+  public login(credentials: LoginCredentials): Observable<TokenResponse> {
     return this.http
       .post<TokenResponse>(`${BASE_API_URL}user/login`, credentials)
       .pipe(
-        tap((response) => {
+        tap((response: TokenResponse): void => {
           this.tokenService.setToken(response.token);
           this.isAuthSubject.next(true);
         }),
       );
   }
 
-  logout() {
+  public logout(): void {
     this.tokenService.clearToken();
     this.isAuthSubject.next(false);
     this.profileService.clearProfile();
-    this.router.navigate(["/login"]).catch(() => {});
+    this.router.navigate(["/login"]).catch((): void => {});
   }
 
-  isAuthenticated(): boolean {
+  public isAuthenticated(): boolean {
     return this.tokenService.hasToken();
   }
 }

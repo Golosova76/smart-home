@@ -1,5 +1,5 @@
 import type { InputSignal, OnInit, OutputEmitterRef } from "@angular/core";
-import { Component, effect, inject, input, output } from "@angular/core";
+import { Component, effect, input, output } from "@angular/core";
 import type { AbstractControl, ValidatorFn } from "@angular/forms";
 import {
   FormControl,
@@ -14,7 +14,6 @@ import type {
   Dashboard,
   EntityActions,
 } from "@/app/shared/models/dashboard.model";
-import { Router } from "@angular/router";
 import { capitalize, normalizeId } from "@/app/shared/utils/capitalize";
 import { ModalShellComponent } from "@/app/smart-home/components/modal/modal-shell/modal-shell.component";
 import { ModalHeaderComponent } from "@/app/smart-home/components/modal/components/modal-header/modal-header.component";
@@ -43,7 +42,6 @@ export class ModalCreateDashboardsComponent implements OnInit {
     ]),
     icon: new FormControl<string | null>(null, Validators.required),
   });
-  private readonly router: Router = inject(Router);
 
   public readonly closed: OutputEmitterRef<void> = output<void>();
   public readonly checkId: InputSignal<string[]> = input<string[]>([]);

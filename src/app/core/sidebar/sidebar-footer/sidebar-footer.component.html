@@ -10,7 +10,13 @@
       <div class="footer-initials">{{ user.initials }}</div>
       @if (!sidebarCollapsed()) {
         <div class="footer-text">{{ user.fullName }}</div>
-        <span (click)="onLogout()" class="material-symbols-outlined logout-icon"
+        <span (click)="onLogout()"
+              (keydown.enter)="onLogout()"
+              (keydown.space)="onLogout(); $event.preventDefault()"
+              role="button"
+              tabindex="0"
+              class="material-symbols-outlined logout-icon"
+              aria-label="Logout"
           >logout</span
         >
       }

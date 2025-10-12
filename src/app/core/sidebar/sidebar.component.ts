@@ -1,3 +1,4 @@
+import type { WritableSignal } from "@angular/core";
 import { Component, HostBinding, signal } from "@angular/core";
 
 import { SidebarFooterComponent } from "@/app/core/sidebar/sidebar-footer/sidebar-footer.component";
@@ -16,14 +17,15 @@ import { SidebarMainComponent } from "@/app/core/sidebar/sidebar-main/sidebar-ma
   templateUrl: "./sidebar.component.html",
 })
 export class SidebarComponent {
-  sidebarCollapsed = signal<boolean>(false);
+  public readonly sidebarCollapsed: WritableSignal<boolean> =
+    signal<boolean>(false);
 
   @HostBinding("class.collapsed")
-  get isCollapsed(): boolean {
+  public get isCollapsed(): boolean {
     return this.sidebarCollapsed();
   }
 
-  toggleSidebar(): void {
-    this.sidebarCollapsed.update((visible) => !visible);
+  public toggleSidebar(): void {
+    this.sidebarCollapsed.update((visible: boolean): boolean => !visible);
   }
 }

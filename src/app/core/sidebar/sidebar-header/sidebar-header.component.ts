@@ -1,3 +1,4 @@
+import type { InputSignal, OutputEmitterRef } from "@angular/core";
 import { Component, input, output } from "@angular/core";
 
 @Component({
@@ -8,6 +9,7 @@ import { Component, input, output } from "@angular/core";
   styleUrl: "./sidebar-header.component.scss",
 })
 export class SidebarHeaderComponent {
-  sidebarCollapsed = input<boolean>(false);
-  menuClicked = output<void>();
+  public readonly sidebarCollapsed: InputSignal<boolean> =
+    input<boolean>(false);
+  public menuClicked: OutputEmitterRef<void> = output<void>();
 }

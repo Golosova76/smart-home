@@ -1,3 +1,4 @@
+import type { InputSignal, Signal, WritableSignal } from "@angular/core";
 import {
   Component,
   computed,
@@ -12,9 +13,11 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ModalCreateDashboardsComponent } from "@/app/smart-home/components/modal/modal-create-dashboards/modal-create-dashboards.component";
 
 import type { Dashboard } from "@/app/shared/models/dashboard.model";
+import type { Observable } from "rxjs";
 import { map, switchMap, tap } from "rxjs";
 import { Router } from "@angular/router";
 import { DashboardHandlerService } from "@/app/shared/services/dashboard-handler.service";
+import type { UserProfile } from "@/app/shared/models/profile.model";
 
 @Component({
   selector: "app-sidebar-footer",
@@ -24,53 +27,64 @@ import { DashboardHandlerService } from "@/app/shared/services/dashboard-handler
   styleUrl: "./sidebar-footer.component.scss",
 })
 export class SidebarFooterComponent {
-  profileService = inject(ProfileService);
-  authService = inject(AuthService);
-  destroyRef = inject(DestroyRef);
-  handlerService = inject(DashboardHandlerService);
-  router = inject(Router);
+  private readonly profileService: ProfileService = inject(ProfileService);
+  private readonly authService: AuthService = inject(AuthService);
+  private readonly destroyRef: DestroyRef = inject(DestroyRef);
+  private readonly handlerService: DashboardHandlerService = inject(
+    DashboardHandlerService,
+  );
+  private readonly router: Router = inject(Router);
 
-  readonly sidebarCollapsed = input<boolean>(false);
-  readonly isCreateOpenModal = signal<boolean>(false);
-  readonly dashboardsSignal = this.handlerService.dashboardsSignal;
+  public readonly sidebarCollapsed: InputSignal<boolean> =
+    input<boolean>(false);
+  public readonly isCreateOpenModal: WritableSignal<boolean> =
+    signal<boolean>(false);
+  public readonly dashboardsSignal: WritableSignal<Dashboard[]> =
+    this.handlerService.dashboardsSignal;
 
-  readonly checkId = computed(() =>
-    this.dashboardsSignal().map((dash) => dash.id),
+  public readonly checkId: Signal<string[]> = computed((): string[] =>
+    this.dashboardsSignal().map((dash: Dashboard): string => dash.id),
   );
 
-  readonly profile = this.profileService.profile;
+  public readonly profile: WritableSignal<UserProfile | null> =
+    this.profileService.profile;
 
   constructor() {
     this.profileService
       .getProfile()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (profile) => this.profile.set(profile),
+        next: (profile: UserProfile): void => this.profile.set(profile),
       });
   }
 
-  openCreate() {
+  public openCreate(): void {
     this.isCreateOpenModal.set(true);
   }
 
-  closeCreate() {
+  public closeCreate(): void {
     this.isCreateOpenModal.set(false);
   }
 
-  onLogout() {
+  public onLogout(): void {
     this.authService.logout();
   }
 
-  handleCreate(dto: Dashboard) {
+  public handleCreate(dto: Dashboard): void {
     this.handlerService
       .addDashboard(dto)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        switchMap((created) =>
-          this.handlerService.loadDashboards().pipe(map(() => created)),
+        switchMap(
+          (created: Dashboard): Observable<Dashboard> =>
+            this.handlerService
+              .loadDashboards()
+              .pipe(map((): Dashboard => created)),
         ),
-        tap((created) => {
-          this.router.navigate(["/dashboard", created.id]).catch(() => {});
+        tap((created: Dashboard): void => {
+          this.router
+            .navigate(["/dashboard", created.id])
+            .catch((): void => {});
           this.isCreateOpenModal.set(false);
         }),
       )

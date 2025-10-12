@@ -1,3 +1,4 @@
+import type { Signal, WritableSignal } from "@angular/core";
 import { Component, computed, inject, signal } from "@angular/core";
 import { CardListComponent } from "@/app/smart-home/components/card-list/card-list.component";
 import * as dashboardsSelectors from "@/app/store/selectors/selected-dashboard.selectors";
@@ -7,7 +8,8 @@ import { RouteIdValidService } from "@/app/shared/services/route-id-valid.servic
 import { ModalCreateCardComponent } from "@/app/smart-home/components/modal/modal-create-card/modal-create-card.component";
 
 import * as dashboardActions from "@/app/store/actions/dashboard.actions";
-import type { LayoutType } from "@/app/shared/models/data.model";
+import type { Card, LayoutType } from "@/app/shared/models/data.model";
+import { isNullOrEmpty } from "@/app/shared/utils/is-null-or-empty";
 
 @Component({
   selector: "app-dashboard-tab",
@@ -16,48 +18,50 @@ import type { LayoutType } from "@/app/shared/models/data.model";
   styleUrl: "./dashboard-tab.component.scss",
 })
 export class DashboardTabComponent {
-  private store = inject<Store<AppState>>(Store);
-  private readonly routeIds = inject(RouteIdValidService);
+  private readonly store: Store<AppState> = inject<Store<AppState>>(Store);
+  private readonly routeIds: RouteIdValidService = inject(RouteIdValidService);
 
-  readonly selectedTabId = this.routeIds.selectedTabId;
+  public readonly selectedTabId: Signal<string | null> =
+    this.routeIds.selectedTabId;
 
-  readonly isAddCardOpenModal = signal<boolean>(false);
+  public isAddCardOpenModal: WritableSignal<boolean> = signal<boolean>(false);
 
-  readonly isEditMode = this.store.selectSignal<boolean>(
-    dashboardsSelectors.selectIsEditModeEnabled,
-  );
+  public readonly isEditMode: Signal<boolean> =
+    this.store.selectSignal<boolean>(
+      dashboardsSelectors.selectIsEditModeEnabled,
+    );
 
-  readonly cards = computed(() => {
-    const tabId = this.selectedTabId();
-    if (!tabId) return [];
+  public readonly cards: Signal<Card[]> = computed((): Card[] => {
+    const tabId: string | null = this.selectedTabId();
+    if (isNullOrEmpty(tabId)) return [];
 
     const selectCardsByTabId = dashboardsSelectors.selectCardsByTabId(tabId);
     return this.store.selectSignal(selectCardsByTabId)();
   });
 
-  openAddCardModal() {
+  public openAddCardModal(): void {
     if (!this.isEditMode()) {
       return;
     }
     this.isAddCardOpenModal.set(true);
   }
 
-  onAddCardSubmit({
+  public onAddCardSubmit({
     layout,
     title,
   }: {
     layout: LayoutType;
     title: string;
   }): void {
-    const tabId = this.selectedTabId();
-    if (!tabId) return;
+    const tabId: string | null = this.selectedTabId();
+    if (isNullOrEmpty(tabId)) return;
     this.store.dispatch(
       dashboardActions.TabActionsTitleMove.addCard({ tabId, layout, title }),
     );
     this.closeDelete();
   }
 
-  closeDelete() {
+  public closeDelete(): void {
     this.isAddCardOpenModal.set(false);
   }
 }

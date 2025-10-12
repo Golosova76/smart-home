@@ -4,6 +4,7 @@ import { SidebarComponent } from "@/app/core/sidebar/sidebar.component";
 import { RouterOutlet } from "@angular/router";
 import { AuthService } from "@/app/core/auth/services/auth/auth.service";
 import { AsyncPipe } from "@angular/common";
+import type { Observable } from "rxjs";
 
 @Component({
   imports: [SidebarComponent, RouterOutlet, AsyncPipe],
@@ -13,7 +14,7 @@ import { AsyncPipe } from "@angular/common";
   templateUrl: "./navigation.component.html",
 })
 export class NavigationComponent {
-  authService = inject(AuthService);
+  private readonly authService: AuthService = inject(AuthService);
 
-  isAuth$ = this.authService.isAuth$;
+  public isAuth$: Observable<boolean> = this.authService.isAuth$;
 }

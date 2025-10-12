@@ -1,3 +1,4 @@
+import type { InputSignal, Signal } from "@angular/core";
 import { Component, computed, inject, input } from "@angular/core";
 
 import type { Device, LayoutType } from "@/app/shared/models/data.model";
@@ -12,6 +13,7 @@ import {
   TabActionsTitleMove,
 } from "@/app/store/actions/dashboard.actions";
 import * as dashboardsSelectors from "@/app/store/selectors/selected-dashboard.selectors";
+import { isNullOrEmpty } from "@/app/shared/utils/is-null-or-empty";
 
 @Component({
   selector: "app-device",
@@ -22,33 +24,43 @@ import * as dashboardsSelectors from "@/app/store/selectors/selected-dashboard.s
 })
 export class DeviceComponent {
   private readonly store: Store<AppState> = inject<Store<AppState>>(Store);
-  private readonly routeIds = inject(RouteIdValidService);
-  readonly LAYOUT = LAYOUT_TYPES;
+  private readonly routeIds: RouteIdValidService = inject(RouteIdValidService);
+  public readonly LAYOUT = LAYOUT_TYPES;
 
-  device = input<Device>();
-  layout = input<LayoutType>();
-  readonly selectedTabId = this.routeIds.selectedTabId;
-  cardId = input<string | null>(null);
-  readonly isEditMode = this.store.selectSignal<boolean>(
-    dashboardsSelectors.selectIsEditModeEnabled,
+  public readonly device: InputSignal<Device | undefined> = input<Device>();
+  public readonly layout: InputSignal<LayoutType | undefined> =
+    input<LayoutType>();
+  public readonly selectedTabId: Signal<string | null> =
+    this.routeIds.selectedTabId;
+  public readonly cardId: InputSignal<string | null> = input<string | null>(
+    null,
   );
+  public readonly isEditMode: Signal<boolean> =
+    this.store.selectSignal<boolean>(
+      dashboardsSelectors.selectIsEditModeEnabled,
+    );
 
-  readonly isOn = computed(() => !!this.device()?.state);
+  public readonly isOn: Signal<boolean> = computed((): boolean => {
+    const device: Device | undefined = this.device();
+    return device?.state === true;
+  });
 
-  readonly toggleIcon = computed(() =>
+  public readonly toggleIcon = computed(() =>
     this.isOn() ? "toggle_on" : "toggle_off",
   );
-  readonly toggleClasses = computed(() => ({
+
+  public readonly toggleClasses = computed(() => ({
     on: this.isOn(),
     off: !this.isOn(),
   }));
 
   public onItemDelete(): void {
-    const tabId = this.selectedTabId();
-    const cardId = this.cardId();
-    const itemId = this.device()?.id;
+    const tabId: string | null = this.selectedTabId();
+    const cardId: string | null = this.cardId();
+    const itemId: string | undefined = this.device()?.id;
 
-    if (!tabId || !cardId || !itemId) return;
+    if (isNullOrEmpty(tabId) || isNullOrEmpty(cardId) || isNullOrEmpty(itemId))
+      return;
 
     this.store.dispatch(
       TabActionsTitleMove.removeItemFromCard({ tabId, cardId, itemId }),
@@ -56,7 +68,7 @@ export class DeviceComponent {
   }
 
   public onToggleClick(): void {
-    const device = this.device();
+    const device: Device | undefined = this.device();
     if (!device) return;
 
     this.store.dispatch(

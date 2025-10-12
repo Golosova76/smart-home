@@ -70,16 +70,18 @@ export class DashboardComponent {
   );
 
   public readonly tabToDeleteName = computed(() => {
-    const tabId = this.tabToDeleteId();
+    const tabId: string | null = this.tabToDeleteId();
     if (isNullOrEmpty(tabId)) return "";
 
-    const tab = this.tabsSignal().find((tab) => tab.id === tabId);
+    const tab: Tab | undefined = this.tabsSignal().find(
+      (tab: Tab): boolean => tab.id === tabId,
+    );
     return tab?.title ?? "";
   });
 
   constructor() {
-    effect(() => {
-      const dashboardId = this.routeIds.dashboardIdValid();
+    effect((): void => {
+      const dashboardId: string | null = this.routeIds.dashboardIdValid();
       if (isNonEmptyString(dashboardId)) {
         this.store.dispatch(dashboardActions.selectDashboard({ dashboardId }));
       }

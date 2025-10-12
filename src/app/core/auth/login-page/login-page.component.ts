@@ -1,4 +1,4 @@
-import type { OnDestroy } from "@angular/core";
+import type { OnDestroy, WritableSignal } from "@angular/core";
 import { Component, inject, signal } from "@angular/core";
 import {
   FormControl,
@@ -8,10 +8,9 @@ import {
 } from "@angular/forms";
 import { AuthService } from "@/app/core/auth/services/auth/auth.service";
 import { Router } from "@angular/router";
-import { ProfileService } from "@/app/shared/services/profile.service";
 import type { HttpErrorResponse } from "@angular/common/http";
-import { DashboardService } from "@/app/shared/services/dashboard.service";
 import { Subject } from "rxjs";
+import { UNAUTHENTIC_STATUS_CODE } from "@/app/shared/utils/constants";
 
 @Component({
   selector: "app-login-page",
@@ -20,18 +19,11 @@ import { Subject } from "rxjs";
   styleUrl: "./login-page.component.scss",
 })
 export class LoginPageComponent implements OnDestroy {
-  private authService = inject(AuthService);
-  private router = inject(Router);
-  private profileService = inject(ProfileService);
-  dashboardService = inject(DashboardService);
+  private readonly authService: AuthService = inject(AuthService);
+  private readonly router: Router = inject(Router);
+  private destroy$: Subject<void> = new Subject<void>();
 
-  private destroy$ = new Subject<void>();
-
-  isPasswordVisible = signal<boolean>(false);
-
-  errorMessage = signal<string | null>(null);
-
-  form: FormGroup<{
+  public form: FormGroup<{
     username: FormControl<string | null>;
     password: FormControl<string | null>;
   }> = new FormGroup({
@@ -39,27 +31,33 @@ export class LoginPageComponent implements OnDestroy {
     password: new FormControl<string | null>(null, Validators.required),
   });
 
-  ngOnDestroy() {
+  public isPasswordVisible: WritableSignal<boolean> = signal<boolean>(false);
+
+  public errorMessage: WritableSignal<string | null> = signal<string | null>(
+    null,
+  );
+
+  public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  togglePasswordVisible(): void {
+  public togglePasswordVisible(): void {
     this.isPasswordVisible.set(!this.isPasswordVisible());
   }
 
-  onSubmit() {
+  public onSubmit(): void {
     if (!this.form.valid) return;
     const formData = {
       userName: this.form.value.username ?? "",
       password: this.form.value.password ?? "",
     };
     this.authService.login(formData).subscribe({
-      next: () => {
-        this.router.navigate([""]).then(() => {});
+      next: (): void => {
+        this.router.navigate([""]).then((): void => {});
       },
-      error: (error: HttpErrorResponse) => {
-        if (error.status === 401) {
+      error: (error: HttpErrorResponse): void => {
+        if (error.status === UNAUTHENTIC_STATUS_CODE) {
           this.errorMessage.set("Invalid login or password.");
           return;
         }

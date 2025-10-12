@@ -34,8 +34,8 @@ export class ModalCreateTabsComponent {
     ]),
   });
 
-  protected readonly closed: OutputEmitterRef<void> = output<void>();
-  protected readonly submitted: OutputEmitterRef<string> = output<string>();
+  public readonly closed: OutputEmitterRef<void> = output<void>();
+  public readonly submitted: OutputEmitterRef<string> = output<string>();
 
   public get canSubmit(): boolean {
     return this.form.valid;
