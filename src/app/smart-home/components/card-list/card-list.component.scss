@@ -7,8 +7,7 @@
 @media (width <= 480px) {
   .card-container {
     padding: 5px;
-    column-count: 1;
-    column-width: auto;
-    column-gap: 16px;
+    columns: 200px;
+    column-gap: 15px;
   }
 }

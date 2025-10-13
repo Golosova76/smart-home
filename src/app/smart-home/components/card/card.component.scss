@@ -1,5 +1,9 @@
 @use "styles/mixins" as m;
 
+:host {
+
+}
+
 .card-wrapper {
   padding: 10px;
   background-color: var(--background-color-card);
@@ -125,6 +129,7 @@
 @media (width <= 480px) {
   .card-wrapper {
     padding: 7px;
+    display: block;
   }
 }
 

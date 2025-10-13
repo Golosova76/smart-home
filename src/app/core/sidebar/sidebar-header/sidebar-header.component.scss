@@ -36,3 +36,10 @@
     padding: 5px;
   }
 }
+
+@media (width <= 460px) {
+  .menu-open-icon {
+    cursor: none;
+    pointer-events: none;
+  }
+}
