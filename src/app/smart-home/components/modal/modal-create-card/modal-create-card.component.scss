@@ -72,14 +72,6 @@
   text-align: center;
 }
 
-.form {
-  @include m.flex-center-center-column;
-}
-
-.form-field {
-  @include m.margin-bottom20;
-}
-
 .form-label {
   display: grid;
   grid-template-columns: 70px 1fr;
@@ -111,8 +103,17 @@
   -webkit-text-fill-color: var(--active-text);
   -webkit-box-shadow: 0 0 0 1000px #fff inset;
 }
+
 .modal-footer-submit.disable {
   opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
+}
+
+@media (width <= 520px) {
+  .layout-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
 }

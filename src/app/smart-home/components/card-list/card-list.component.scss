@@ -6,8 +6,9 @@
 
 @media (width <= 480px) {
   .card-container {
-    column-count: 1;      /* фиксируем одну колонку */
-    column-width: auto;   /* чтобы не мешало */
-    column-gap: 16px;     /* уже межколоночный интервал */
+    padding: 5px;
+    column-count: 1;
+    column-width: auto;
+    column-gap: 16px;
   }
 }

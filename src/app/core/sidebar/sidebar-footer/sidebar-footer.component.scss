@@ -51,7 +51,26 @@
   .footer {
     gap: 5px;
     padding: 5px;
-
   }
 }
+
+@media (width <= 480px) {
+  .footer-add {
+    gap: 5px;
+    font-size: var(--font-size-error);
+  }
+  .footer-text {
+    font-size: var(--font-size-error);
+  }
+  .footer-profile {
+    gap: 5px;
+  }
+  .footer-initials {
+    width: 20px;
+    height: 20px;
+    font-weight: 500;
+    font-size: 1rem;
+  }
+}
+
 

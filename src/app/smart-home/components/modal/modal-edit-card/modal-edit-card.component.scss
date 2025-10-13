@@ -148,6 +148,21 @@ select {
   }
 }
 
+@media (width <= 570px) {
+  .modal {
+    width: 100%;
+    max-width: 400px;
+  }
+}
+
+@media (width <= 450px) {
+  .modal {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+
 @keyframes fadeIn {
   from {
     opacity: 0;

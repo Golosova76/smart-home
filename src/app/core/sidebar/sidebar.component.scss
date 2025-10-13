@@ -38,3 +38,14 @@
     flex-shrink: 0;
   }
 }
+
+@media (width <= 480px) {
+  :host {
+    width: 120px;
+  }
+  :host:not(.collapsed) {
+    width: 120px;
+    //min-width: 150px;
+    flex-shrink: 0;
+  }
+}
