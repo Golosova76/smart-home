@@ -1,31 +1,34 @@
-<footer class="footer">
-  <button (click)="openCreate()" type="button" class="footer-add">
-    <span class="material-symbols-outlined add-icon">add</span>
-    @if (!sidebarCollapsed()) {
-      <span class="footer-text">Add Dashboard</span>
-    }
-  </button>
-  @if (profile(); as user) {
-    <div class="footer-profile">
-      <div class="footer-initials">{{ user.initials }}</div>
+@if (isDashboardsLoading()) {
+  <app-loader-overlay class="footer-spinner"></app-loader-overlay>
+} @else {
+  <footer class="footer">
+    <button (click)="openCreate()" type="button" class="footer-add">
+      <span class="material-symbols-outlined add-icon">add</span>
       @if (!sidebarCollapsed()) {
-        <div class="footer-text">{{ user.fullName }}</div>
-        <span (click)="onLogout()"
-              (keydown.enter)="onLogout()"
-              (keydown.space)="onLogout(); $event.preventDefault()"
-              role="button"
-              tabindex="0"
-              class="material-symbols-outlined logout-icon"
-              aria-label="Logout"
-          >logout</span
-        >
+        <span class="footer-text">Add Dashboard</span>
       }
-    </div>
-  } @else {
-    <div class="no-profile">No profile data</div>
-  }
-</footer>
-
+    </button>
+    @if (profile(); as user) {
+      <div class="footer-profile">
+        <div class="footer-initials">{{ user.initials }}</div>
+        @if (!sidebarCollapsed()) {
+          <div class="footer-text">{{ user.fullName }}</div>
+          <span (click)="onLogout()"
+                (keydown.enter)="onLogout()"
+                (keydown.space)="onLogout(); $event.preventDefault()"
+                role="button"
+                tabindex="0"
+                class="material-symbols-outlined logout-icon"
+                aria-label="Logout"
+          >logout</span
+          >
+        }
+      </div>
+    } @else {
+      <div class="no-profile">No profile data</div>
+    }
+  </footer>
+}
 @if (isCreateOpenModal()) {
   <app-modal-create-dashboards
     [entityActions]="'Add'"

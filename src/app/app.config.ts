@@ -19,13 +19,18 @@ import { provideStoreDevtools } from "@ngrx/store-devtools";
 import { selectedDashboardFeature } from "@/app/store/reducers/dashboard.reducer";
 import { SelectedDashboardEffects } from "@/app/store/effects/selected-dashboard.effects";
 import { availableItemsFeature } from "@/app/store/reducers/devices.reducer";
+import { loadingInterceptor } from "@/app/shared/interceptors/loading.interceptor";
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideRouter(routes),
-    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([authInterceptor]),
+      withInterceptors([loadingInterceptor]),
+    ),
     provideStore(),
     provideState(selectedDashboardFeature),
     provideState(availableItemsFeature),

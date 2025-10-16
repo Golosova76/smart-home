@@ -25,6 +25,7 @@ import {
   isNonEmptyString,
   isNullOrEmpty,
 } from "@/app/shared/utils/is-null-or-empty";
+import { LoadingService } from "@/app/shared/services/loading.service";
 
 @Component({
   imports: [
@@ -43,6 +44,8 @@ export class DashboardComponent {
   private readonly handlerService = inject(DashboardHandlerService);
   private readonly routeIds = inject(RouteIdValidService);
   private readonly store = inject<Store<AppState>>(Store);
+  private readonly loading = inject(LoadingService);
+  public readonly isDashboardLoading = this.loading.visible("dashboard");
 
   // массив tab где tabId
   public readonly tabsSignal = this.store.selectSignal<Tab[]>(

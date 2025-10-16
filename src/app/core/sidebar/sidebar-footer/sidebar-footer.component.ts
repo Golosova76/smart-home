@@ -18,11 +18,13 @@ import { map, switchMap, tap } from "rxjs";
 import { Router } from "@angular/router";
 import { DashboardHandlerService } from "@/app/shared/services/dashboard-handler.service";
 import type { UserProfile } from "@/app/shared/models/profile.model";
+import { LoaderOverlayComponent } from "@/app/shared/components/loader-overlay/loader-overlay.component";
+import { LoadingService } from "@/app/shared/services/loading.service";
 
 @Component({
   selector: "app-sidebar-footer",
   standalone: true,
-  imports: [ModalCreateDashboardsComponent],
+  imports: [ModalCreateDashboardsComponent, LoaderOverlayComponent],
   templateUrl: "./sidebar-footer.component.html",
   styleUrl: "./sidebar-footer.component.scss",
 })
@@ -34,6 +36,7 @@ export class SidebarFooterComponent {
     DashboardHandlerService,
   );
   private readonly router: Router = inject(Router);
+  private readonly loading = inject(LoadingService);
 
   public readonly sidebarCollapsed: InputSignal<boolean> =
     input<boolean>(false);
@@ -45,6 +48,9 @@ export class SidebarFooterComponent {
   public readonly checkId: Signal<string[]> = computed((): string[] =>
     this.dashboardsSignal().map((dash: Dashboard): string => dash.id),
   );
+
+  public readonly isDashboardsLoading: WritableSignal<boolean> =
+    this.loading.visible("user");
 
   public readonly profile: WritableSignal<UserProfile | null> =
     this.profileService.profile;

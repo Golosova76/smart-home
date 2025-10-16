@@ -20,6 +20,7 @@ export class DashboardService {
   }
 
   public getDashboardById(id: string): Observable<DataModel> {
+    console.log('[HTTP REAL] get dashboard', id);
     return this.http.get<DataModel>(`${BASE_API_URL}dashboards/${id}`);
   }
 

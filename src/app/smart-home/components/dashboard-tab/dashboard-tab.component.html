@@ -1,10 +1,14 @@
-@if (cards().length > 0) {
-  <app-card-list [cards]="cards()"></app-card-list>
-} @else {
-  <div class="empty-tab">
-    <p>This tab doesn’t have any cards yet.</p>
-  </div>
-}
+<section class="tab-content">
+  @if (isDashboardLoading()) {
+    <app-loader-overlay class="tab-spinner"> ></app-loader-overlay>
+  } @else if (cards().length > 0) {
+      <app-card-list [cards]="cards()"></app-card-list>
+  } @else {
+    <div class="empty-tab">
+      <p>This tab doesn’t have any cards yet.</p>
+    </div>
+  }
+</section>
 
 @if (isEditMode()) {
   <div class="add-wrapper">

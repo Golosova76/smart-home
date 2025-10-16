@@ -3,7 +3,16 @@ import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { DashboardService } from "@/app/shared/services/dashboard.service";
 import * as A from "@/app/store/actions/dashboard.actions";
-import { catchError, filter, map, mergeMap, of, switchMap, tap } from "rxjs";
+import {
+  catchError,
+  distinctUntilChanged,
+  filter,
+  map,
+  mergeMap,
+  of,
+  switchMap,
+  tap,
+} from "rxjs";
 import { Store } from "@ngrx/store";
 import {
   selectDashboardId,
@@ -26,6 +35,9 @@ export class SelectedDashboardEffects {
   private loadSelectedDashboard$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(A.selectDashboard),
+      distinctUntilChanged(
+        (previous, current) => previous.dashboardId === current.dashboardId,
+      ),
       switchMap(({ dashboardId }) =>
         this.api.getDashboardById(dashboardId).pipe(
           map((data) => A.loadSelectedDashboardSuccess({ data })),

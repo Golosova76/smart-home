@@ -10,10 +10,16 @@ import { ModalCreateCardComponent } from "@/app/smart-home/components/modal/moda
 import * as dashboardActions from "@/app/store/actions/dashboard.actions";
 import type { Card, LayoutType } from "@/app/shared/models/data.model";
 import { isNullOrEmpty } from "@/app/shared/utils/is-null-or-empty";
+import { LoaderOverlayComponent } from "@/app/shared/components/loader-overlay/loader-overlay.component";
+import { LoadingService } from "@/app/shared/services/loading.service";
 
 @Component({
   selector: "app-dashboard-tab",
-  imports: [CardListComponent, ModalCreateCardComponent],
+  imports: [
+    CardListComponent,
+    ModalCreateCardComponent,
+    LoaderOverlayComponent,
+  ],
   templateUrl: "./dashboard-tab.component.html",
   styleUrl: "./dashboard-tab.component.scss",
 })
@@ -25,6 +31,11 @@ export class DashboardTabComponent {
     this.routeIds.selectedTabId;
 
   public isAddCardOpenModal: WritableSignal<boolean> = signal<boolean>(false);
+
+  private readonly loading = inject(LoadingService);
+
+  public readonly isDashboardLoading: Signal<boolean> =
+    this.loading.visible("dashboard");
 
   public readonly isEditMode: Signal<boolean> =
     this.store.selectSignal<boolean>(

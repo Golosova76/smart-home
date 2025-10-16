@@ -46,3 +46,12 @@
   padding-left: 20px;
   font-size: var(--font-size-h1);
 }
+
+
+
+.tab-content:has(.tab-spinner) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}

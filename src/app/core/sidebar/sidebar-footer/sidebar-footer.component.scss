@@ -47,6 +47,12 @@
   white-space: nowrap;
 }
 
+.footer-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 @media (width <= 768px) {
   .footer {
     gap: 5px;

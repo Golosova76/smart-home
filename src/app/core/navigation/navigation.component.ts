@@ -5,6 +5,7 @@ import { RouterOutlet } from "@angular/router";
 import { AuthService } from "@/app/core/auth/services/auth/auth.service";
 import { AsyncPipe } from "@angular/common";
 import type { Observable } from "rxjs";
+import { LoaderOverlayComponent } from "@/app/shared/components/loader-overlay/loader-overlay.component";
 
 @Component({
   imports: [SidebarComponent, RouterOutlet, AsyncPipe],
