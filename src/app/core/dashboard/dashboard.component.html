@@ -21,7 +21,7 @@
 
 <router-outlet></router-outlet>
 
-@if (selectedDashboardInitialized() && tabs.length === 0) {
+@if (!isDashboardBusy() && tabs.length === 0) {
   <div class="empty-dashboard" role="status">
     <p>This dashboard doesn’t have any tabs yet.</p>
   </div>

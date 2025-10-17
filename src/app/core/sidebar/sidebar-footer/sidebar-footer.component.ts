@@ -36,7 +36,7 @@ export class SidebarFooterComponent {
     DashboardHandlerService,
   );
   private readonly router: Router = inject(Router);
-  private readonly loading = inject(LoadingService);
+  private readonly loading: LoadingService = inject(LoadingService);
 
   public readonly sidebarCollapsed: InputSignal<boolean> =
     input<boolean>(false);
@@ -49,11 +49,15 @@ export class SidebarFooterComponent {
     this.dashboardsSignal().map((dash: Dashboard): string => dash.id),
   );
 
-  public readonly isDashboardsLoading: WritableSignal<boolean> =
+  public readonly isUserLoading: WritableSignal<boolean> =
     this.loading.visible("user");
 
   public readonly profile: WritableSignal<UserProfile | null> =
     this.profileService.profile;
+
+  public readonly isFooterBusy: Signal<boolean> = computed((): boolean =>
+    this.isUserLoading(),
+  );
 
   constructor() {
     this.profileService

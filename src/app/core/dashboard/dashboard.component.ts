@@ -48,8 +48,19 @@ export class DashboardComponent {
   private readonly routeIds: RouteIdValidService = inject(RouteIdValidService);
   private readonly store: Store<AppState> = inject<Store<AppState>>(Store);
   private readonly loading: LoadingService = inject(LoadingService);
+
   public readonly isDashboardLoading: WritableSignal<boolean> =
     this.loading.visible("dashboard");
+
+  public readonly isDashboardBusy: Signal<boolean> = computed(
+    (): boolean =>
+      !this.selectedDashboardInitialized() || this.isDashboardLoading(),
+  );
+
+  public readonly selectedDashboardInitialized: Signal<boolean> =
+    this.store.selectSignal<boolean>(
+      dashboardsSelectors.selectDashboardInitialized,
+    );
 
   // массив tab где tabId
   public readonly tabsSignal: Signal<Tab[]> = this.store.selectSignal<Tab[]>(
@@ -60,11 +71,6 @@ export class DashboardComponent {
   >(dashboardsSelectors.selectEditTabId);
   public readonly tabTitleDraft: Signal<string> =
     this.store.selectSignal<string>(dashboardsSelectors.selectTabTitleDraft);
-
-  public readonly selectedDashboardInitialized: Signal<boolean> =
-    this.store.selectSignal<boolean>(
-      dashboardsSelectors.selectDashboardInitialized,
-    );
 
   public readonly dashboardIdRouteSignal: Signal<string | null> =
     this.routeIds.dashboardIdValid;

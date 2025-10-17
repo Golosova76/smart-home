@@ -41,11 +41,14 @@ export class SelectedDashboardEffects {
       switchMap(({ dashboardId }) =>
         this.api.getDashboardById(dashboardId).pipe(
           map((data) => A.loadSelectedDashboardSuccess({ data })),
-          catchError((error: unknown) =>
-            of(
-              A.loadSelectedDashboardFailure({ error: this.toMessage(error) }),
-            ),
-          ),
+          catchError((error: unknown) => {
+            console.error('[dbg] loadSelectedDashboardFailure:', error); // 👈 лог ошибки
+            return of(
+              A.loadSelectedDashboardFailure({
+                error: this.toMessage(error),
+              }),
+            );
+          }),
         ),
       ),
     );

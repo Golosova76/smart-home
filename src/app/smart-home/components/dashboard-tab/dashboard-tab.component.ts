@@ -1,5 +1,5 @@
 import type { Signal, WritableSignal } from "@angular/core";
-import { Component, computed, inject, signal } from "@angular/core";
+import { effect, Component, computed, inject, signal } from "@angular/core";
 import { CardListComponent } from "@/app/smart-home/components/card-list/card-list.component";
 import * as dashboardsSelectors from "@/app/store/selectors/selected-dashboard.selectors";
 import { Store } from "@ngrx/store";
@@ -34,23 +34,31 @@ export class DashboardTabComponent {
 
   private readonly loading: LoadingService = inject(LoadingService);
 
-  public readonly isDashboardLoading: Signal<boolean> =
-    this.loading.visible("dashboard");
-
   public readonly isEditMode: Signal<boolean> =
     this.store.selectSignal<boolean>(
       dashboardsSelectors.selectIsEditModeEnabled,
     );
+
+  public readonly isDashboardLoading: Signal<boolean> =
+    this.loading.visible("dashboard");
+
+  public readonly selectedLoading: Signal<boolean> = this.store.selectSignal(
+    (s: AppState) => s.selectedDashboard.loading,
+  );
 
   public readonly selectedDashboardInitialized: Signal<boolean> =
     this.store.selectSignal<boolean>(
       dashboardsSelectors.selectDashboardInitialized,
     );
 
-  public readonly isDashboardBusy: Signal<boolean> = computed(
-    (): boolean =>
-      !this.selectedDashboardInitialized() || this.isDashboardLoading(),
-  );
+  public readonly isDashboardBusy = computed(() => {
+    const httpVisible = this.isDashboardLoading();
+    const storeLoading = this.selectedLoading();
+    const pendingInit = this.initialPending();
+    return storeLoading || httpVisible || pendingInit;
+  });
+
+  public readonly initialPending = signal(true);
 
   public readonly cards: Signal<Card[]> = computed((): Card[] => {
     const tabId: string | null = this.selectedTabId();
@@ -59,6 +67,13 @@ export class DashboardTabComponent {
     const selectCardsByTabId = dashboardsSelectors.selectCardsByTabId(tabId);
     return this.store.selectSignal(selectCardsByTabId)();
   });
+
+  constructor() {
+    effect(() => {
+      const initialized = this.selectedDashboardInitialized();
+      if (initialized) this.initialPending.set(false);
+    });
+  }
 
   public openAddCardModal(): void {
     if (!this.isEditMode()) {

@@ -51,6 +51,7 @@ export const reducer = createReducer<SelectedDashboardState>(
     (state, { error }): SelectedDashboardState => ({
       ...state,
       loading: false,
+      initialized: true,
       error,
     }),
   ),

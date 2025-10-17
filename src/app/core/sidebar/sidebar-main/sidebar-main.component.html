@@ -1,7 +1,7 @@
 @let dashboards = dashboardsSignal();
 
 <div class="main-loader">
-  @if (isDashboardsLoading()) {
+  @if (isDashboardBusy()) {
     <app-loader-overlay class="main-spinner"></app-loader-overlay>
   } @else if (dashboards.length === 0) {
       <div class="empty-state-dashboards">

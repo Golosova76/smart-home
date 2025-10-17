@@ -45,7 +45,7 @@
   color: var(--light-border);
 }
 
-.empty-state-dashboards {
+.main-loader:has(.empty-state-dashboards) {
   display: flex;
   align-items: center;
   justify-content: center;
