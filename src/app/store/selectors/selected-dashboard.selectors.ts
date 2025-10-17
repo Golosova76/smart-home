@@ -2,6 +2,7 @@ import type { MemoizedSelector } from "@ngrx/store";
 import { createSelector } from "@ngrx/store";
 import { selectedDashboardFeature } from "@/app/store/reducers/dashboard.reducer";
 import type { Card } from "@/app/shared/models/data.model";
+import type { SelectedDashboardState } from "@/app/store/state/dashboard.state";
 
 // весь срез состояния фичи
 export const selectFeatureState =
@@ -86,3 +87,9 @@ export const selectIsDeleteDisabled = createSelector(
   selectIsEditModeEnabled,
   (edit) => edit,
 );
+
+export const selectDashboardInitialized: MemoizedSelector<object, boolean> =
+  createSelector(
+    selectFeatureState,
+    (state: SelectedDashboardState): boolean => state.initialized,
+  );

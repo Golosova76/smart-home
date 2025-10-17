@@ -1,3 +1,4 @@
+import type { Signal, WritableSignal } from "@angular/core";
 import {
   Component,
   computed,
@@ -40,39 +41,51 @@ import { LoadingService } from "@/app/shared/services/loading.service";
   templateUrl: "./dashboard.component.html",
 })
 export class DashboardComponent {
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly handlerService = inject(DashboardHandlerService);
-  private readonly routeIds = inject(RouteIdValidService);
-  private readonly store = inject<Store<AppState>>(Store);
-  private readonly loading = inject(LoadingService);
-  public readonly isDashboardLoading = this.loading.visible("dashboard");
+  private readonly destroyRef: DestroyRef = inject(DestroyRef);
+  private readonly handlerService: DashboardHandlerService = inject(
+    DashboardHandlerService,
+  );
+  private readonly routeIds: RouteIdValidService = inject(RouteIdValidService);
+  private readonly store: Store<AppState> = inject<Store<AppState>>(Store);
+  private readonly loading: LoadingService = inject(LoadingService);
+  public readonly isDashboardLoading: WritableSignal<boolean> =
+    this.loading.visible("dashboard");
 
   // массив tab где tabId
-  public readonly tabsSignal = this.store.selectSignal<Tab[]>(
+  public readonly tabsSignal: Signal<Tab[]> = this.store.selectSignal<Tab[]>(
     dashboardsSelectors.selectTabs,
   );
-  public readonly editTabId = this.store.selectSignal<string | null>(
-    dashboardsSelectors.selectEditTabId,
+  public readonly editTabId: Signal<string | null> = this.store.selectSignal<
+    string | null
+  >(dashboardsSelectors.selectEditTabId);
+  public readonly tabTitleDraft: Signal<string> =
+    this.store.selectSignal<string>(dashboardsSelectors.selectTabTitleDraft);
+
+  public readonly selectedDashboardInitialized: Signal<boolean> =
+    this.store.selectSignal<boolean>(
+      dashboardsSelectors.selectDashboardInitialized,
+    );
+
+  public readonly dashboardIdRouteSignal: Signal<string | null> =
+    this.routeIds.dashboardIdValid;
+
+  public readonly selectedTabId: Signal<string | null> =
+    this.routeIds.selectedTabId;
+
+  public isAddTabOpenModal: WritableSignal<boolean> = signal<boolean>(false);
+
+  public isDeleteOpenModal: WritableSignal<boolean> = signal<boolean>(false);
+  public isDeleteTabOpenModal: WritableSignal<boolean> = signal<boolean>(false);
+  public tabToDeleteId: WritableSignal<string | null> = signal<string | null>(
+    null,
   );
-  public readonly tabTitleDraft = this.store.selectSignal<string>(
-    dashboardsSelectors.selectTabTitleDraft,
-  );
 
-  public readonly dashboardIdRouteSignal = this.routeIds.dashboardIdValid;
+  public readonly isEditMode: Signal<boolean> =
+    this.store.selectSignal<boolean>(
+      dashboardsSelectors.selectIsEditModeEnabled,
+    );
 
-  public readonly selectedTabId = this.routeIds.selectedTabId;
-
-  public isAddTabOpenModal = signal<boolean>(false);
-
-  public isDeleteOpenModal = signal<boolean>(false);
-  public isDeleteTabOpenModal = signal<boolean>(false);
-  public tabToDeleteId = signal<string | null>(null);
-
-  public readonly isEditMode = this.store.selectSignal<boolean>(
-    dashboardsSelectors.selectIsEditModeEnabled,
-  );
-
-  public readonly tabToDeleteName = computed(() => {
+  public readonly tabToDeleteName: Signal<string> = computed((): string => {
     const tabId: string | null = this.tabToDeleteId();
     if (isNullOrEmpty(tabId)) return "";
 

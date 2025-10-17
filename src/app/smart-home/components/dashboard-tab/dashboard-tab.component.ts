@@ -32,7 +32,7 @@ export class DashboardTabComponent {
 
   public isAddCardOpenModal: WritableSignal<boolean> = signal<boolean>(false);
 
-  private readonly loading = inject(LoadingService);
+  private readonly loading: LoadingService = inject(LoadingService);
 
   public readonly isDashboardLoading: Signal<boolean> =
     this.loading.visible("dashboard");
@@ -41,6 +41,16 @@ export class DashboardTabComponent {
     this.store.selectSignal<boolean>(
       dashboardsSelectors.selectIsEditModeEnabled,
     );
+
+  public readonly selectedDashboardInitialized: Signal<boolean> =
+    this.store.selectSignal<boolean>(
+      dashboardsSelectors.selectDashboardInitialized,
+    );
+
+  public readonly isDashboardBusy: Signal<boolean> = computed(
+    (): boolean =>
+      !this.selectedDashboardInitialized() || this.isDashboardLoading(),
+  );
 
   public readonly cards: Signal<Card[]> = computed((): Card[] => {
     const tabId: string | null = this.selectedTabId();

@@ -1,6 +1,6 @@
 <section class="tab-content">
-  @if (isDashboardLoading()) {
-    <app-loader-overlay class="tab-spinner"> ></app-loader-overlay>
+  @if (isDashboardBusy()) {
+    <app-loader-overlay class="tab-spinner"></app-loader-overlay>
   } @else if (cards().length > 0) {
       <app-card-list [cards]="cards()"></app-card-list>
   } @else {

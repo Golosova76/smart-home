@@ -28,6 +28,7 @@ export const reducer = createReducer<SelectedDashboardState>(
       ...state,
       dashboardId,
       loading: true,
+      initialized: false,
       error: null,
       editMode: false,
       deepCopy: null,
@@ -39,6 +40,7 @@ export const reducer = createReducer<SelectedDashboardState>(
     (state, { data }): SelectedDashboardState => ({
       ...state,
       loading: false,
+      initialized: true,
       error: null,
       workingCopy: data,
     }),

@@ -2,8 +2,8 @@ import type { WritableSignal } from "@angular/core";
 
 export const LOADING_CHANNELS = ["dashboard", "dashboards", "user"] as const;
 
-export const DEFAULT_SHOW_AFTER_MS = 500;
-export const DEFAULT_MIN_VISIBLE_MS = 300;
+export const DEFAULT_SHOW_AFTER_MS = 200;
+export const DEFAULT_MIN_VISIBLE_MS = 600;
 
 export type LoadingChannel = (typeof LOADING_CHANNELS)[number];
 
