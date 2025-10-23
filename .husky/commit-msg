@@ -1,7 +1,7 @@
-echo ""
-echo "📝 Validating commit message with commitlint..."
-npx --no -- commitlint --edit "$1"
+GREEN='\033[0;32m'
+NC='\033[0m'
 
-echo ""
-echo "✅ Commit message passed!"
-echo "───────────────────────────────"
+printf "\n%b📝 Validating commit message with commitlint...%b\n" "$GREEN" "$NC"
+npx --no -- commitlint --edit "$1"
+printf "\n%b✅ Commit message passed!%b\n" "$GREEN" "$NC"
+printf "───────────────────────────────\n"
