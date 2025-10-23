@@ -9,5 +9,5 @@ printf "%b✨ Running lint-staged (ESLint, Prettier, Stylelint)...%b\n" "$GREEN"
 
 FORCE_COLOR=1 npx lint-staged --verbose
 
-printf "\n%b✅ Code linting & formatting complete!%b\n" "$GREEN" "$NC"
+printf "\n%b✅ Code linting & formatting complete!%b\n" "$YELLOW" "$NC"
 printf "───────────────────────────────\n"
