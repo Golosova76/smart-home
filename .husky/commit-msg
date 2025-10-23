@@ -1,9 +1,9 @@
 PURPLE='\033[1;35m'
-CYAN='\033[1;36m'
-NC='\033[0m' # No Color
+GREEN='\033[0;32m'
+NC='\033[0m'
 
 printf "\n%b📝 Validating commit message with commitlint...%b\n" "$PURPLE" "$NC"
 npx --no -- commitlint --edit "$1"
 
-printf "\n%b✅ Commit message passed!%b\n" "$CYAN" "$NC"
+printf "\n%b✅ Commit message passed!%b\n" "$GREEN" "$NC"
 printf "───────────────────────────────\n"
