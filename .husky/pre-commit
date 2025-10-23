@@ -1,10 +1,14 @@
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
 echo ""
-echo "🧹 Pre-commit started..."
+echo "${YELLOW}🧹 Pre-commit started...${NC}"
 echo "───────────────────────────────"
 
-echo "✨ Running lint-staged (ESLint, Prettier, Stylelint)..."
+echo "${GREEN}✨ Running lint-staged (ESLint, Prettier, Stylelint)...${NC}"
 FORCE_COLOR=1 npx lint-staged --verbose
 
 echo ""
-echo "✅ Code linting & formatting complete!"
+echo "${GREEN}✅ Code linting & formatting complete!${NC}"
 echo "───────────────────────────────"
