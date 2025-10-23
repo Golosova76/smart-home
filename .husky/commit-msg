@@ -1,1 +1,7 @@
+echo ""
+echo "📝 Validating commit message with commitlint..."
 npx --no -- commitlint --edit "$1"
+
+echo ""
+echo "✅ Commit message passed!"
+echo "───────────────────────────────"
