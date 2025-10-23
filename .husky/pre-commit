@@ -1,14 +1,13 @@
+# ANSI-последовательности как строки с \033
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-echo ""
-echo "${YELLOW}🧹 Pre-commit started...${NC}"
-echo "───────────────────────────────"
+printf "\n%b🧹 Pre-commit started...%b\n" "$YELLOW" "$NC"
+printf "───────────────────────────────\n"
+printf "%b✨ Running lint-staged (ESLint, Prettier, Stylelint)...%b\n" "$GREEN" "$NC"
 
-echo "${GREEN}✨ Running lint-staged (ESLint, Prettier, Stylelint)...${NC}"
 FORCE_COLOR=1 npx lint-staged --verbose
 
-echo ""
-echo "${GREEN}✅ Code linting & formatting complete!${NC}"
-echo "───────────────────────────────"
+printf "\n%b✅ Code linting & formatting complete!%b\n" "$GREEN" "$NC"
+printf "───────────────────────────────\n"
