@@ -53,7 +53,7 @@ export class LoadingService {
   }
 
   private finish(channel: LoadingChannel): void {
-    const state = this.getChannelState(channel);
+    const state: ChannelState = this.getChannelState(channel);
     state.activeRequestsCount = Math.max(0, state.activeRequestsCount - 1);
 
     // Если ещё есть активные запросы — ничего не скрываем
@@ -70,12 +70,12 @@ export class LoadingService {
     }
 
     // Спиннер виден — соблюдаем минимальное время
-    const visibleSince = state.visibleSinceTimestamp ?? Date.now();
-    const elapsedMilliseconds = Date.now() - visibleSince;
-    const minVisibleMilliseconds =
+    const visibleSince: number = state.visibleSinceTimestamp ?? Date.now();
+    const elapsedMilliseconds: number = Date.now() - visibleSince;
+    const minVisibleMilliseconds: number =
       LOADING_DEFAULT_POLICY.minVisibleMs ?? DEFAULT_MIN_VISIBLE_MS;
 
-    const remainingMilliseconds = Math.max(
+    const remainingMilliseconds: number = Math.max(
       0,
       minVisibleMilliseconds - elapsedMilliseconds,
     );
@@ -84,7 +84,7 @@ export class LoadingService {
       this.hideImmediately(state);
     } else {
       if (state.hideTimerId != null) clearTimeout(state.hideTimerId);
-      state.hideTimerId = globalThis.setTimeout(() => {
+      state.hideTimerId = globalThis.setTimeout((): void => {
         this.hideImmediately(state);
         state.hideTimerId = null;
       }, remainingMilliseconds);
@@ -122,8 +122,8 @@ export class LoadingService {
     }
 
     // Возвращаем idempotent-завершалку
-    let isAlreadyFinished = false;
-    return () => {
+    let isAlreadyFinished: boolean = false;
+    return (): void => {
       if (isAlreadyFinished) return;
       isAlreadyFinished = true;
       this.finish(channel);

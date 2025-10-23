@@ -3,7 +3,7 @@ echo "🧹 Pre-commit started..."
 echo "───────────────────────────────"
 
 echo "✨ Running lint-staged (ESLint, Prettier, Stylelint)..."
-FORCE_COLOR=1 npx lint-staged --verbose --debug
+FORCE_COLOR=1 npx lint-staged --verbose
 
 echo ""
 echo "✅ Code linting & formatting complete!"
