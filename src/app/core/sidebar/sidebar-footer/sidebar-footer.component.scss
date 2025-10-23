@@ -1,10 +1,11 @@
 @use "styles/mixins" as m;
 
 .footer {
-  min-height: 76px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+
+  min-height: 76px;
   padding: 10px;
   border: 1px solid var(--light-border);
 }
@@ -12,7 +13,9 @@
 .footer-add {
   @include m.margin-bottom10;
   @include m.flex-center-center;
+
   gap: 10px;
+
   &:hover {
     color: var(--color-text-icon-hover);
   }
@@ -20,24 +23,31 @@
 
 .footer-profile {
   @include m.flex-center-between;
+
   gap: 10px;
 }
 
 .footer-initials {
+  user-select: none;
+
+  flex-shrink: 0;
+
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background-color: var(--color-text-icon-hover);
-  @include m.flex-center-center;
-  font-weight: 600;
+
   font-size: 1rem;
+  font-weight: 600;
   color: var(--light-solid);
-  user-select: none;
-  flex-shrink: 0;
+
+  background-color: var(--color-text-icon-hover);
+
+  @include m.flex-center-center;
 }
 
 .logout-icon {
   cursor: pointer;
+
   &:hover {
     color: var(--active-icon);
   }
@@ -49,8 +59,8 @@
 
 .footer-spinner {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 @media (width <= 768px) {
@@ -65,18 +75,19 @@
     gap: 5px;
     font-size: var(--font-size-error);
   }
+
   .footer-text {
     font-size: var(--font-size-error);
   }
+
   .footer-profile {
     gap: 5px;
   }
+
   .footer-initials {
     width: 20px;
     height: 20px;
-    font-weight: 500;
     font-size: 0.8rem;
+    font-weight: 500;
   }
 }
-
-

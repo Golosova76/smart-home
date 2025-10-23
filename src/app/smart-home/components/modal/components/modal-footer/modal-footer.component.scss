@@ -2,31 +2,38 @@
 
 .modal-footer {
   @include m.flex-column;
+
   justify-content: flex-end;
+
   padding: 10px;
-  background-color: var(--text-card-border);
-  border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+
+  background-color: var(--text-card-border);
+
   button {
-    max-width: 100px;
-    border: none;
-    background-color: var(--background-color-tab-modal);
-    padding: 10px;
     cursor: pointer;
+
+    max-width: 100px;
+    padding: 10px;
+    border: none;
     border-radius: 5px;
+
     font-size: var(--font-size-title);
     font-weight: var(--font-weight-title);
     color: var(--light-solid);
+
+    background-color: var(--background-color-tab-modal);
+
     &:hover {
-      background-color: var(--background-color-tab-modal-hover);
       color: var(--background-color404-hover);
+      background-color: var(--background-color-tab-modal-hover);
     }
   }
 }
 
-
 .modal-footer-submit.disable {
-  opacity: 0.5;
-  cursor: not-allowed;
   pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.5;
 }

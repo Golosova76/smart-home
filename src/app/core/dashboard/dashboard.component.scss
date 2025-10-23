@@ -1,15 +1,17 @@
 @use "styles/mixins" as m;
 
 :host {
-  flex-grow: 1;
-  //width: 100%;
+  // width: 100%;
   display: block;
+  flex-grow: 1;
 }
 
 .empty-dashboard {
   display: flex;
+
   padding-top: 20px;
   padding-left: 20px;
+
   font-size: var(--font-size-h1);
   color: var(--text-card);
 }

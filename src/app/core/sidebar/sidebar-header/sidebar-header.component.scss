@@ -6,21 +6,25 @@
 
 .header-wrapper {
   height: 56px;
-  border-bottom: 1px solid var(--light-border);
-  border-right: 1px solid var(--light-border);
   padding: 10px;
-  @include m.flex-column;
+  border-right: 1px solid var(--light-border);
+  border-bottom: 1px solid var(--light-border);
+
   background-color: var(--background-color-navbar);
+
+  @include m.flex-column;
 }
 
 .menu-open-icon {
+  cursor: pointer;
   width: 24px;
   height: 24px;
   color: var(--light-solid);
-  cursor: pointer;
+
   &:hover {
     color: var(--color-text-icon-hover);
   }
+
   &:focus-visible {
     outline: 2px solid var(--light-border);
     outline-offset: 2px;
@@ -39,7 +43,7 @@
 
 @media (width <= 460px) {
   .menu-open-icon {
-    cursor: none;
     pointer-events: none;
+    cursor: none;
   }
 }

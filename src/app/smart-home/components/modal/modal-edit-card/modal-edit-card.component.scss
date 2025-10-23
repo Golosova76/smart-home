@@ -1,40 +1,50 @@
 @use "styles/mixins" as m;
 
 .modal-wrapper {
-  background-color: var(--modal-background-color);
   position: fixed;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   z-index: 1000;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: var(--modal-background-color);
 }
 
 .modal {
-  background-color: var(--light-solid);
-  border-radius: 8px;
+  pointer-events: none;
+
   width: 100%;
   max-width: 500px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-  animation: fadeIn 0.5s ease-out;
-  pointer-events: none;
+  border-radius: 8px;
+
+  background-color: var(--light-solid);
+  box-shadow: 0 8px 20px rgb(0 0 0 / 25%);
+
+  animation: fade-in 0.5s ease-out;
 }
 
 .modal-content {
   @include m.flex-center-center-column;
-  color: var(--light-solid);
+
   pointer-events: auto;
+  color: var(--light-solid);
 }
 
 .modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  @include m.margin-bottom20;
+
   padding: 10px;
-  background-color: var(--text-card-border);
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
+
+  background-color: var(--text-card-border);
+
+  @include m.margin-bottom20;
+
   .close-icon {
     &:hover {
       color: var(--active-icon);
@@ -46,9 +56,11 @@
   padding: 15px;
   color: var(--text-card);
 }
+
 .modal-title {
   padding-right: 15px;
   padding-left: 15px;
+
   font-size: 16px;
   font-weight: bold;
   color: var(--text-card);
@@ -56,6 +68,7 @@
 
 .form {
   @include m.flex-center-center-column;
+
   color: var(--text-card);
 }
 
@@ -66,15 +79,18 @@
 .form-label {
   display: grid;
   grid-template-columns: 70px 1fr;
-  align-items: center;
   gap: 10px;
-  @include m.margin-bottom10;
+  align-items: center;
+
   color: var(--text-card);
+
+  @include m.margin-bottom10;
 }
 
 .form-control-title {
   font-size: var(--font-size-title);
   font-weight: var(--font-weight-title);
+
   span {
     color: var(--active-icon);
   }
@@ -82,21 +98,29 @@
 
 .modal-footer {
   @include m.flex-column;
+
   justify-content: flex-end;
+
   padding: 10px;
-  background-color: var(--text-card-border);
-  border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+
+  background-color: var(--text-card-border);
+
   button {
-    max-width: 100px;
-    border: none;
-    background-color: var(--active-text);
-    padding: 10px;
     cursor: pointer;
+
+    max-width: 100px;
+    padding: 10px;
+    border: none;
     border-radius: 5px;
+
     font-size: var(--font-size-title);
     font-weight: var(--font-weight-title);
     color: var(--light-solid);
+
+    background-color: var(--active-text);
+
     &:hover {
       color: var(--color404);
     }
@@ -112,13 +136,14 @@
 }
 
 .modal-footer-submit.disable {
-  opacity: 0.5;
-  cursor: not-allowed;
   pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .modal-footer .modal-footer-delete {
   color: var(--active-icon);
+
   &:hover {
     color: var(--active-icon);
     outline: 1px solid var(--active-icon);
@@ -126,13 +151,17 @@
 }
 
 select {
+  cursor: pointer;
+
   padding: 0.5rem 0.75rem;
   border: 1px solid #bdbdbd;
   border-radius: 0.4rem;
-  background-color: #fff;
+
   font-size: 0.9rem;
   color: #2c3e50;
-  cursor: pointer;
+
+  background-color: #fff;
+
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
@@ -143,8 +172,8 @@ select {
 
   &:focus {
     border-color: #2196f3;
-    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
     outline: none;
+    box-shadow: 0 0 0 3px rgb(33 150 243 / 20%);
   }
 }
 
@@ -162,14 +191,14 @@ select {
   }
 }
 
-
-@keyframes fadeIn {
+@keyframes fade-in {
   from {
-    opacity: 0;
     transform: translateY(-10px);
+    opacity: 0;
   }
+
   to {
-    opacity: 1;
     transform: translateY(0);
+    opacity: 1;
   }
 }

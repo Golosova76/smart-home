@@ -10,33 +10,34 @@ exports.handler = async (event) => {
     const base = process.env.API_BASE_URL;
     //Если переменная не задана, функция возвращает ошибку 500 и завершает работу
     if (!base) {
-      return { statusCode: 500, body: 'API_BASE_URL is not configured.' };
+      return { statusCode: 500, body: "API_BASE_URL is not configured." };
     }
 
     // Убирает префикс /.netlify/functions/proxy из пути
-    const afterFn = event.path.replace(/^\/.netlify\/functions\/proxy/, '');
+    const afterFn = event.path.replace(/^\/.netlify\/functions\/proxy/, "");
     const upstreamPath = afterFn;
 
     //Собирает конечный URL, на который пойдёт реальный запрос.
-    const url = base + upstreamPath + (event.rawQuery ? `?${event.rawQuery}` : '');
+    const url =
+      base + upstreamPath + (event.rawQuery ? `?${event.rawQuery}` : "");
     console.log(`[proxy→][${rid}] ${url}`);
 
     //Фильтрует заголовки запроса, чтобы передать только безопасные и нужные
     // Заголовки к Render: добавляем accept-encoding: identity
     const upstreamHeaders = filterHeaders(event.headers, [
-      'accept',
-      'accept-language',
-      'content-type',
-      'authorization',
-      'x-requested-with',
+      "accept",
+      "accept-language",
+      "content-type",
+      "authorization",
+      "x-requested-with",
     ]);
-    upstreamHeaders['accept-encoding'] = 'identity';
+    upstreamHeaders["accept-encoding"] = "identity";
 
     //Формирует объект для fetch()
     const init = {
       method: event.httpMethod,
       headers: upstreamHeaders,
-      body: ['GET', 'HEAD'].includes(event.httpMethod) ? undefined : event.body,
+      body: ["GET", "HEAD"].includes(event.httpMethod) ? undefined : event.body,
     };
 
     //Отправляет запрос к внешнему API (Render)
@@ -51,19 +52,21 @@ exports.handler = async (event) => {
     resp.headers.forEach((v, k) => (headers[k.toLowerCase()] = v));
 
     //Удаляет заголовки, которые нельзя напрямую пробрасывать — иначе Netlify может некорректно отправить ответ
-    delete headers['content-encoding'];
-    delete headers['content-length'];
-    delete headers['transfer-encoding'];
-    delete headers['connection'];
+    delete headers["content-encoding"];
+    delete headers["content-length"];
+    delete headers["transfer-encoding"];
+    delete headers["connection"];
 
     // контент-тайп обязательно
-    if (!headers['content-type']) {
-      headers['content-type'] = 'application/json; charset=utf-8';
+    if (!headers["content-type"]) {
+      headers["content-type"] = "application/json; charset=utf-8";
     }
 
     // Добавляет CORS-заголовки, чтобы фронтенд мог обращаться к API из браузера
-    if (!headers['access-control-allow-origin']) headers['access-control-allow-origin'] = '*';
-    if (!headers['access-control-allow-headers']) headers['access-control-allow-headers'] = 'Content-Type, Authorization';
+    if (!headers["access-control-allow-origin"])
+      headers["access-control-allow-origin"] = "*";
+    if (!headers["access-control-allow-headers"])
+      headers["access-control-allow-headers"] = "Content-Type, Authorization";
 
     //Возвращает тот же статус, тело и нужные заголовки.
     //Netlify просто “переупаковывает” ответ Render-сервера.
@@ -77,8 +80,11 @@ exports.handler = async (event) => {
     //При любой ошибке возвращает 500 Proxy failed и пишет ошибку в логи
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: 'Proxy failed', error: String(e?.message || e) }),
-      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        message: "Proxy failed",
+        error: String(e?.message || e),
+      }),
+      headers: { "content-type": "application/json" },
     };
   }
 };
@@ -94,4 +100,3 @@ function filterHeaders(src = {}, allow = []) {
   }
   return out;
 }
-

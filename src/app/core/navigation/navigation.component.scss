@@ -1,7 +1,10 @@
 .main-wrapper {
   display: flex;
+
   width: 100%;
   min-height: 100svh;
-  background-color: var(--background-color-app);
+
   color: var(--text-primary);
+
+  background-color: var(--background-color-app);
 }

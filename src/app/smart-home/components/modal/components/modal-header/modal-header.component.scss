@@ -4,11 +4,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  @include m.margin-bottom20;
+
   padding: 10px;
-  background-color: var(--text-card-border);
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
+
+  background-color: var(--text-card-border);
+
+  @include m.margin-bottom20;
+
   .close-icon {
     &:hover {
       color: var(--active-icon);

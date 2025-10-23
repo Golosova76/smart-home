@@ -24,14 +24,14 @@
 
 @mixin flex-column {
   display: flex;
-  align-items: center;
   gap: 10px;
+  align-items: center;
 }
 
 @mixin flex-column20 {
   display: flex;
-  align-items: center;
   gap: 20px;
+  align-items: center;
 }
 
 @mixin flex-center-center {

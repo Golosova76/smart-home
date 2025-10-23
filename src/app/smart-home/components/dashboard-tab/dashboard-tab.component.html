@@ -2,7 +2,7 @@
   @if (isDashboardBusy()) {
     <app-loader-overlay class="tab-spinner"></app-loader-overlay>
   } @else if (cards().length > 0) {
-      <app-card-list [cards]="cards()"></app-card-list>
+    <app-card-list [cards]="cards()"></app-card-list>
   } @else {
     <div class="empty-tab">
       <p>This tab doesn’t have any cards yet.</p>

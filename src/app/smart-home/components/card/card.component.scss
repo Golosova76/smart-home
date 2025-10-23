@@ -1,42 +1,45 @@
 @use "styles/mixins" as m;
 
-:host {
-
-}
-
 .card-wrapper {
-  padding: 10px;
-  background-color: var(--background-color-card);
-  color: var(--color-text-card);
-  border-radius: 5px;
   break-inside: avoid;
-  margin-bottom: 20px;
+
   min-width: 0;
+  margin-bottom: 20px;
+  padding: 10px;
   border: 2px solid transparent;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  border-radius: 5px;
+
+  color: var(--color-text-card);
+
+  background-color: var(--background-color-card);
+  box-shadow: 0 4px 10px rgb(0 0 0 / 8%);
+
   &.active-card {
-    box-shadow: 0 0 15px var(--card-shadow-active);
     border: 2px solid var(--card-border-active);
+    box-shadow: 0 0 15px var(--card-shadow-active);
     transition: all 0.3s ease;
   }
 }
 
 .card-header {
   display: flex;
+  gap: 40px;
   align-items: center;
   justify-content: space-between;
-  gap: 40px;
+
   @include m.margin-bottom20;
 }
 
 .tab-toggle {
-  text-align: right;
-  color: var(--device-sensor-off);
   font-size: 38px;
+  color: var(--device-sensor-off);
+  text-align: right;
+
   .off {
     font-size: 38px;
     color: var(--device-sensor-off);
   }
+
   .on {
     font-size: 38px;
     color: var(--device-sensor-on);
@@ -45,8 +48,9 @@
 
 .header-title {
   display: flex;
-  align-items: center;
   gap: 10px;
+  align-items: center;
+
   .tab-button.edit-title.card {
     .material-symbols-outlined {
       font-size: 18px;
@@ -58,6 +62,7 @@
   .card-content {
     @include m.margin-bottom20;
   }
+
   .card-reorder {
     .material-symbols-outlined {
       font-size: 18px;
@@ -70,14 +75,17 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 20px;
-    justify-items: start;
     justify-content: start;
+    justify-items: start;
+
     @include m.margin-bottom20;
   }
+
   .card-reorder {
     .material-symbols-outlined {
       font-size: 18px;
       color: var(--device-sensor-off);
+
       &:hover {
         color: var(--active-icon);
       }
@@ -91,12 +99,15 @@
     grid-template-columns: 1fr; // только 1 колонка
     gap: 20px;
     justify-items: start;
+
     @include m.margin-bottom20;
   }
+
   .card-reorder {
     .material-symbols-outlined {
       font-size: 18px;
       color: var(--device-sensor-off);
+
       &:hover {
         color: var(--active-icon);
       }
@@ -106,20 +117,21 @@
 
 .tab-button {
   border-bottom: 2px solid transparent;
-  transition: all 0.2s ease;
   font-weight: var(--font-weight-title);
+  transition: all 0.2s ease;
 }
 
 .tab-button.arrow-forward.disable,
 .tab-button.arrow-back.disable {
-  opacity: 0.5;
-  cursor: not-allowed;
   pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .tab-button.delete-item {
   .dash-action-icon {
     color: var(--device-sensor-off);
+
     &:hover {
       color: var(--active-icon);
     }
@@ -128,8 +140,7 @@
 
 @media (width <= 480px) {
   .card-wrapper {
-    padding: 7px;
     display: block;
+    padding: 7px;
   }
 }
-

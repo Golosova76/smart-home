@@ -1,9 +1,9 @@
 @use "styles/mixins" as m;
 
 .nav-wrapper {
-  padding: 5px;
   flex: 1 1 auto;
   min-height: 0;
+  padding: 5px;
 }
 
 .menu-items {
@@ -13,11 +13,13 @@
 }
 
 .menu-item.active {
-  background-color: var(--background-color-menu-item-active-sidebar);
   color: var(--color-text-icon-active);
+  background-color: var(--background-color-menu-item-active-sidebar);
+
   .sidebar-icon {
     color: var(--color-text-icon-active);
   }
+
   &:hover {
     color: var(--color-text-icon-active-hover);
   }
@@ -25,10 +27,12 @@
 
 .menu-item {
   @include m.flex-column;
+
+  cursor: pointer;
   padding: 5px;
   border-radius: 4px;
-  cursor: pointer;
   font-weight: var(--font-weight-title);
+
   &:hover {
     color: var(--color-text-icon-hover);
   }
@@ -36,6 +40,7 @@
 
 .menu-item-link {
   @include m.flex-column;
+
   width: 100%;
 }
 
@@ -49,17 +54,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
   height: 100%;
+
   font-size: 12px;
   line-height: 1.2;
 }
 
-
-
 .main-loader:has(.main-spinner) {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   height: 100%;
 }
 

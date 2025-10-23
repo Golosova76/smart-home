@@ -1,31 +1,31 @@
 import tseslint from "typescript-eslint"; //нужно
 import js from "@eslint/js"; //нужно
 
-import prettier from 'eslint-plugin-prettier'; //нужно
-import configPrettier from 'eslint-config-prettier'; //нужно
-import ngrx from '@ngrx/eslint-plugin/v9'; //нужно
+import prettier from "eslint-plugin-prettier"; //нужно
+import configPrettier from "eslint-config-prettier"; //нужно
+import ngrx from "@ngrx/eslint-plugin/v9"; //нужно
 
-import { FlatCompat } from '@eslint/eslintrc';
+import { FlatCompat } from "@eslint/eslintrc";
 const compat = new FlatCompat({
   baseDirectory: import.meta.dirname, // чтобы корректно резолвились shareable-configs
 });
 
 // Плагины, чьи правила ты вызываешь напрямую в rules:
-import unusedImports from 'eslint-plugin-unused-imports';
-import noRelative from 'eslint-plugin-no-relative-import-paths';
+import unusedImports from "eslint-plugin-unused-imports";
+import noRelative from "eslint-plugin-no-relative-import-paths";
 
-import unicorn from 'eslint-plugin-unicorn';
+import unicorn from "eslint-plugin-unicorn";
 
-import angularEslintTemplate from '@angular-eslint/eslint-plugin-template';
-import angularTemplateParser from '@angular-eslint/template-parser';
+import angularEslintTemplate from "@angular-eslint/eslint-plugin-template";
+import angularTemplateParser from "@angular-eslint/template-parser";
 
 export default [
   js.configs.recommended,
   ...tseslint.configs.recommended,
-  ...ngrx.configs.all.map(c => ({ ...c, files: ['**/*.ts'] })),
+  ...ngrx.configs.all.map((c) => ({ ...c, files: ["**/*.ts"] })),
 
   // Плагины с flat-конфигами: без spread!
-  unicorn.configs['flat/recommended'],
+  unicorn.configs["flat/recommended"],
 
   //general rules
   {
@@ -34,7 +34,15 @@ export default [
     },
   },
   {
-    ignores: [".angular/", "dist/", "node_modules/", "coverage/", "eslint.config.js", "netlify/functions/proxy.js"],
+    ignores: [
+      ".angular/",
+      "dist/",
+      "node_modules/",
+      "coverage/",
+      "eslint.config.js",
+      "netlify/functions/proxy.js",
+      "stylelint.config.js",
+    ],
   },
   {
     settings: {
@@ -53,10 +61,10 @@ export default [
   // Пресеты из «legacy»-мира через FlatCompat
   // (соответствуют пакетам и версиям из package.json)
   ...compat.extends(
-    'plugin:@angular-eslint/recommended',
-    'plugin:import/recommended',
-    'plugin:import/typescript',
-    'prettier'
+    "plugin:@angular-eslint/recommended",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
+    "prettier",
   ),
 
   // TypeScript (Angular) files
@@ -75,9 +83,9 @@ export default [
 
     // Подключаем только те плагины, у которых правила вызываем явно
     plugins: {
-      'unused-imports': unusedImports,
-      'no-relative-import-paths': noRelative,
-      'prettier': prettier,
+      "unused-imports": unusedImports,
+      "no-relative-import-paths": noRelative,
+      prettier: prettier,
     },
     rules: {
       "@typescript-eslint/no-unused-vars": [
@@ -104,16 +112,16 @@ export default [
         { accessibility: "explicit", overrides: { constructors: "off" } },
       ],
       "@typescript-eslint/member-ordering": [
-        'error',
+        "error",
         {
           default: {
             memberTypes: [
               // порядок групп, не зависящий от модификаторов
-              'field',
-              'constructor',
-              'method',
+              "field",
+              "constructor",
+              "method",
             ],
-            order: 'as-written', // сохраняет порядок, как в коде
+            order: "as-written", // сохраняет порядок, как в коде
           },
         },
       ],
@@ -124,8 +132,8 @@ export default [
           ignore: [0, 1, -1, 100],
           ignoreEnums: true,
           ignoreNumericLiteralTypes: true,
-          enforceConst: true
-        }
+          enforceConst: true,
+        },
       ],
 
       "unicorn/prefer-top-level-await": "off",
@@ -150,7 +158,7 @@ export default [
       "import/no-unresolved": "error",
       "unused-imports/no-unused-imports": "warn",
 
-      'prettier/prettier': 'error',
+      "prettier/prettier": "error",
     },
   },
 
@@ -191,4 +199,3 @@ export default [
 
   configPrettier,
 ];
-

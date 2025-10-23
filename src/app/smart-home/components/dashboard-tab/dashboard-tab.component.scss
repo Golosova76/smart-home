@@ -2,22 +2,30 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
+
   color: var(--text-card);
+
   background-color: var(--background-color-app);
 }
 
 .tab-button {
   border-bottom: 2px solid transparent;
-  transition: all 0.2s ease;
-  font-weight: var(--font-weight-title);
-  background-color: var(--background-color-tab-add);
   border-radius: 4px;
+
+  font-weight: var(--font-weight-title);
+
+  background-color: var(--background-color-tab-add);
+
+  transition: all 0.2s ease;
+
   &:hover {
     color: var(--color-text-icon-hover);
   }
+
   &.active {
     border-bottom: 2px solid red;
   }
+
   &:focus-visible {
     outline: 2px solid var(--active-text);
     outline-offset: 2px;
@@ -29,12 +37,15 @@
 }
 
 .add-card {
-  border: 1px solid var(--light-border);
-  padding: 10px;
   display: flex;
-  align-items: center;
   column-gap: 10px;
+  align-items: center;
+
+  padding: 10px;
+  border: 1px solid var(--light-border);
+
   color: var(--light-solid);
+
   .material-symbols-outlined {
     font-size: 20px;
   }
@@ -47,11 +58,9 @@
   font-size: var(--font-size-h1);
 }
 
-
-
 .tab-content:has(.tab-spinner) {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   height: 100dvh;
 }

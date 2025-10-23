@@ -1,13 +1,13 @@
 .card-container {
-  padding: 10px;
   columns: 300px;
   column-gap: 30px;
+  padding: 10px;
 }
 
 @media (width <= 480px) {
   .card-container {
-    padding: 5px;
     columns: 200px;
     column-gap: 15px;
+    padding: 5px;
   }
 }

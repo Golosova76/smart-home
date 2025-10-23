@@ -1,18 +1,22 @@
 @use "styles/mixins" as m;
 
 .nav-tabs {
-  min-height: 56px;
-  border-bottom: 1px solid var(--light-border);
-  border-right: 1px solid var(--light-border);
-  padding: 10px 10px 10px 20px;
-  @include m.flex-center-between;
-  gap: 20px;
   flex-wrap: wrap;
+  gap: 20px;
+
+  min-height: 56px;
+  padding: 10px 10px 10px 20px;
+  border-right: 1px solid var(--light-border);
+  border-bottom: 1px solid var(--light-border);
+
   background-color: var(--background-color-navbar);
+
+  @include m.flex-center-between;
 }
 
 .tabs-actions {
   @include m.flex-column20;
+
   flex-wrap: wrap;
 }
 
@@ -28,14 +32,17 @@
 
 .tab-button {
   border-bottom: 2px solid transparent;
-  transition: all 0.2s ease;
   font-weight: var(--font-weight-title);
+  transition: all 0.2s ease;
+
   &:hover {
     color: var(--color-text-icon-hover);
   }
+
   &.active {
     border-bottom: 2px solid var(--border-bottom-active);
   }
+
   &:focus-visible {
     outline: 2px solid var(--active-text);
     outline-offset: 2px;
@@ -45,17 +52,19 @@
 .dash-action-button.delete.disable,
 .tab-button.arrow-forward.disable,
 .tab-button.arrow-back.disable {
-  opacity: 0.5;
-  cursor: not-allowed;
   pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .edit-title-tab {
   display: flex;
-  align-items: center;
   gap: 16px;
-  border: 1px solid var(--light-border);
+  align-items: center;
+
   padding: 10px;
+  border: 1px solid var(--light-border);
+
   .material-symbols-outlined {
     font-size: 16px;
   }
@@ -64,14 +73,15 @@
 .add-tab,
 .discard,
 .save {
-  border: 1px solid var(--light-border);
   padding: 10px;
+  border: 1px solid var(--light-border);
 }
 
 .add-tab {
   display: flex;
-  align-items: center;
   column-gap: 10px;
+  align-items: center;
+
   .material-symbols-outlined {
     font-size: 20px;
   }
